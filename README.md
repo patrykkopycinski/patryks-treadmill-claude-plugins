@@ -77,6 +77,33 @@ Automated knowledge capture and promotion evidence tracking.
 
 ---
 
+### 🤖 CI Babysitter **[v1.0.0 - Released]**
+
+**The CI Agent - Automated PR maintenance and monitoring**
+
+Keeps your PRs green by automatically monitoring CI, fixing failures, and handling PR comments.
+
+**Features:**
+- ✅ **GUARD Mode:** Pre-push validation (type check, eslint, tests)
+- ✅ **BABYSIT Mode:** Continuous CI monitoring (5min polling)
+- ✅ Auto-fixes: ESLint, type errors, test failures, flaky tests, merge conflicts
+- ✅ Smart PR comment handling (auto for bots, ask for humans)
+- ✅ Buildkite integration via MCP server
+- ✅ Safety guards: dry-run, iteration limit (max 20)
+- ✅ Stops automatically when CI goes green
+
+**Quick Start:**
+```bash
+# In Claude Code
+/ci-babysitter guard    # Validate before push
+/ci-babysitter          # Monitor existing PR
+# Or just say: "babysit my PR"
+```
+
+**[Full Docs →](plugins/ci-babysitter/README.md)**
+
+---
+
 ### 🔧 Kibana Development Tools **[Coming Soon]**
 
 **The Kibana Agent - Scout, FTR, and Elastic workflows**
@@ -273,6 +300,7 @@ This marketplace provides **automated agents** that run alongside you—capturin
 | Agent | Category | Status | Version | Docs |
 |-------|----------|--------|---------|------|
 | 📚 Knowledge Base System | Productivity | ✅ Released | v1.0.0 | [Link](https://github.com/patrykkopycinski/claude-knowledge-base-system) |
+| 🤖 CI Babysitter | CI/CD | ✅ Released | v1.0.0 | [Link](plugins/ci-babysitter/README.md) |
 | 🔧 Kibana Dev Tools | Development | 🚧 In Dev | - | Coming Soon |
 | 🔍 Elastic Stack Utils | Development | 🎯 Planned | - | Coming Soon |
 | 🤖 Agent Builder Tools | Meta | 🎯 Planned | - | Coming Soon |
