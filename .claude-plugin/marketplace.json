@@ -31,6 +31,90 @@
       },
       "tags": ["ci", "automation", "devops", "buildkite"],
       "category": "development"
+    },
+    {
+      "name": "kibana-testing-tools",
+      "source": "./plugins/kibana-testing-tools",
+      "description": "Comprehensive testing and QA automation for Kibana - coverage analysis, test generation, flake detection, and Scout/Cypress migration",
+      "version": "1.0.0",
+      "author": {
+        "name": "Patryk Kopycinski",
+        "url": "https://github.com/patrykkopycinski"
+      },
+      "tags": ["testing", "qa", "kibana", "scout", "cypress", "playwright", "coverage"],
+      "category": "development"
+    },
+    {
+      "name": "kibana-code-quality-suite",
+      "source": "./plugins/kibana-code-quality-suite",
+      "description": "Automated code quality, security, and accessibility reviews for Kibana with TypeScript healing and refactoring assistance",
+      "version": "1.0.0",
+      "author": {
+        "name": "Patryk Kopycinski",
+        "url": "https://github.com/patrykkopycinski"
+      },
+      "tags": ["quality", "security", "accessibility", "typescript", "kibana", "refactoring"],
+      "category": "development"
+    },
+    {
+      "name": "kibana-dev-workflow-tools",
+      "source": "./plugins/kibana-dev-workflow-tools",
+      "description": "Streamlined development workflow automation - Git operations, PR optimization, OpenSpec guidance, and code archaeology",
+      "version": "1.0.0",
+      "author": {
+        "name": "Patryk Kopycinski",
+        "url": "https://github.com/patrykkopycinski"
+      },
+      "tags": ["workflow", "git", "pr", "openspec", "kibana", "productivity"],
+      "category": "development"
+    },
+    {
+      "name": "kibana-build-performance-tools",
+      "source": "./plugins/kibana-build-performance-tools",
+      "description": "Performance optimization, bundle analysis, and dependency management automation for Kibana",
+      "version": "1.0.0",
+      "author": {
+        "name": "Patryk Kopycinski",
+        "url": "https://github.com/patrykkopycinski"
+      },
+      "tags": ["performance", "build", "bundle", "dependencies", "kibana", "optimization"],
+      "category": "development"
+    },
+    {
+      "name": "kibana-docs-release-tools",
+      "source": "./plugins/kibana-docs-release-tools",
+      "description": "Automated documentation generation, release notes creation, and migration planning for Kibana releases",
+      "version": "1.0.0",
+      "author": {
+        "name": "Patryk Kopycinski",
+        "url": "https://github.com/patrykkopycinski"
+      },
+      "tags": ["documentation", "release", "migration", "kibana"],
+      "category": "development"
+    },
+    {
+      "name": "kibana-infrastructure-ops-tools",
+      "source": "./plugins/kibana-infrastructure-ops-tools",
+      "description": "Infrastructure and operations automation - monitoring setup, cross-repo synchronization, and i18n management",
+      "version": "1.0.0",
+      "author": {
+        "name": "Patryk Kopycinski",
+        "url": "https://github.com/patrykkopycinski"
+      },
+      "tags": ["infrastructure", "ops", "monitoring", "i18n", "kibana"],
+      "category": "development"
+    },
+    {
+      "name": "kibana-career-development",
+      "source": "./plugins/kibana-career-development",
+      "description": "Career progression tracking and promotion evidence capture for Kibana developers",
+      "version": "1.0.0",
+      "author": {
+        "name": "Patryk Kopycinski",
+        "url": "https://github.com/patrykkopycinski"
+      },
+      "tags": ["career", "promotion", "evidence", "productivity"],
+      "category": "productivity"
     }
   ]
 }
