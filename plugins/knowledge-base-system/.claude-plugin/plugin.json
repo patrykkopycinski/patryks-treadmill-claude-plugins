@@ -5,16 +5,6 @@
   "author": {
     "name": "Patryk Kopycinski"
   },
-  "commands": [
-    {
-      "id": "setup-knowledge-base",
-      "path": "commands/setup-knowledge-base.md"
-    },
-    {
-      "id": "setup-promotion-tracking",
-      "path": "commands/setup-promotion-tracking.md"
-    }
-  ],
   "hooks": {
     "SessionStart": [
       {
