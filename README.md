@@ -77,11 +77,11 @@ Automated knowledge capture and promotion evidence tracking.
 
 ---
 
-### 🦸 Kibana Agent Superpowers **[v1.0.0 - NEW!]**
+### 🦸 Kibana Development Agents **[v1.0.0 - NEW!]**
 
 **The Complete Workflow Automation Framework**
 
-**20 specialized agents** for Kibana development. Built from 2,001 real conversations.
+**20 specialized agents + 5 bonus** for Kibana development. Built from 2,001 real conversations.
 
 **Top Agents:**
 - ✅ **@kbn-evals-debugger** - Debug evals via OTEL traces (70% → 100% pass rate)

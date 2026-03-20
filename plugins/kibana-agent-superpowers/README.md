@@ -1,26 +1,30 @@
-# Kibana Agent Superpowers Plugin
+# Patryk's Treadmill - Kibana Agents
 
 **20 specialized workflow automation agents for Kibana development**
 
 Built from analysis of 2,001 real Cursor AI conversations and 41,603 development messages.
 
-**🎯 Even number for marketplace!** 20 agents covering all workflow patterns.
+**🎯 Even number for marketplace!** 20 core agents + 5 bonus agents covering all workflow patterns.
 
 ---
 
 ## Quick Install
 
 ```bash
-cd ~/Projects/patryks-treadmill-claude-plugins
-./install-select.sh
-# Select: kibana-agent-superpowers
+# Clone repository
+git clone https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins.git
+cd patryks-treadmill-claude-plugins
+
+# Install all Kibana agents
+cd plugins/kibana-agent-superpowers
+./install.sh
 ```
 
-Or manually:
+Or use selective installer:
 
 ```bash
-cd ~/Projects/patryks-treadmill-claude-plugins/plugins/kibana-agent-superpowers
-./install.sh
+cd patryks-treadmill-claude-plugins
+./install-select.sh
 ```
 
 ---
