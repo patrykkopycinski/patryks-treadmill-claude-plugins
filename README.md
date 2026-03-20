@@ -81,20 +81,23 @@ Automated knowledge capture and promotion evidence tracking.
 
 **The Complete Workflow Automation Framework**
 
-19 specialized agents for Kibana development. Built from 2,001 real conversations.
+**20 specialized agents** for Kibana development. Built from 2,001 real conversations.
 
 **Top Agents:**
 - ✅ **@kbn-evals-debugger** - Debug evals via OTEL traces (70% → 100% pass rate)
 - ✅ **@cypress-to-scout-migrator** - Strategic test optimizer (66% faster execution)
 - ✅ **@type-healer** - Fix TypeScript errors (10 categories, zero @ts-ignore)
 - ✅ **@flake-hunter** - Debug flaky tests (50-run protocol, 5 root causes)
+- ✅ **@test-coverage-analyzer** ⭐ NEW! - Find untested code paths (AST analysis)
 - ✅ **@perf-optimizer** - Optimize build/test/CI (perf_tools.sh included)
 
-**All 19 Agents:**
-- Testing & Quality (7 agents)
+**All 20 Agents:**
+- Testing & Quality (8 agents) - Including test-coverage-analyzer!
 - Development Workflow (6 agents)
 - CI/CD & Operations (4 agents)
 - Infrastructure & Tooling (2 agents)
+
+**Plus 5 bonus agents:** bundle-analyzer, pr-optimizer, code-archaeology, release-notes-generator, test-data-builder
 
 **Expected Impact:**
 - ⏱️  Time saved: 15-40 hr/week
