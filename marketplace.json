@@ -9,14 +9,8 @@
   "version": "1.0.0",
   "plugins": [
     {
-      "id": "knowledge-base-system",
-      "path": "plugins/knowledge-base-system",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins",
-        "ref": "main"
-      },
       "name": "knowledge-base-system",
+      "source": "./plugins/knowledge-base-system",
       "description": "Automated knowledge capture with memory and promotion evidence tracking",
       "version": "1.0.0",
       "author": {
@@ -27,14 +21,8 @@
       "category": "productivity"
     },
     {
-      "id": "ci-babysitter",
-      "path": "plugins/ci-babysitter",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins",
-        "ref": "main"
-      },
       "name": "ci-babysitter",
+      "source": "./plugins/ci-babysitter",
       "description": "Monitor and auto-retry CI builds with smart failure detection",
       "version": "1.0.0",
       "author": {
