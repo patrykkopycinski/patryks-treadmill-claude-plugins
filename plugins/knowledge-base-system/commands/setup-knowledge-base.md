@@ -16,7 +16,6 @@ Initialize the automated knowledge base system with memory structure, hooks, and
    - Template memory files
 
 2. **Configures automation hooks** (optional, asks user)
-   - PostToolUse: Auto-capture promotion evidence on git commit/PR
    - SessionEnd: Auto-capture learnings at session end
 
 3. **Sets up skills**
@@ -104,26 +103,17 @@ echo "✓ Created template memory files"
 
 Use AskUserQuestion to confirm hook setup:
 
-**Question:** "Do you want to enable automated memory capture?"
+**Question:** "Enable automated learning capture at session end?"
 
 **Options:**
-1. **Yes, full automation (Recommended)** - Auto-capture promotion evidence + session learnings
-2. **Promotion evidence only** - Only auto-capture on git commit/PR
-3. **No automation** - Manual capture only via `/capture-learnings`
+1. **Yes (Recommended)** - Auto-capture learnings when you exit Claude Code
+2. **No** - Manual capture only via `/capture-learnings`
 
-**If Option 1 (Full Automation):**
+**If Option 1 (Yes):**
 
 ```json
 {
   "hooks": {
-    "PostToolUse": [{
-      "matcher": "Bash",
-      "hooks": [{
-        "type": "agent",
-        "prompt": "Analyze git commit/PR for promotion evidence. If significant: Read/append to ~/.cursor/promotion-evidence.md with date, category, description, impact. Return {\"systemMessage\": \"✅ Added to promotion evidence\"}. Else return {}.",
-        "timeout": 30
-      }]
-    }],
     "SessionEnd": [{
       "hooks": [{
         "type": "agent",
@@ -135,11 +125,10 @@ Use AskUserQuestion to confirm hook setup:
 }
 ```
 
-**If Option 2 (Promotion Only):**
-Only add PostToolUse hook (omit SessionEnd).
-
-**If Option 3 (No Automation):**
+**If Option 2 (No):**
 Skip hook configuration entirely.
+
+**Note:** Promotion evidence tracking is handled separately by the `@promotion-evidence-tracker` skill in the kibana-career-development plugin.
 
 ### Step 5: Merge Hooks into Settings
 
@@ -161,12 +150,14 @@ Show completion summary:
 📝 Template files created - customize for your project
 
 Automation enabled:
-• Promotion evidence: Auto-captured on git commit/PR
 • Session learnings: Auto-captured at session end
 
 Available commands:
 • /capture-learnings - Manual learning capture
 • /check-cross-repo-consistency - Check version drift (if applicable)
+
+For promotion evidence tracking, see the @promotion-evidence-tracker skill
+in the kibana-career-development plugin.
 
 Edit memory files to add project-specific context:
 - user_role.md - Your role and work style
