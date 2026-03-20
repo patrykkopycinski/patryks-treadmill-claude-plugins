@@ -2,7 +2,9 @@
   "name": "kibana-docs-release-tools",
   "version": "1.0.0",
   "description": "Automated documentation generation, release notes creation, and migration planning for Kibana releases",
-  "author": "Patryk Kopycinski",
+  "author": {
+    "name": "Patryk Kopycinski"
+  },
   "skills": [
     {
       "id": "doc-generator",

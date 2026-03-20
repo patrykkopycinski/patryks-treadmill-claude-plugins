@@ -2,7 +2,9 @@
   "name": "kibana-code-quality-suite",
   "version": "1.0.0",
   "description": "Automated code quality, security, and accessibility reviews for Kibana with TypeScript healing and refactoring assistance",
-  "author": "Patryk Kopycinski",
+  "author": {
+    "name": "Patryk Kopycinski"
+  },
   "skills": [
     {
       "id": "type-healer",

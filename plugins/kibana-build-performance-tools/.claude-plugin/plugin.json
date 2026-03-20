@@ -2,7 +2,9 @@
   "name": "kibana-build-performance-tools",
   "version": "1.0.0",
   "description": "Performance optimization, bundle analysis, and dependency management automation for Kibana",
-  "author": "Patryk Kopycinski",
+  "author": {
+    "name": "Patryk Kopycinski"
+  },
   "skills": [
     {
       "id": "perf-optimizer",

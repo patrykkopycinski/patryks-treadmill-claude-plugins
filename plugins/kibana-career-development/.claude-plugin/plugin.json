@@ -2,7 +2,9 @@
   "name": "kibana-career-development",
   "version": "1.0.0",
   "description": "Career progression tracking and promotion evidence capture for Kibana developers",
-  "author": "Patryk Kopycinski",
+  "author": {
+    "name": "Patryk Kopycinski"
+  },
   "skills": [
     {
       "id": "promotion-evidence-tracker",

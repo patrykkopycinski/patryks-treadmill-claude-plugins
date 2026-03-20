@@ -2,7 +2,9 @@
   "name": "kibana-infrastructure-ops-tools",
   "version": "1.0.0",
   "description": "Infrastructure and operations automation - monitoring setup, cross-repo synchronization, and i18n management",
-  "author": "Patryk Kopycinski",
+  "author": {
+    "name": "Patryk Kopycinski"
+  },
   "skills": [
     {
       "id": "monitoring-setup",
