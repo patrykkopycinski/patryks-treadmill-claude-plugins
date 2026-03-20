@@ -1,0 +1,21 @@
+{
+  "name": "Patryk's Treadmill",
+  "description": "A swarm of automated Claude Code agents for knowledge capture, career growth, and team productivity",
+  "author": "Patryk Kopycinski",
+  "url": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins",
+  "version": "1.0.0",
+  "plugins": [
+    {
+      "id": "knowledge-base-system",
+      "name": "Knowledge Base System",
+      "description": "Automated knowledge capture with memory and promotion evidence tracking",
+      "version": "1.0.0",
+      "author": "Patryk Kopycinski",
+      "path": "../plugins/knowledge-base-system",
+      "tags": ["productivity", "career", "automation", "knowledge-management", "memory"],
+      "category": "productivity",
+      "icon": "📚",
+      "repository": "https://github.com/patrykkopycinski/claude-knowledge-base-system"
+    }
+  ]
+}
