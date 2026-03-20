@@ -31,6 +31,18 @@
       },
       "tags": ["ci", "automation", "devops", "buildkite"],
       "category": "development"
+    },
+    {
+      "name": "kibana-agent-superpowers",
+      "source": "./plugins/kibana-agent-superpowers",
+      "description": "20 specialized workflow automation agents for Kibana development - testing, CI/CD, quality, and productivity",
+      "version": "1.0.0",
+      "author": {
+        "name": "Patryk Kopycinski",
+        "url": "https://github.com/patrykkopycinski"
+      },
+      "tags": ["kibana", "testing", "typescript", "playwright", "ci-cd", "automation", "quality", "coverage", "performance"],
+      "category": "development"
     }
   ]
 }
