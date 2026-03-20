@@ -49,147 +49,114 @@ ln -s treadmill/plugins/agent-builder-tools agent-builder-tools
 
 ---
 
-## 🤖 Agent Swarm (Available Plugins)
+## 🤖 Agent Swarm (9 Focused Plugins)
 
-### 📚 Knowledge Base System **[v1.0.0 - Released]**
+### 📚 Knowledge Base System **[v1.0.0]**
+**2 skills** | Automated knowledge capture and promotion evidence tracking
 
-**The Memory Agent - Never forget a learning**
-
-Automated knowledge capture and promotion evidence tracking.
-
-**Features:**
-- ✅ Auto-captures session learnings when you exit Claude Code
+- ✅ Auto-captures session learnings when you exit
 - ✅ Auto-tracks promotion evidence on every git commit
 - ✅ Creates structured memory files (feedback, project, reference, user)
-- ✅ Supports Senior → Staff → Principal → Manager career paths
 - ✅ Privacy-first design (all data stays local)
-- ✅ One-liner installer
-- ✅ Fully documented
 
-**Quick Start:**
-```bash
-# In Claude Code
-/setup-knowledge-base
-/setup-promotion-tracking  # Optional but recommended
-```
+**Quick Start:** `/setup-knowledge-base` | `/setup-promotion-tracking`
 
-**[View Plugin Repo →](https://github.com/patrykkopycinski/claude-knowledge-base-system)** | **[Full Docs →](plugins/knowledge-base-system/README.md)**
+**[Full Docs →](plugins/knowledge-base-system/README.md)**
 
 ---
 
-### 🦸 Kibana Development Agents **[v1.0.0 - NEW!]**
+### 🤖 CI Babysitter **[v1.0.0]**
+**1 skill** | Automated PR maintenance and CI monitoring
 
-**The Complete Workflow Automation Framework**
-
-**20 specialized agents + 5 bonus** for Kibana development. Built from 2,001 real conversations.
-
-**Top Agents:**
-- ✅ **@kbn-evals-debugger** - Debug evals via OTEL traces (70% → 100% pass rate)
-- ✅ **@cypress-to-scout-migrator** - Strategic test optimizer (66% faster execution)
-- ✅ **@type-healer** - Fix TypeScript errors (10 categories, zero @ts-ignore)
-- ✅ **@flake-hunter** - Debug flaky tests (50-run protocol, 5 root causes)
-- ✅ **@test-coverage-analyzer** ⭐ NEW! - Find untested code paths (AST analysis)
-- ✅ **@perf-optimizer** - Optimize build/test/CI (perf_tools.sh included)
-
-**All 20 Agents:**
-- Testing & Quality (8 agents) - Including test-coverage-analyzer!
-- Development Workflow (6 agents)
-- CI/CD & Operations (4 agents)
-- Infrastructure & Tooling (2 agents)
-
-**Plus 5 bonus agents:** bundle-analyzer, pr-optimizer, code-archaeology, release-notes-generator, test-data-builder
-
-**Expected Impact:**
-- ⏱️  Time saved: 15-40 hr/week
-- 📈 CI pass rate: +15-20%
-- 🐛 Test flake rate: -75-85%
-- 🔒 Security issues: -80-90%
-
-**Quick Start:**
-```bash
-/install-select    # Choose kibana-agent-superpowers
-# Or manually: cd plugins/kibana-agent-superpowers && ./install.sh
-```
-
-**[Full Plugin Docs →](plugins/kibana-agent-superpowers/README.md)** | **[Quick Start →](plugins/kibana-agent-superpowers/docs/QUICK_START.md)** | **[Integration Workflows →](plugins/kibana-agent-superpowers/docs/INTEGRATION_WORKFLOWS.md)**
-
----
-
-### 🤖 CI Babysitter **[v1.0.0 - Released]**
-
-**The CI Agent - Automated PR maintenance and monitoring**
-
-Keeps your PRs green by automatically monitoring CI, fixing failures, and handling PR comments.
-
-**Features:**
 - ✅ **GUARD Mode:** Pre-push validation (type check, eslint, tests)
 - ✅ **BABYSIT Mode:** Continuous CI monitoring (5min polling)
 - ✅ Auto-fixes: ESLint, type errors, test failures, flaky tests, merge conflicts
-- ✅ Smart PR comment handling (auto for bots, ask for humans)
 - ✅ Buildkite integration via MCP server
-- ✅ Safety guards: dry-run, iteration limit (max 20)
-- ✅ Stops automatically when CI goes green
 
-**Quick Start:**
-```bash
-# In Claude Code
-/ci-babysitter guard    # Validate before push
-/ci-babysitter          # Monitor existing PR
-# Or just say: "babysit my PR"
-```
+**Quick Start:** `/ci-babysitter guard` | `/ci-babysitter`
 
 **[Full Docs →](plugins/ci-babysitter/README.md)**
 
 ---
 
-### 🔧 Kibana Development Tools **[Coming Soon]**
+### 🧪 Kibana Testing Tools **[v1.0.0]**
+**6 skills** | Comprehensive testing and QA automation for Kibana
 
-**The Kibana Agent - Scout, FTR, and Elastic workflows**
+- ✅ **@kbn-evals-debugger** - Debug evals via OTEL traces (70% → 100% pass rate)
+- ✅ **@cypress-to-scout-migrator** - Strategic test optimizer (not 1:1 conversion)
+- ✅ **@flake-hunter** - Debug flaky tests (50-run protocol, 5 root causes)
+- ✅ **@test-coverage-analyzer** - Find untested code paths (AST analysis)
+- ✅ **@api-test-generator** - Generate Scout API tests from routes (2,334 lines!)
+- ✅ **@test-data-builder** - Mock data generation with faker.js
 
-Specialized automation for Kibana and Elastic Stack development.
-
-**Planned Features:**
-- Scout test scaffolding and best practices
-- FTR → Scout migration tools
-- Kibana validation workflows (type check, lint, test)
-- Pre-commit checks for Elastic repositories
-- Package dependency management
-
-**Status:** 🚧 In Development
+**Expected Impact:** 🐛 Test flake rate: -75-85% | 📈 CI pass rate: +15-20%
 
 ---
 
-### 🔍 Elastic Stack Utils **[Planned]**
+### 🔒 Kibana Code Quality Suite **[v1.0.0]**
+**5 skills** | Automated code quality, security, and accessibility reviews
 
-**The Elasticsearch Agent - Query, manage, observe**
+- ✅ **@type-healer** - Fix TypeScript errors (10 categories, zero @ts-ignore)
+- ✅ **@refactor-assistant** - Safety-first refactoring with tests
+- ✅ **@security-reviewer** - Vulnerability scanner (7 types, validated test suite)
+- ✅ **@accessibility-auditor** - WCAG 2.1 compliance checker
+- ✅ **@skill-curator** - Skill ecosystem quality manager
 
-Productivity tools for Elasticsearch, Kibana, and Elastic Cloud.
-
-**Planned Features:**
-- Quick Elasticsearch operations
-- Kibana API helpers with authentication
-- Cloud deployment automation
-- Index management workflows
-- Query builder and tester
-
-**Status:** 🎯 Planned for Q2 2026
+**Expected Impact:** 🔒 Security issues: -80-90% | 🏗️ Code quality: measurably improved
 
 ---
 
-### 🤖 Agent Builder Tools **[Planned]**
+### 🔧 Kibana Dev Workflow Tools **[v1.0.0]**
+**4 skills** | Streamlined development workflow automation
 
-**The Meta-Agent - Build and validate skills**
+- ✅ **@openspec-advisor** - Smart OpenSpec decision maker
+- ✅ **@pr-optimizer** - PR size/quality analyzer
+- ✅ **@git-workflow-helper** - Git operations guide (rebase, cherry-pick, conflicts)
+- ✅ **@code-archaeology** - Git history analysis
 
-Tools for creating, testing, and validating Agent Builder skills.
+**Expected Impact:** ⏱️ Time saved: 10-15 hr/week | 📊 PR quality: improved review times
 
-**Planned Features:**
-- Skill scaffolding with templates
-- Automated skill validation
-- Eval suite generation (@kbn/evals)
-- Similarity detection (avoid duplicate skills)
-- LLM benchmarking integration
+---
 
-**Status:** 🎯 Planned for Q2 2026
+### ⚡ Kibana Build Performance Tools **[v1.0.0]**
+**3 skills** | Performance optimization and dependency management
+
+- ✅ **@perf-optimizer** - Build/test/CI optimizer (perf_tools.sh, 1,989 lines!)
+- ✅ **@bundle-analyzer** - Webpack optimization with TTI metrics
+- ✅ **@dependency-updater** - Renovate PR reviewer and batch merger
+
+**Expected Impact:** ⚡ Build time: -20-40% | 🧪 Test time: -50-80%
+
+---
+
+### 📖 Kibana Docs & Release Tools **[v1.0.0]**
+**3 skills** | Documentation generation and release management
+
+- ✅ **@doc-generator** - Technical docs from code (API, architecture, changelog)
+- ✅ **@release-notes-generator** - Changelog automation
+- ✅ **@migration-planner** - Large migration orchestrator
+
+**Expected Impact:** 📝 Documentation: always current | 🚀 Release process: streamlined
+
+---
+
+### 🏗️ Kibana Infrastructure Ops Tools **[v1.0.0]**
+**3 skills** | Infrastructure and operations automation
+
+- ✅ **@cross-repo-sync** - Multi-repo version propagation (2,423 lines!)
+- ✅ **@monitoring-setup** - APM/metrics/logging setup
+- ✅ **@i18n-helper** - Internationalization automation
+
+**Expected Impact:** 🔄 Cross-repo consistency: maintained | 📊 Observability: comprehensive
+
+---
+
+### 📈 Kibana Career Development **[v1.0.0]**
+**1 skill** | Career progression and promotion evidence tracking
+
+- ✅ **@promotion-evidence-tracker** - Auto-tracking with CI metrics
+
+**Expected Impact:** 🎯 Promotion evidence: comprehensive, organized, ready
 
 ---
 
@@ -333,16 +300,21 @@ This marketplace provides **automated agents** that run alongside you—capturin
 
 ---
 
-## 📊 Agent Catalog
+## 📊 Complete Agent Catalog
 
-| Agent | Category | Agents Count | Status | Version | Docs |
-|-------|----------|--------------|--------|---------|------|
-| 📚 Knowledge Base System | Productivity | 2 skills | ✅ Released | v1.0.0 | [Link](https://github.com/patrykkopycinski/claude-knowledge-base-system) |
-| 🦸 Kibana Development Agents | Testing/Dev/CI | **25 skills** | ✅ Released | v1.0.0 | [Link](plugins/kibana-agent-superpowers/README.md) |
-| 🤖 CI Babysitter | CI/CD | 1 agent | ✅ Released | v1.0.0 | [Link](plugins/ci-babysitter/README.md) |
-| 🔧 Kibana Dev Tools | Development | TBD | 🚧 In Dev | - | Coming Soon |
-| 🔍 Elastic Stack Utils | Development | TBD | 🎯 Planned | - | Coming Soon |
-| 🤖 Agent Builder Tools | Meta | TBD | 🎯 Planned | - | Coming Soon |
+| Plugin | Category | Skills | Status | Docs |
+|--------|----------|--------|--------|------|
+| 📚 **Knowledge Base System** | Productivity | 2 | ✅ v1.0.0 | [Link](plugins/knowledge-base-system/README.md) |
+| 🤖 **CI Babysitter** | CI/CD | 1 | ✅ v1.0.0 | [Link](plugins/ci-babysitter/README.md) |
+| 🧪 **Kibana Testing Tools** | Testing | 6 | ✅ v1.0.0 | Testing & QA automation |
+| 🔒 **Kibana Code Quality Suite** | Quality | 5 | ✅ v1.0.0 | Security, TypeScript, refactoring |
+| 🔧 **Kibana Dev Workflow Tools** | Workflow | 4 | ✅ v1.0.0 | Git, PR, OpenSpec, archaeology |
+| ⚡ **Kibana Build Performance** | Performance | 3 | ✅ v1.0.0 | Build, bundle, dependencies |
+| 📖 **Kibana Docs & Release** | Documentation | 3 | ✅ v1.0.0 | Docs generation, changelogs |
+| 🏗️ **Kibana Infrastructure Ops** | Infrastructure | 3 | ✅ v1.0.0 | Cross-repo, monitoring, i18n |
+| 📈 **Kibana Career Development** | Career | 1 | ✅ v1.0.0 | Promotion evidence tracking |
+
+**Total: 9 plugins | 28 skills**
 
 ### 🔮 Future Agents (Roadmap)
 
