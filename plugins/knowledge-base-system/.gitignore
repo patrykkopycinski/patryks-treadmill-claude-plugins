@@ -1,0 +1,25 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temp files
+*.tmp
+*.log
+
+# Node modules (if any)
+node_modules/
+
+# Personal data (should never be in plugin)
+user_memories/
+personal_evidence/
+*.local.md
+
+# Build artifacts
+dist/
+build/
