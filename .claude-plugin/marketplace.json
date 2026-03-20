@@ -17,10 +17,7 @@
         "name": "Patryk Kopycinski",
         "url": "https://github.com/patrykkopycinski"
       },
-      "source": {
-        "type": "local",
-        "path": "plugins/knowledge-base-system"
-      },
+      "source": "plugins/knowledge-base-system",
       "tags": ["productivity", "career", "automation", "knowledge-management", "memory"],
       "category": "productivity"
     },
@@ -33,10 +30,7 @@
         "name": "Patryk Kopycinski",
         "url": "https://github.com/patrykkopycinski"
       },
-      "source": {
-        "type": "local",
-        "path": "plugins/ci-babysitter"
-      },
+      "source": "plugins/ci-babysitter",
       "tags": ["ci", "automation", "devops", "buildkite"],
       "category": "development"
     }
