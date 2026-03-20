@@ -2,17 +2,9 @@
   "name": "knowledge-base-system",
   "version": "1.0.0",
   "description": "Automated knowledge base with memory capture, promotion evidence tracking, and cross-repo consistency checks",
-  "author": "Patryk Kopycinski",
-  "skills": [
-    {
-      "id": "capture-learnings",
-      "path": "skills/capture-learnings/SKILL.md"
-    },
-    {
-      "id": "check-cross-repo-consistency",
-      "path": "skills/check-cross-repo-consistency/SKILL.md"
-    }
-  ],
+  "author": {
+    "name": "Patryk Kopycinski"
+  },
   "commands": [
     {
       "id": "setup-knowledge-base",
@@ -30,5 +22,6 @@
         "command": "echo '{\"systemMessage\": \"💡 Knowledge Base System active\\n\\n• Promotion evidence: Auto-captured on git commit/PR\\n• Session learnings: Auto-captured on exit\\n• Cross-repo checks: /check-cross-repo-consistency\\n\\nView memories: ~/.claude/projects/<project>/memory/\"}'"
       }
     ]
-  }
+  },
+  "repository": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins"
 }

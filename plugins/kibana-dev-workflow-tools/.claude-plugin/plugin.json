@@ -5,22 +5,5 @@
   "author": {
     "name": "Patryk Kopycinski"
   },
-  "skills": [
-    {
-      "id": "openspec-advisor",
-      "path": "skills/openspec-advisor/SKILL.md"
-    },
-    {
-      "id": "pr-optimizer",
-      "path": "skills/pr-optimizer/SKILL.md"
-    },
-    {
-      "id": "git-workflow-helper",
-      "path": "skills/git-workflow-helper/SKILL.md"
-    },
-    {
-      "id": "code-archaeology",
-      "path": "skills/code-archaeology/SKILL.md"
-    }
-  ]
+  "repository": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins"
 }

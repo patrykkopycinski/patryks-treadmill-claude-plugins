@@ -2,11 +2,10 @@
   "name": "ci-babysitter",
   "version": "1.0.0",
   "description": "Automated CI monitoring and fixing for Kibana PRs. Watches Buildkite builds, debugs failures, auto-fixes issues, handles PR comments, and maintains PRs until green. Includes GUARD mode for pre-push validation and BABYSIT mode for continuous monitoring.",
-  "author": "Patryk Kopycinski",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins"
+  "author": {
+    "name": "Patryk Kopycinski"
   },
+  "repository": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins",
   "keywords": [
     "ci",
     "buildkite",
@@ -19,13 +18,11 @@
   ],
   "license": "MIT",
   "compatibility": {
-    "required_skills": ["buildkite-ci-debugger"],
-    "required_mcps": ["user-buildkite-read-only-toolsets"]
-  },
-  "skills": [
-    {
-      "id": "ci-babysitter",
-      "path": "skills/ci-babysitter/SKILL.md"
-    }
-  ]
+    "required_skills": [
+      "buildkite-ci-debugger"
+    ],
+    "required_mcps": [
+      "user-buildkite-read-only-toolsets"
+    ]
+  }
 }
