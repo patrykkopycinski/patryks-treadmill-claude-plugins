@@ -1,0 +1,17 @@
+{
+  "name": "kibana-testing-tools",
+  "version": "1.0.0",
+  "description": "Comprehensive testing and QA automation for Kibana - coverage analysis, test generation, flake detection, and Scout/Cypress migration",
+  "author": {
+    "name": "Patryk Kopycinski",
+    "url": "https://github.com/patrykkopycinski"
+  },
+  "skills": [
+    { "path": "skills/test-coverage-analyzer" },
+    { "path": "skills/api-test-generator" },
+    { "path": "skills/test-data-builder" },
+    { "path": "skills/flake-hunter" },
+    { "path": "skills/cypress-to-scout-migrator" },
+    { "path": "skills/kbn-evals-debugger" }
+  ]
+}

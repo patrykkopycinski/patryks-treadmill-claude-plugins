@@ -1,0 +1,15 @@
+{
+  "name": "kibana-code-quality-suite",
+  "version": "1.0.0",
+  "description": "Automated code quality, security, and accessibility reviews for Kibana with TypeScript healing and refactoring assistance",
+  "author": {
+    "name": "Patryk Kopycinski",
+    "url": "https://github.com/patrykkopycinski"
+  },
+  "skills": [
+    { "path": "skills/security-reviewer" },
+    { "path": "skills/accessibility-auditor" },
+    { "path": "skills/type-healer" },
+    { "path": "skills/refactor-assistant" }
+  ]
+}
