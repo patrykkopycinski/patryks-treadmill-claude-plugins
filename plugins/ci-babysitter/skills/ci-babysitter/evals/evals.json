@@ -1,0 +1,53 @@
+{
+  "skill_name": "ci-babysitter",
+  "evals": [
+    {
+      "id": 1,
+      "name": "eslint-failure",
+      "prompt": "hey so I just pushed some changes to my PR #258775 and buildkite is failing with eslint errors. can you watch it and fix whatever comes up? i'm going to lunch, just get it green for me",
+      "expected_output": "Should invoke ci-babysitter, detect ESLint failures, auto-fix them, push, retrigger CI, and continue monitoring until green",
+      "should_trigger": true,
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "type-error-and-test-failure",
+      "prompt": "my PR keeps failing CI - looks like there's a type error in src/index.ts and also one of the tests is timing out. can you babysit this for me and keep fixing until it's all green?",
+      "expected_output": "Should invoke ci-babysitter, detect type error + test timeout, fix both issues (refactor test for timeout, don't just increase timeout), monitor until green",
+      "should_trigger": true,
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "human-comment-major-change",
+      "prompt": "i need you to monitor my PR #258775. buildkite is failing and there's also a review comment from @reviewer asking me to refactor the whole approach to use a different pattern. fix the CI stuff but ask me before addressing that comment",
+      "expected_output": "Should invoke ci-babysitter, fix CI failures automatically, detect human comment requesting major refactor, ask user for confirmation before implementing that change",
+      "should_trigger": true,
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "flaky-test-needs-refactor",
+      "prompt": "can you watch my PR? one of the playwright tests keeps failing intermittently - sometimes it passes, sometimes it times out on a locator. fix it properly, don't just increase the timeout",
+      "expected_output": "Should invoke ci-babysitter, detect flaky test, analyze root cause (race condition / missing wait), refactor test to use proper waitFor, NOT just increase timeout",
+      "should_trigger": true,
+      "files": []
+    },
+    {
+      "id": 5,
+      "name": "one-time-debug-not-babysit",
+      "prompt": "my CI is red, can you pull the logs and tell me what's wrong?",
+      "expected_output": "Should use buildkite-ci-debugger (one-time), NOT ci-babysitter (continuous monitoring not requested)",
+      "should_trigger": false,
+      "files": []
+    },
+    {
+      "id": 6,
+      "name": "user-wants-to-investigate",
+      "prompt": "buildkite failed, can you show me the error logs so i can debug it myself?",
+      "expected_output": "Should use buildkite-ci-debugger to show logs, NOT auto-fix with ci-babysitter (user wants manual investigation)",
+      "should_trigger": false,
+      "files": []
+    }
+  ]
+}
