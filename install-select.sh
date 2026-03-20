@@ -43,7 +43,12 @@ echo "  - Enter numbers (e.g., '1 3 5') to install specific agents"
 echo "  - Enter 'all' to install all agents"
 echo "  - Enter 'none' to skip installation"
 echo ""
-read -p "Select agents to install: " selection
+# Use /dev/tty to read from terminal when script is piped from curl
+if [ -t 0 ]; then
+    read -p "Select agents to install: " selection
+else
+    read -p "Select agents to install: " selection </dev/tty
+fi
 
 if [ "$selection" = "none" ]; then
     echo "👋 No agents installed. You can run this script again later."
