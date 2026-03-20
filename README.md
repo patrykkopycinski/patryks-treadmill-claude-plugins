@@ -335,13 +335,14 @@ This marketplace provides **automated agents** that run alongside you—capturin
 
 ## 📊 Agent Catalog
 
-| Agent | Category | Status | Version | Docs |
-|-------|----------|--------|---------|------|
-| 📚 Knowledge Base System | Productivity | ✅ Released | v1.0.0 | [Link](https://github.com/patrykkopycinski/claude-knowledge-base-system) |
-| 🤖 CI Babysitter | CI/CD | ✅ Released | v1.0.0 | [Link](plugins/ci-babysitter/README.md) |
-| 🔧 Kibana Dev Tools | Development | 🚧 In Dev | - | Coming Soon |
-| 🔍 Elastic Stack Utils | Development | 🎯 Planned | - | Coming Soon |
-| 🤖 Agent Builder Tools | Meta | 🎯 Planned | - | Coming Soon |
+| Agent | Category | Agents Count | Status | Version | Docs |
+|-------|----------|--------------|--------|---------|------|
+| 📚 Knowledge Base System | Productivity | 2 skills | ✅ Released | v1.0.0 | [Link](https://github.com/patrykkopycinski/claude-knowledge-base-system) |
+| 🦸 Kibana Development Agents | Testing/Dev/CI | **25 skills** | ✅ Released | v1.0.0 | [Link](plugins/kibana-agent-superpowers/README.md) |
+| 🤖 CI Babysitter | CI/CD | 1 agent | ✅ Released | v1.0.0 | [Link](plugins/ci-babysitter/README.md) |
+| 🔧 Kibana Dev Tools | Development | TBD | 🚧 In Dev | - | Coming Soon |
+| 🔍 Elastic Stack Utils | Development | TBD | 🎯 Planned | - | Coming Soon |
+| 🤖 Agent Builder Tools | Meta | TBD | 🎯 Planned | - | Coming Soon |
 
 ### 🔮 Future Agents (Roadmap)
 
