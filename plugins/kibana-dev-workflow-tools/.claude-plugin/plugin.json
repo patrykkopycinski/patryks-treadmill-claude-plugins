@@ -1,0 +1,24 @@
+{
+  "name": "kibana-dev-workflow-tools",
+  "version": "1.0.0",
+  "description": "Streamlined development workflow automation - Git operations, PR optimization, OpenSpec guidance, and code archaeology",
+  "author": "Patryk Kopycinski",
+  "skills": [
+    {
+      "id": "openspec-advisor",
+      "path": "../skills/openspec-advisor/SKILL.md"
+    },
+    {
+      "id": "pr-optimizer",
+      "path": "../skills/pr-optimizer/SKILL.md"
+    },
+    {
+      "id": "git-workflow-helper",
+      "path": "../skills/git-workflow-helper/SKILL.md"
+    },
+    {
+      "id": "code-archaeology",
+      "path": "../skills/code-archaeology/SKILL.md"
+    }
+  ]
+}
