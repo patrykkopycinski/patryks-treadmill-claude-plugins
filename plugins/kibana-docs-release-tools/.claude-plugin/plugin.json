@@ -6,15 +6,15 @@
   "skills": [
     {
       "id": "doc-generator",
-      "path": "../skills/doc-generator/SKILL.md"
+      "path": "skills/doc-generator/SKILL.md"
     },
     {
       "id": "release-notes-generator",
-      "path": "../skills/release-notes-generator/SKILL.md"
+      "path": "skills/release-notes-generator/SKILL.md"
     },
     {
       "id": "migration-planner",
-      "path": "../skills/migration-planner/SKILL.md"
+      "path": "skills/migration-planner/SKILL.md"
     }
   ]
 }

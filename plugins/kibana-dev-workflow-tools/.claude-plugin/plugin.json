@@ -6,19 +6,19 @@
   "skills": [
     {
       "id": "openspec-advisor",
-      "path": "../skills/openspec-advisor/SKILL.md"
+      "path": "skills/openspec-advisor/SKILL.md"
     },
     {
       "id": "pr-optimizer",
-      "path": "../skills/pr-optimizer/SKILL.md"
+      "path": "skills/pr-optimizer/SKILL.md"
     },
     {
       "id": "git-workflow-helper",
-      "path": "../skills/git-workflow-helper/SKILL.md"
+      "path": "skills/git-workflow-helper/SKILL.md"
     },
     {
       "id": "code-archaeology",
-      "path": "../skills/code-archaeology/SKILL.md"
+      "path": "skills/code-archaeology/SKILL.md"
     }
   ]
 }

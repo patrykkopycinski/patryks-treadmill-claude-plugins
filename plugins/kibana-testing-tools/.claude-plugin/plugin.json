@@ -6,27 +6,27 @@
   "skills": [
     {
       "id": "kbn-evals-debugger",
-      "path": "../skills/kbn-evals-debugger/SKILL.md"
+      "path": "skills/kbn-evals-debugger/SKILL.md"
     },
     {
       "id": "cypress-to-scout-migrator",
-      "path": "../skills/cypress-to-scout-migrator/SKILL.md"
+      "path": "skills/cypress-to-scout-migrator/SKILL.md"
     },
     {
       "id": "flake-hunter",
-      "path": "../skills/flake-hunter/SKILL.md"
+      "path": "skills/flake-hunter/SKILL.md"
     },
     {
       "id": "test-coverage-analyzer",
-      "path": "../skills/test-coverage-analyzer/SKILL.md"
+      "path": "skills/test-coverage-analyzer/SKILL.md"
     },
     {
       "id": "api-test-generator",
-      "path": "../skills/api-test-generator/SKILL.md"
+      "path": "skills/api-test-generator/SKILL.md"
     },
     {
       "id": "test-data-builder",
-      "path": "../skills/test-data-builder/SKILL.md"
+      "path": "skills/test-data-builder/SKILL.md"
     }
   ]
 }

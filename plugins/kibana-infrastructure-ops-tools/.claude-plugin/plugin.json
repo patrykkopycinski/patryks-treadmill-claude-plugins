@@ -6,15 +6,15 @@
   "skills": [
     {
       "id": "monitoring-setup",
-      "path": "../skills/monitoring-setup/SKILL.md"
+      "path": "skills/monitoring-setup/SKILL.md"
     },
     {
       "id": "cross-repo-sync",
-      "path": "../skills/cross-repo-sync/SKILL.md"
+      "path": "skills/cross-repo-sync/SKILL.md"
     },
     {
       "id": "i18n-helper",
-      "path": "../skills/i18n-helper/SKILL.md"
+      "path": "skills/i18n-helper/SKILL.md"
     }
   ]
 }

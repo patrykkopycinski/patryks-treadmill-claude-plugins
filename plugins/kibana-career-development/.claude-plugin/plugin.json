@@ -6,7 +6,7 @@
   "skills": [
     {
       "id": "promotion-evidence-tracker",
-      "path": "../skills/promotion-evidence-tracker/SKILL.md"
+      "path": "skills/promotion-evidence-tracker/SKILL.md"
     }
   ]
 }

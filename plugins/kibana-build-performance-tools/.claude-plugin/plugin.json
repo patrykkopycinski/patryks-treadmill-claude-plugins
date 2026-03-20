@@ -6,15 +6,15 @@
   "skills": [
     {
       "id": "perf-optimizer",
-      "path": "../skills/perf-optimizer/SKILL.md"
+      "path": "skills/perf-optimizer/SKILL.md"
     },
     {
       "id": "bundle-analyzer",
-      "path": "../skills/bundle-analyzer/SKILL.md"
+      "path": "skills/bundle-analyzer/SKILL.md"
     },
     {
       "id": "dependency-updater",
-      "path": "../skills/dependency-updater/SKILL.md"
+      "path": "skills/dependency-updater/SKILL.md"
     }
   ]
 }
