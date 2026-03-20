@@ -1,32 +1,44 @@
 {
-  "name": "Patryk's Treadmill",
+  "name": "patryks-treadmill",
   "description": "A swarm of automated Claude Code agents for knowledge capture, career growth, and team productivity",
-  "author": "Patryk Kopycinski",
+  "owner": {
+    "name": "Patryk Kopycinski",
+    "url": "https://github.com/patrykkopycinski"
+  },
   "url": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins",
   "version": "1.0.0",
   "plugins": [
     {
       "id": "knowledge-base-system",
-      "name": "Knowledge Base System",
+      "name": "knowledge-base-system",
       "description": "Automated knowledge capture with memory and promotion evidence tracking",
       "version": "1.0.0",
-      "author": "Patryk Kopycinski",
-      "path": "plugins/knowledge-base-system",
+      "author": {
+        "name": "Patryk Kopycinski",
+        "url": "https://github.com/patrykkopycinski"
+      },
+      "source": {
+        "type": "local",
+        "path": "plugins/knowledge-base-system"
+      },
       "tags": ["productivity", "career", "automation", "knowledge-management", "memory"],
-      "category": "productivity",
-      "icon": "📚",
-      "repository": "https://github.com/patrykkopycinski/claude-knowledge-base-system"
+      "category": "productivity"
     },
     {
       "id": "ci-babysitter",
-      "name": "CI Babysitter",
+      "name": "ci-babysitter",
       "description": "Monitor and auto-retry CI builds with smart failure detection",
       "version": "1.0.0",
-      "author": "Patryk Kopycinski",
-      "path": "plugins/ci-babysitter",
+      "author": {
+        "name": "Patryk Kopycinski",
+        "url": "https://github.com/patrykkopycinski"
+      },
+      "source": {
+        "type": "local",
+        "path": "plugins/ci-babysitter"
+      },
       "tags": ["ci", "automation", "devops", "buildkite"],
-      "category": "development",
-      "icon": "👶"
+      "category": "development"
     }
   ]
 }
