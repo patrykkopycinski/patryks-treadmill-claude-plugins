@@ -8,20 +8,44 @@
 [![Claude Code](https://img.shields.io/badge/Claude-Code%20Plugins-8A63D2)](https://github.com/anthropics/claude-code)
 [![GitHub](https://img.shields.io/badge/github-patryks--treadmill--claude--plugins-181717?logo=github)](https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins)
 
-Professional-grade automation for knowledge capture, career development, and team productivity. Built by an engineer on the path to Principal, for engineers who want to level up faster.
+Professional-grade automation for knowledge capture, career development, and team productivity. Built for engineers who want to level up faster.
 
 ---
 
 ## 🚀 Quick Install
 
-### Add Marketplace to Claude Code
+### Option 1: Install Specific Agents (Recommended)
+
+**Choose exactly which agents you want:**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/patrykkopycinski/patryks-treadmill-claude-plugins/main/install-select.sh | bash
+```
+
+Interactive installer lets you pick agents (e.g., "1 3 5") - only those get installed!
+
+### Option 2: Install All Agents
 
 ```bash
 cd ~/.claude/plugins
 git clone https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins treadmill
 ```
 
-All plugins will be available immediately. No additional configuration needed!
+All plugins available immediately. Disable unwanted ones in settings.
+
+### Option 3: Manual Selection
+
+```bash
+# Clone marketplace
+cd ~/.claude/plugins
+git clone https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins treadmill
+
+# Symlink only agents you want
+ln -s treadmill/plugins/knowledge-base-system knowledge-base-system
+ln -s treadmill/plugins/agent-builder-tools agent-builder-tools
+```
+
+**[Full Installation Guide →](docs/SELECTIVE-INSTALL.md)**
 
 ---
 
@@ -277,13 +301,12 @@ Build your own treadmill. Share your agents. Help others run faster.
 ## 👨‍💻 Author
 
 **Patryk Kopycinski**
-- Role: Principal Software Engineer II (candidate) @ Elastic
-- Focus: Observability, Agent Builder, Kibana platform
-- Goal: Technical excellence, organizational impact, helping others grow
+
+Building automated agents for career growth and team productivity.
 
 **Connect:**
 - GitHub: [@patrykkopycinski](https://github.com/patrykkopycinski)
-- Treadmill: Running toward Principal while building agents that help others run faster
+- Treadmill: Building agents that help engineers run faster
 
 ---
 
@@ -293,8 +316,7 @@ Built for engineers who want to level up faster.
 
 **Special Thanks:**
 - **Anthropic** - for Claude Code and the plugin system
-- **Elastic Team** - for inspiration and collaboration
-- **Open Source Community** - for shared knowledge and tools
+- **Open Source Community** - for shared knowledge and inspiration
 - **Early Adopters** - for feedback and contributions
 
 ---

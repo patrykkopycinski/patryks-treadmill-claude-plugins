@@ -308,8 +308,8 @@ MIT - Share freely, customize as needed
 ## Author
 
 Patryk Kopycinski
-Principal Software Engineer II (candidate)
-Elastic / Kibana
+Software Engineer
+Building automated agents for career growth
 
 ---
 

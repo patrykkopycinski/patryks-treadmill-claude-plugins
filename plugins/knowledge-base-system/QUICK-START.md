@@ -184,7 +184,7 @@ You exit Claude Code
 
 Edit `~/.cursor/promotion-evidence.md` header:
 ```markdown
-**Target Position:** Principal Software Engineer II
+**Target Position:** [Your target position]
 
 **Position Description:**
 Sets technical direction for observability platform, drives innovation
