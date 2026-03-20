@@ -99,6 +99,10 @@
     {
       "id": "release-notes-generator",
       "path": "../skills/release-notes-generator/SKILL.md"
+    },
+    {
+      "id": "test-coverage-analyzer",
+      "path": "../skills/test-coverage-analyzer/SKILL.md"
     }
   ]
 }
