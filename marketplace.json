@@ -11,6 +11,7 @@
     {
       "id": "knowledge-base-system",
       "path": "plugins/knowledge-base-system",
+      "source": ".",
       "name": "knowledge-base-system",
       "description": "Automated knowledge capture with memory and promotion evidence tracking",
       "version": "1.0.0",
@@ -24,6 +25,7 @@
     {
       "id": "ci-babysitter",
       "path": "plugins/ci-babysitter",
+      "source": ".",
       "name": "ci-babysitter",
       "description": "Monitor and auto-retry CI builds with smart failure detection",
       "version": "1.0.0",
