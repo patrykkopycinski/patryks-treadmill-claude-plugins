@@ -1,0 +1,104 @@
+{
+  "name": "kibana-agent-superpowers",
+  "version": "1.0.0",
+  "description": "19 specialized workflow automation agents for Kibana development - built from 2,001 real conversations",
+  "author": "Patryk Kopycinski",
+  "skills": [
+    {
+      "id": "kbn-evals-debugger",
+      "path": "../skills/kbn-evals-debugger/SKILL.md"
+    },
+    {
+      "id": "cypress-to-scout-migrator",
+      "path": "../skills/cypress-to-scout-migrator/SKILL.md"
+    },
+    {
+      "id": "promotion-evidence-tracker",
+      "path": "../skills/promotion-evidence-tracker/SKILL.md"
+    },
+    {
+      "id": "type-healer",
+      "path": "../skills/type-healer/SKILL.md"
+    },
+    {
+      "id": "flake-hunter",
+      "path": "../skills/flake-hunter/SKILL.md"
+    },
+    {
+      "id": "perf-optimizer",
+      "path": "../skills/perf-optimizer/SKILL.md"
+    },
+    {
+      "id": "skill-curator",
+      "path": "../skills/skill-curator/SKILL.md"
+    },
+    {
+      "id": "openspec-advisor",
+      "path": "../skills/openspec-advisor/SKILL.md"
+    },
+    {
+      "id": "doc-generator",
+      "path": "../skills/doc-generator/SKILL.md"
+    },
+    {
+      "id": "refactor-assistant",
+      "path": "../skills/refactor-assistant/SKILL.md"
+    },
+    {
+      "id": "api-test-generator",
+      "path": "../skills/api-test-generator/SKILL.md"
+    },
+    {
+      "id": "cross-repo-sync",
+      "path": "../skills/cross-repo-sync/SKILL.md"
+    },
+    {
+      "id": "security-reviewer",
+      "path": "../skills/security-reviewer/SKILL.md"
+    },
+    {
+      "id": "accessibility-auditor",
+      "path": "../skills/accessibility-auditor/SKILL.md"
+    },
+    {
+      "id": "i18n-helper",
+      "path": "../skills/i18n-helper/SKILL.md"
+    },
+    {
+      "id": "monitoring-setup",
+      "path": "../skills/monitoring-setup/SKILL.md"
+    },
+    {
+      "id": "migration-planner",
+      "path": "../skills/migration-planner/SKILL.md"
+    },
+    {
+      "id": "git-workflow-helper",
+      "path": "../skills/git-workflow-helper/SKILL.md"
+    },
+    {
+      "id": "dependency-updater",
+      "path": "../skills/dependency-updater/SKILL.md"
+    },
+    {
+      "id": "test-data-builder",
+      "path": "../skills/test-data-builder/SKILL.md"
+    },
+    {
+      "id": "bundle-analyzer",
+      "path": "../skills/bundle-analyzer/SKILL.md"
+    },
+    {
+      "id": "pr-optimizer",
+      "path": "../skills/pr-optimizer/SKILL.md"
+    },
+    {
+      "id": "code-archaeology",
+      "path": "../skills/code-archaeology/SKILL.md"
+    },
+    {
+      "id": "release-notes-generator",
+      "path": "../skills/release-notes-generator/SKILL.md"
+    }
+  ]
+}

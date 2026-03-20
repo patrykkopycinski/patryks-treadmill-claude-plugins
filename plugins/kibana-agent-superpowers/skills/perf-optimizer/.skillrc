@@ -1,0 +1,48 @@
+{
+  "name": "perf-optimizer",
+  "version": "1.0.0",
+  "description": "Identifies and fixes performance bottlenecks in Kibana build, test, and CI workflows",
+  "author": "Patryk Kopczynski",
+  "triggers": [
+    "optimize build time",
+    "why is this test slow",
+    "reduce CI time",
+    "analyze performance",
+    "speed up",
+    "profile"
+  ],
+  "capabilities": [
+    "Bundle analysis (webpack)",
+    "Test profiling (Jest/Scout)",
+    "CI timing analysis (Buildkite)",
+    "Bootstrap optimization",
+    "Cost-benefit calculation"
+  ],
+  "tools": {
+    "perf_tools.sh": "Helper script for common analysis tasks",
+    "webpack-bundle-analyzer": "Bundle visualization",
+    "Scout HTML reporter": "Test timeline analysis",
+    "Buildkite API": "CI metrics"
+  },
+  "quick_wins": [
+    "Replace lodash with lodash-es (-450KB)",
+    "Move ES archive to beforeAll (-70% test time)",
+    "Increase Scout workers (-80% test time)",
+    "Cache bootstrap (-86% CI time)",
+    "Lazy load plugins (-33% startup time)"
+  ],
+  "typical_roi": {
+    "build": "20-40% reduction",
+    "test": "50-80% faster",
+    "ci": "40-60% faster",
+    "bootstrap": "80-90% faster (cached)"
+  },
+  "files": {
+    "SKILL.md": "Full agent instructions (663 lines)",
+    "README.md": "Overview and setup",
+    "QUICKREF.md": "Command reference",
+    "EXAMPLES.md": "Real-world scenarios",
+    "test_scenarios.md": "6 test cases",
+    "perf_tools.sh": "Executable helper script"
+  }
+}
