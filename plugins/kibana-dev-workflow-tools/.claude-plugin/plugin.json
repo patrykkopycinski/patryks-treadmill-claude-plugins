@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Streamlined development workflow automation - Git operations, PR optimization, OpenSpec guidance, and code archaeology",
   "author": {
-    "name": "Patryk Kopycinski"
-  },
-  "repository": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins"
+    "name": "Patryk Kopycinski",
+    "email": "patryk.kopycinski@elastic.co"
+  }
 }

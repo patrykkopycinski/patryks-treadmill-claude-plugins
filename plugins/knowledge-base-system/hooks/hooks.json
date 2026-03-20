@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "echo '{\"systemMessage\": \"💡 Knowledge Base System active\\n\\n• Promotion evidence: Auto-captured on git commit/PR\\n• Session learnings: Auto-captured on exit\\n• Cross-repo checks: /check-cross-repo-consistency\\n\\nView memories: ~/.claude/projects/<project>/memory/\"}'"
+      }
+    ]
+  }
+}

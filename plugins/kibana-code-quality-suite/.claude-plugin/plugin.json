@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Automated code quality, security, and accessibility reviews for Kibana with TypeScript healing and refactoring assistance",
   "author": {
-    "name": "Patryk Kopycinski"
-  },
-  "repository": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins"
+    "name": "Patryk Kopycinski",
+    "email": "patryk.kopycinski@elastic.co"
+  }
 }

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Automated documentation generation, release notes creation, and migration planning for Kibana releases",
   "author": {
-    "name": "Patryk Kopycinski"
-  },
-  "repository": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins"
+    "name": "Patryk Kopycinski",
+    "email": "patryk.kopycinski@elastic.co"
+  }
 }

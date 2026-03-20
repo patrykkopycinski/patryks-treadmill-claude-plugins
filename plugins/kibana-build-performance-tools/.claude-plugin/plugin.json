@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Performance optimization, bundle analysis, and dependency management automation for Kibana",
   "author": {
-    "name": "Patryk Kopycinski"
-  },
-  "repository": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins"
+    "name": "Patryk Kopycinski",
+    "email": "patryk.kopycinski@elastic.co"
+  }
 }

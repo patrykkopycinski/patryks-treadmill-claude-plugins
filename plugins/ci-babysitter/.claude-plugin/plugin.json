@@ -3,26 +3,7 @@
   "version": "1.0.0",
   "description": "Automated CI monitoring and fixing for Kibana PRs. Watches Buildkite builds, debugs failures, auto-fixes issues, handles PR comments, and maintains PRs until green. Includes GUARD mode for pre-push validation and BABYSIT mode for continuous monitoring.",
   "author": {
-    "name": "Patryk Kopycinski"
-  },
-  "repository": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins",
-  "keywords": [
-    "ci",
-    "buildkite",
-    "automation",
-    "testing",
-    "pr",
-    "github",
-    "kibana",
-    "continuous-integration"
-  ],
-  "license": "MIT",
-  "compatibility": {
-    "required_skills": [
-      "buildkite-ci-debugger"
-    ],
-    "required_mcps": [
-      "user-buildkite-read-only-toolsets"
-    ]
+    "name": "Patryk Kopycinski",
+    "email": "patryk.kopycinski@elastic.co"
   }
 }

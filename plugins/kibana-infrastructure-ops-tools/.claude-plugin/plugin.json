@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Infrastructure and operations automation - monitoring setup, cross-repo synchronization, and i18n management",
   "author": {
-    "name": "Patryk Kopycinski"
-  },
-  "repository": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins"
+    "name": "Patryk Kopycinski",
+    "email": "patryk.kopycinski@elastic.co"
+  }
 }
