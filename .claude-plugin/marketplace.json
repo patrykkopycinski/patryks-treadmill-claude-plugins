@@ -10,6 +10,7 @@
   "plugins": [
     {
       "id": "knowledge-base-system",
+      "path": "plugins/knowledge-base-system",
       "name": "knowledge-base-system",
       "description": "Automated knowledge capture with memory and promotion evidence tracking",
       "version": "1.0.0",
@@ -17,12 +18,12 @@
         "name": "Patryk Kopycinski",
         "url": "https://github.com/patrykkopycinski"
       },
-      "source": "plugins/knowledge-base-system",
       "tags": ["productivity", "career", "automation", "knowledge-management", "memory"],
       "category": "productivity"
     },
     {
       "id": "ci-babysitter",
+      "path": "plugins/ci-babysitter",
       "name": "ci-babysitter",
       "description": "Monitor and auto-retry CI builds with smart failure detection",
       "version": "1.0.0",
@@ -30,7 +31,6 @@
         "name": "Patryk Kopycinski",
         "url": "https://github.com/patrykkopycinski"
       },
-      "source": "plugins/ci-babysitter",
       "tags": ["ci", "automation", "devops", "buildkite"],
       "category": "development"
     }
