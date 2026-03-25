@@ -115,6 +115,18 @@
       },
       "tags": ["career", "promotion", "evidence", "productivity"],
       "category": "productivity"
+    },
+    {
+      "name": "elastic-agent-builder-skill-dev",
+      "source": {"source": "github", "repo": "elastic/agent-builder-skill-dev-cursor-plugin"},
+      "description": "Development toolkit for building, testing, and optimizing Elastic Agent Builder skills — collision detection, eval generation, self-improving loops, trace analysis, and multi-model compatibility",
+      "version": "0.1.0",
+      "author": {
+        "name": "Elastic",
+        "url": "https://github.com/elastic"
+      },
+      "tags": ["elastic", "agent-builder", "skills", "evals", "kibana", "llm", "mcp"],
+      "category": "development"
     }
   ]
 }
