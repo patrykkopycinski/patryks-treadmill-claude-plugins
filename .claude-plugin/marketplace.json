@@ -1,12 +1,12 @@
 {
   "name": "patryks-treadmill",
-  "description": "A swarm of automated Claude Code agents for knowledge capture, career growth, and team productivity",
-  "owner": {
-    "name": "Patryk Kopycinski",
-    "url": "https://github.com/patrykkopycinski"
+  "metadata": {
+    "description": "A swarm of automated Claude Code agents for knowledge capture, career growth, and team productivity",
+    "version": "1.0.0"
   },
-  "url": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins",
-  "version": "1.0.0",
+  "owner": {
+    "name": "Patryk Kopycinski"
+  },
   "plugins": [
     {
       "name": "knowledge-base-system",
