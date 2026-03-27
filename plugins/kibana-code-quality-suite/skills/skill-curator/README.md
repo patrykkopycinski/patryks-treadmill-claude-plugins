@@ -162,11 +162,11 @@ All skills must pass these gates:
 
 **Delegates to:**
 - `skill-security-review` — Security analysis
-- `cursor-chat-browser` — Usage analytics (if available)
+- `ai-chat-browser` — Usage analytics (if available)
 
 **Uses MCP tools:**
 - `agent-builder-skill-dev` — Similarity detection, ecosystem audit
-- `cursor-chat-browser` — Conversation history search
+- `ai-chat-browser` — Conversation history search
 
 ---
 
@@ -222,7 +222,7 @@ See `examples/review-workflow.md` for detailed examples:
 ## Known Limitations
 
 - **MCP availability:** Similarity detection requires `agent-builder-skill-dev` MCP server. Falls back to keyword-based similarity if unavailable.
-- **Usage analytics:** Requires `cursor-chat-browser` MCP tool. Skips analytics mode if unavailable.
+- **Usage analytics:** Requires `ai-chat-browser` MCP tool (from ai-conversation-intelligence plugin). Skips analytics mode if unavailable.
 - **Security reviews:** Always delegates to `skill-security-review` skill (must be available).
 
 ---
