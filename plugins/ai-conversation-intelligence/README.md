@@ -1,100 +1,122 @@
 # AI Conversation Intelligence
 
-**4 skills + MCP server for pattern mining, learnings capture, and automation from AI session history**
+**Your AI conversations are a goldmine. Stop losing them.**
 
-Unified plugin that searches Claude Code and Cursor conversation history, mines recurring patterns, captures validated learnings into memory, and manages automations (hooks, rules, skills) derived from session insights. Replaces the former knowledge-base-system plugin.
+Every correction you make, every workflow you repeat, every "always do X" instruction you give — it's all trapped in local session files, forgotten between conversations. This plugin changes that.
 
----
+## What It Does
 
-## MCP Server: ai-chat-browser
+**1. Searches all your AI history in one place**
 
-Bundled MCP server that indexes and searches past AI conversations across all workspaces.
+A unified MCP server indexes every Claude Code and Cursor session you've ever had. Ask "what did we decide about auth last week?" and get the actual conversation, not a vague memory.
 
-**Capabilities:**
-- Search messages by keyword with surrounding context
-- Search conversations by title
-- Retrieve full conversation content
-- Reindex conversation databases on demand
+```
+search_messages("authentication refactor", source: "claude")
+→ 3 matches across 2 sessions with full context
+```
 
-Defined in `mcp.json` and automatically registered when the plugin is loaded.
+**2. Mines patterns you didn't know you had**
 
----
+Scans your conversation history for:
+- **Corrections** — things you keep fixing ("no, don't mock the database")
+- **Repeated workflows** — the same 5 steps you run every time
+- **Recurring instructions** — "always lint before commit" said 4 times
+- **Validated approaches** — what actually worked
 
-## Skills
+**3. Turns patterns into automations**
 
-### @mine-patterns
-**Session history pattern miner**
+Discovered patterns become real artifacts:
+- Corrections → memory entries or hook rules
+- Repeated workflows → skills
+- Recurring delegations → agents
+- Instructions → CLAUDE.md updates or rules
 
-Processes queued sessions from the analysis queue, searches conversation history for recurring themes, and surfaces actionable patterns (repeated mistakes, common workflows, knowledge gaps).
+With confidence-based safety: memories auto-merge at high confidence, but skills and hooks always require your review.
 
-**Trigger:** `/mine-patterns` | "Analyze my recent sessions" | "Find patterns"
+**4. Keeps your automation ecosystem healthy**
 
----
+When new skills are created, evaluates whether they should be published to the marketplace. Deduplicates against existing automations so you don't end up with 3 skills that do the same thing.
 
-### @capture-learnings
-**Validated learning capture**
+## Quick Start
 
-Extracts non-obvious learnings from conversations and persists them as structured memory files (feedback, project, reference types). Deduplicates against existing memories.
+```bash
+# After installing, run the initial sweep
+/mine-patterns all
 
-**Trigger:** `/capture-learnings` | "Save what I learned" | End-of-session review
+# Review what it found
+/review-nominations
 
----
+# Set up simplified memory structure (migrates from 6-tier if needed)
+/setup-memory
+```
 
-### @manage-automations
-**Hook/rule/skill lifecycle manager**
+## Architecture
 
-Creates, updates, and removes automation artifacts (hooks, rules, skills) based on mined patterns. Escalation path: repeated pattern -> rule -> hook -> skill.
+```
+┌─ Skills ────────────────────────────────────────┐
+│  mine-patterns        → discover patterns       │
+│  capture-learnings    → manual reflection        │
+│  manage-automations   → review & create          │
+│  marketplace-advisor  → evaluate for publishing  │
+├─ Commands ──────────────────────────────────────┤
+│  /mine-patterns       → bulk or incremental scan │
+│  /review-nominations  → accept/reject candidates │
+│  /setup-memory        → scaffold memory dirs     │
+├─ Hooks ─────────────────────────────────────────┤
+│  SessionEnd   → queues session for analysis      │
+│  SessionStart → notifies of pending analysis     │
+├─ MCP Server (ai-chat-browser) ──────────────────┤
+│  Indexes Claude Code + Cursor sessions           │
+│  SQLite FTS4 search across all conversations     │
+│  Tools: search_messages, search_conversations,   │
+│         get_conversation, list_projects, stats    │
+└─────────────────────────────────────────────────┘
+```
 
-**Trigger:** "Create a hook for this" | "Automate this pattern" | "Review my automations"
+## Memory Structure
 
----
+Uses a simplified 3-directory layout:
 
-### @marketplace-advisor
-**Plugin discovery and recommendation**
+```
+~/.claude/projects/<project>/memory/
+├── MEMORY.md          ← index
+├── knowledge/         ← validated learnings
+├── nominations/       ← candidates pending review
+└── audit/             ← promotion evidence, quality scores
+```
 
-Suggests relevant plugins and skills from the marketplace based on current workflow gaps. Compares installed plugins against available offerings.
+## How Pattern Mining Works
 
-**Trigger:** "What plugins should I install?" | "Find a skill for X"
+1. **FTS pre-filter** — queries the search index for high-signal messages (corrections, confirmations, instructions)
+2. **Context extraction** — pulls surrounding messages for each hit
+3. **Classification** — categorizes as correction, workflow, delegation, validation, or instruction
+4. **Confidence scoring** — frequency + clarity + actionability = 0-100 score
+5. **Dedup** — LLM compares candidates against existing automations
+6. **Output** — auto-merges high-confidence memories, nominates everything else for review
 
----
-
-## Commands
-
-| Command | Description |
-|---------|-------------|
-| `/mine-patterns` | Process queued sessions and surface recurring patterns |
-| `/review-nominations` | Review candidate learnings before promoting to memory |
-| `/setup-memory` | Initialize the memory directory structure for a project |
-
----
-
-## Hooks
-
-| Hook | Behavior |
-|------|----------|
-| **SessionEnd** | Queues the ending session's metadata to `~/.claude/chat-browser/analysis-queue.jsonl` for later pattern mining. Does not perform analysis inline. |
-| **SessionStart** | Checks for pending sessions in the analysis queue and suggests running `/mine-patterns` if entries exist. |
-
----
+Skills, agents, and hooks **never** auto-merge. They always go through `/review-nominations`.
 
 ## Installation
 
 ### Via Marketplace
 
+The plugin is part of [Patryk's Treadmill](https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins):
+
 ```
-/plugin marketplace add patrykkopycinski/patryks-treadmill-claude-plugins
-/plugin install ai-conversation-intelligence@patryks-treadmill
+ai-conversation-intelligence@patryks-treadmill
 ```
 
-### Manual
+### MCP Server Setup
+
+The MCP server ships inside the plugin. After installation:
 
 ```bash
-cd ~/.claude/plugins
-git clone https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins treadmill
+cd <plugin-path>/mcp-server
+npm install && npm run build
 ```
 
-Restart Claude Code or run `/reload-plugins`.
+It registers automatically via `mcp.json`. On first run, it indexes all existing sessions (~30-60s for large histories, then incremental).
 
----
+## Contributing
 
-**Part of [Patryk's Treadmill](https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins)**
+New skills should go through a PR. The `marketplace-advisor` skill evaluates readiness using a 6-criterion scoring system (reusable, self-contained, well-described, not project-specific, clear trigger, tested). Score 10+/12 to publish.
