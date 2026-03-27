@@ -101,11 +101,21 @@ Checks that changes follow the trace-first, Elastic-native direction, use correc
 
 ## Installation
 
-```bash
-cd ~/.claude/plugins/treadmill && git pull origin main
+### Via Marketplace
+
+```
+/plugin marketplace add patrykkopycinski/patryks-treadmill-claude-plugins
+/plugin install kibana-testing-tools@patryks-treadmill
 ```
 
-Restart Claude Code.
+### Manual
+
+```bash
+cd ~/.claude/plugins
+git clone https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins treadmill
+```
+
+Restart Claude Code or run `/reload-plugins`.
 
 ---
 

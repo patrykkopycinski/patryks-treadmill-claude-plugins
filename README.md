@@ -11,6 +11,26 @@
 
 ## 🚀 Install
 
+### Via Marketplace (recommended)
+
+**Step 1:** Add the marketplace:
+
+```
+/plugin marketplace add patrykkopycinski/patryks-treadmill-claude-plugins
+```
+
+**Step 2:** Install individual plugins:
+
+```
+/plugin install ci-babysitter@patryks-treadmill
+/plugin install kibana-testing-tools@patryks-treadmill
+/plugin install ai-conversation-intelligence@patryks-treadmill
+```
+
+Or browse all available plugins interactively with `/plugin` and go to the **Discover** tab.
+
+### Manual
+
 ```bash
 cd ~/.claude/plugins
 git clone https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins treadmill

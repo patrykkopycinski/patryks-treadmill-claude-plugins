@@ -64,11 +64,21 @@ Runs eslint on changed files before pushing to avoid CI auto-fix commits that re
 
 ## Installation
 
-```bash
-cd ~/.claude/plugins/treadmill && git pull origin main
+### Via Marketplace
+
+```
+/plugin marketplace add patrykkopycinski/patryks-treadmill-claude-plugins
+/plugin install kibana-dev-workflow-tools@patryks-treadmill
 ```
 
-Restart Claude Code.
+### Manual
+
+```bash
+cd ~/.claude/plugins
+git clone https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins treadmill
+```
+
+Restart Claude Code or run `/reload-plugins`.
 
 ---
 

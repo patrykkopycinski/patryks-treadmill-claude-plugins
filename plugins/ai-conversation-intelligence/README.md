@@ -79,11 +79,21 @@ Suggests relevant plugins and skills from the marketplace based on current workf
 
 ## Installation
 
-```bash
-cd ~/.claude/plugins/treadmill && git pull origin main
+### Via Marketplace
+
+```
+/plugin marketplace add patrykkopycinski/patryks-treadmill-claude-plugins
+/plugin install ai-conversation-intelligence@patryks-treadmill
 ```
 
-Restart Claude Code.
+### Manual
+
+```bash
+cd ~/.claude/plugins
+git clone https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins treadmill
+```
+
+Restart Claude Code or run `/reload-plugins`.
 
 ---
 

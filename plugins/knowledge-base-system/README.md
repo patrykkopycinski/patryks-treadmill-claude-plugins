@@ -7,21 +7,22 @@ Automated knowledge capture system for Claude Code that prevents repeating mista
 
 ## 🚀 Quick Start
 
-**One-liner install:**
-```bash
-curl -fsSL https://raw.githubusercontent.com/patrykkopycinski/claude-knowledge-base-system/main/install.sh | bash
+**Via Marketplace (recommended):**
+```
+/plugin marketplace add patrykkopycinski/patryks-treadmill-claude-plugins
+/plugin install knowledge-base-system@patryks-treadmill
 ```
 
 **Or manual install:**
 ```bash
 cd ~/.claude/plugins
-git clone https://github.com/patrykkopycinski/claude-knowledge-base-system
+git clone https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins treadmill
 ```
 
 **Then in Claude Code:**
 ```bash
-/setup-knowledge-base
-/setup-promotion-tracking  # Optional
+/knowledge-base-system:setup-knowledge-base
+/knowledge-base-system:setup-promotion-tracking  # Optional
 ```
 
 **[Full Installation Guide →](INSTALL.md)**
