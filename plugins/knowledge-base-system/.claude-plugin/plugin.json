@@ -1,9 +1,0 @@
-{
-  "name": "knowledge-base-system",
-  "version": "1.0.0",
-  "description": "Automated knowledge base with memory capture, promotion evidence tracking, and cross-repo consistency checks",
-  "author": {
-    "name": "Patryk Kopycinski",
-    "email": "patryk.kopycinski@elastic.co"
-  }
-}

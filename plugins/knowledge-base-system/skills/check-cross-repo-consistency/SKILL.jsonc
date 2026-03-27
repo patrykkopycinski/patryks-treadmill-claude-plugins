@@ -1,5 +1,0 @@
-{
-  "name": "check-cross-repo-consistency",
-  "description": "Check elastic-cursor-plugin and cursor-plugin-evals for Docker versions, npm dependencies, and YAML convention drift",
-  "version": "1.0.0"
-}
