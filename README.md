@@ -1,11 +1,11 @@
 # Patryk's Treadmill 🏃
 
-**9 focused Claude Code plugins for Kibana development, knowledge capture, and career growth**
+**10 focused Claude Code plugins for Kibana development, knowledge capture, and career growth**
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude-Code%20Plugins-8A63D2)](https://github.com/anthropics/claude-code)
 
-37 specialized skills for testing, quality, workflow automation, performance, documentation, infrastructure, and career development.
+40 specialized skills for testing, quality, workflow automation, performance, documentation, infrastructure, and career development.
 
 ---
 
@@ -20,21 +20,22 @@ Restart Claude Code. All plugins auto-discovered.
 
 ---
 
-## 📦 Plugins (9)
+## 📦 Plugins (10)
 
 | Plugin | Skills | Focus |
 |--------|--------|-------|
+| 🧠 [AI Conversation Intelligence](plugins/ai-conversation-intelligence/) | 3 | Pattern mining, learnings capture, automation from session history |
 | 📚 [Knowledge Base System](plugins/knowledge-base-system/) | 2 | Memory & learning capture |
 | 🤖 [CI Babysitter](plugins/ci-babysitter/) | 2 | PR maintenance, CI monitoring & debugging |
 | 🧪 [Kibana Testing Tools](plugins/kibana-testing-tools/) | 9 | Test coverage, flakes, migration, selectors, QA |
 | 🔒 [Kibana Code Quality](plugins/kibana-code-quality-suite/) | 6 | TypeScript, security, a11y, design |
-| 🔧 [Kibana Dev Workflow](plugins/kibana-dev-workflow-tools/) | 7 | Git, PR, OpenSpec, lint, chat history |
+| 🔧 [Kibana Dev Workflow](plugins/kibana-dev-workflow-tools/) | 6 | Git, PR, OpenSpec, lint |
 | ⚡ [Kibana Build Performance](plugins/kibana-build-performance-tools/) | 3 | Build, bundle, deps |
 | 📖 [Kibana Docs & Release](plugins/kibana-docs-release-tools/) | 3 | Docs generation, changelogs |
-| 🏗️ [Kibana Infrastructure](plugins/kibana-infrastructure-ops-tools/) | 4 | Cross-repo, monitoring, i18n, spikes |
+| 🏗️ [Kibana Infrastructure](plugins/kibana-infrastructure-ops-tools/) | 5 | Cross-repo, monitoring, i18n, spikes |
 | 📈 [Kibana Career Dev](plugins/kibana-career-development/) | 1 | Promotion evidence |
 
-**Total: 37 skills**
+**Total: 40 skills**
 
 Click plugin names for detailed documentation.
 

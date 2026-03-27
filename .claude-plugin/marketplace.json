@@ -9,15 +9,15 @@
   },
   "plugins": [
     {
-      "name": "knowledge-base-system",
-      "source": "./plugins/knowledge-base-system",
-      "description": "Automated knowledge capture with memory and promotion evidence tracking",
-      "version": "1.0.0",
+      "name": "ai-conversation-intelligence",
+      "source": "./plugins/ai-conversation-intelligence",
+      "description": "Unified AI conversation search, pattern mining, and automated skill/agent/hook creation from Claude Code and Cursor session history",
+      "version": "0.1.0",
       "author": {
         "name": "Patryk Kopycinski",
         "url": "https://github.com/patrykkopycinski"
       },
-      "tags": ["productivity", "career", "automation", "knowledge-management", "memory"],
+      "tags": ["ai", "memory", "patterns", "skills", "automation", "conversation-intelligence", "mcp"],
       "category": "productivity"
     },
     {

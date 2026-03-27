@@ -1,72 +1,103 @@
 ---
 name: openspec-advisor
-description: Intelligently decide if a task requires OpenSpec and orchestrate the workflow. Auto-evaluates complexity signals and seamlessly guides through OpenSpec or direct implementation.
-license: MIT
-compatibility: Requires openspec CLI and access to OpenSpec skills (openspec-new-change, openspec-ff-change, openspec-apply-change, openspec-verify-change, openspec-archive-change, openspec-explore).
-metadata:
-  author: patryk
-  version: "1.0"
-  triggers:
-    - "implement X"
-    - "should I use OpenSpec?"
-    - "plan this feature"
-    - "add feature X"
-    - "build Y"
+description: >
+  Intelligently decide if a task requires OpenSpec and orchestrate the full spec-driven workflow.
+  OpenSpec is MANDATORY for all specs, planning, and design work -- no exceptions. Auto-evaluates
+  complexity signals and seamlessly guides through OpenSpec or direct implementation. Also handles
+  installation guidance when OpenSpec CLI is missing. Triggers on "implement X", "plan this feature",
+  "add feature X", "build Y", "should I use OpenSpec?", "design X", "spec this out".
 ---
 
-Automatically decide if a task requires OpenSpec, then orchestrate the appropriate workflow.
+# OpenSpec Advisor
 
-**Purpose**: Be the intelligent gateway that evaluates task complexity and seamlessly routes to OpenSpec workflow or direct implementation.
+Automatically decide if a task requires OpenSpec, then orchestrate the appropriate workflow. OpenSpec is the single source of truth for all spec-driven development.
+
+## Hard Rules
+
+1. **Specs, planning, and design work ALWAYS use OpenSpec** -- regardless of file count or complexity. No exceptions.
+2. **"Implement X" triggers mandatory OpenSpec first** -- complete ALL artifacts (proposal -> specs -> design -> tasks) before writing any code.
+3. **Never commit `openspec/` files** -- they are local-only planning artifacts and must never appear in PRs or git history.
+4. **Never skip straight to code on complex tasks** -- the artifacts ARE the deliverable for tracking decisions.
+
+---
+
+## Prerequisites & Installation
+
+### Check if OpenSpec is installed
+
+```bash
+which openspec && openspec --version
+```
+
+### Install OpenSpec CLI
+
+If not installed, guide the user:
+
+```bash
+npm install -g openspec
+```
+
+Then initialize in the project:
+
+```bash
+cd <project-root>
+openspec init
+```
+
+This creates:
+- `openspec/config.yaml` -- project configuration
+- `openspec/specs/` -- finalized specifications
+- `openspec/changes/` -- active change proposals
+
+### Verify installation
+
+```bash
+openspec list
+```
+
+If the user gets errors, check:
+- Node.js >= 18 required
+- npm global bin directory is on PATH (`npm config get prefix` + `/bin`)
+- If using nvm: `nvm use 22 && npm install -g openspec`
 
 ---
 
 ## Decision Logic
 
-### When to Use OpenSpec (Auto-YES)
+### Auto-YES: Always Use OpenSpec
 
-Run complexity analysis to detect these signals:
+Use OpenSpec when ANY of these signals are present:
 
-1. **File count estimate ≥3**
-   - Glob for related files in the target area
-   - Count unique files that would be touched
-   - If ≥3 files → OpenSpec
+1. **Spec, planning, or design work** -- user says "plan", "design", "spec", "think through", "propose", "architect". Always OpenSpec, no complexity check needed.
 
-2. **Architectural scope**
-   - New abstraction or API design
-   - Pattern change affecting multiple modules
-   - Introducing new capability or system
-   - If architectural → OpenSpec
+2. **Implementation triggers** -- user says "implement X", "build X", "add X feature", "create X system", "develop X". Mandatory OpenSpec phase before coding.
 
-3. **Cross-package impact**
-   - Changes span multiple `@kbn/*` packages
-   - Modifications to shared interfaces or contracts
-   - Plugin-to-plugin interaction changes
-   - If cross-package → OpenSpec
+3. **File count >= 3** -- glob for related files, count unique files that would be touched.
 
-4. **Trade-offs present**
-   - Multiple valid approaches exist
-   - Design decisions needed
-   - Performance vs simplicity choices
-   - Security/UX balance
-   - If trade-offs → OpenSpec
+4. **Architectural scope** -- new abstraction/API, pattern change across modules, new capability or system.
 
-### When to Skip OpenSpec (Auto-NO)
+5. **Cross-package impact** -- changes span multiple `@kbn/*` packages, shared interfaces/contracts modified.
 
-- 1-2 files max
-- Simple fix (typo, config tweak, parameter change)
-- Clear, obvious implementation
-- No architectural decisions
-- Single-package, localized change
+6. **Trade-offs present** -- multiple valid approaches, design decisions needed, performance vs simplicity.
 
-### Borderline Cases (Ask User)
+### Auto-NO: Skip OpenSpec
 
-When signals are mixed:
+- Single file fix, typo, config tweak
+- 1-2 file change with obvious approach
+- Debugging existing code
+- Questions or research tasks
+- Minor configuration updates
+
+### Borderline: Ask User
+
+When signals are mixed AND the task is pure implementation (not planning/spec/design):
 - 2-3 files with simple changes
 - Minor refactor touching multiple files
 - Clear implementation but moderate scope
-- Single package but introduces new pattern
 
-→ **Use AskUserQuestion tool** to present analysis and ask user to decide.
+Use **AskUserQuestion** to present analysis and let user decide.
+
+**Exception**: If the user asks for a plan, spec, or design -> always OpenSpec, no asking.
 
 ---
 
@@ -74,64 +105,33 @@ When signals are mixed:
 
 ### 1. Parse User Request
 
-Extract:
-- Intent: What are they trying to accomplish?
-- Scope: Which areas of codebase affected?
-- Constraints: Performance, security, UX requirements mentioned?
-- Unknowns: What's unclear or requires investigation?
+Extract: intent, scope, constraints, unknowns.
 
 ### 2. Estimate File Count
 
 ```bash
 # Search for related files in target area
-# Example for a feature in security plugin:
 find x-pack/solutions/security -name "*.ts*" -o -name "*.tsx" | wc -l
 
-# Grep for existing patterns that would need updating:
+# Grep for existing patterns that would need updating
 grep -r "pattern_to_change" x-pack/solutions/security --include="*.ts" --include="*.tsx" | wc -l
 ```
 
-Count:
-- Files that need direct modification
-- Files that import/depend on changed interfaces
-- Test files requiring updates
-- Documentation files
+Count: files needing modification + dependents + tests + docs.
 
 ### 3. Assess Architectural Impact
 
-Check if any apply:
-- Creating new public API surface?
-- Changing existing contracts/interfaces?
-- Introducing new abstraction (class, hook, utility)?
-- Modifying core patterns used across codebase?
-- Affecting plugin lifecycle or startup?
-
-If ANY → architectural scope detected.
+Check: new public API? Changed contracts? New abstraction? Core pattern modification? Plugin lifecycle impact?
 
 ### 4. Check Cross-Package Dependencies
 
 ```bash
-# List package dependencies
 grep -r "from '@kbn/" path/to/target --include="*.ts" | cut -d"'" -f2 | sort -u
-
-# Check if change affects multiple packages
-# Look for shared types, utilities, or interfaces
 ```
 
-If changes require modifications in 2+ distinct `@kbn/*` packages → cross-package.
+If 2+ distinct `@kbn/*` packages affected -> cross-package.
 
-### 5. Identify Trade-offs
-
-Look for keywords in request:
-- "better performance but..."
-- "should we use X or Y?"
-- "might need to balance..."
-- "considering alternatives..."
-- "evaluate options..."
-
-If present → trade-offs exist.
-
-### 6. Make Decision
+### 5. Make Decision
 
 ```
 Signals detected:
@@ -145,99 +145,68 @@ Decision: OPENSPEC / DIRECT / ASK
 
 ---
 
-## Orchestration Workflows
+## OpenSpec Workflow
 
-### A. OpenSpec Workflow (if YES)
+### Phase 1: Initiate Change
 
-**Phase 1: Initiate Change**
+Choose the mode:
 
-Decide between fast-forward and step-by-step:
+- **Fast-forward** (`openspec change create --fast-forward`) -- user knows what they want, requirements are clear
+- **Step-by-step** (`openspec change create`) -- requirements unclear, multiple unknowns, user wants to explore first
 
-- **Use fast-forward** (`/openspec-ff-change`) if:
-  - User knows what they want
-  - Requirements are clear
-  - They say "just get me started" or "create everything"
+### Phase 2: Create Artifacts
 
-- **Use step-by-step** (`/openspec-new-change`) if:
-  - Requirements unclear
-  - Multiple unknowns
-  - User wants to proceed carefully
-  - They say "help me think through this"
+Complete ALL artifacts before writing code:
 
-**Invoke the skill**:
 ```
-[Call openspec-ff-change OR openspec-new-change skill with user request]
+proposal -> specs -> design -> tasks
 ```
 
-**Phase 2: Exploration (if needed)**
+Use `openspec change continue` to progress through artifacts one at a time.
 
-If requirements become unclear during artifact creation:
-```
-[Call openspec-explore skill to investigate]
-```
+### Phase 3: Exploration (if needed)
 
-Exploration helps:
+If requirements become unclear during artifact creation, use exploration mode to:
 - Clarify vague requirements
 - Compare alternative approaches
 - Map existing architecture
 - Identify risks and unknowns
 
-**Phase 3: Implementation**
+### Phase 4: Implementation
 
-After artifacts ready:
-```
-[Call openspec-apply-change skill to implement tasks]
-```
+After all artifacts are ready, implement using the tasks as a checklist:
+- Work through task groups in order (Infrastructure -> Core -> Testing -> etc.)
+- Update task progress as you complete each item
+- If implementation reveals new complexity -> pause and update artifacts
 
-Monitor for:
-- Implementation blockers → pause and revisit design
-- Discovered complexity → update artifacts
-- Missing requirements → add to specs
+### Phase 5: Verification
 
-**Phase 4: Verification**
-
-Before archiving:
-```
-[Call openspec-verify-change skill to validate]
-```
-
-Check:
+Before archiving, verify:
 - All tasks completed
 - Requirements implemented
 - Design followed
 - Tests passing
 
-**Phase 5: Archive**
+### Phase 6: Archive
 
-After verification passes:
+After verification:
+
+```bash
+openspec archive <change-name>
 ```
-[Call openspec-archive-change skill to finalize]
-```
 
-This:
-- Syncs delta specs to main specs
-- Moves change to archive
-- Preserves artifacts for reference
+This syncs delta specs to main specs and moves the change to archive.
 
-### B. Direct Implementation (if NO)
+---
 
-For simple changes:
+## Direct Implementation Workflow (when OpenSpec skipped)
 
-1. **Confirm scope**
-   - Show what files will be changed
-   - Ask user to confirm approach
-
-2. **Implement directly**
-   - Make focused changes
-   - Follow existing patterns
-   - Update tests
-   - Run validation
-
-3. **Verify**
-   - Type check scoped to affected package
-   - Lint changed files
-   - Run affected tests
-   - Validate with `node scripts/check_changes.ts`
+1. **Confirm scope** -- show files that will change, get user agreement
+2. **Implement** -- focused changes following existing patterns
+3. **Verify**:
+   - Type check: `yarn test:type_check --project <tsconfig.json>`
+   - Lint: `node scripts/eslint --fix $(git diff --name-only)`
+   - Tests: `yarn test:jest <path>`
 
 ---
 
@@ -245,40 +214,36 @@ For simple changes:
 
 ### When to Suggest Worktree
 
-For OpenSpec work, suggest worktree if:
+For OpenSpec work, suggest a worktree if:
 - Change is isolated feature work
-- Want faster git operations
 - Multiple changes being juggled
-- Don't need full codebase access
+- Want faster git operations
 
-**Worktree Setup Pattern**:
+### Worktree Setup
 
 ```bash
-# 1. Create worktree with sparse-checkout
+# 1. Create worktree
 git worktree add ~/Projects/kibana.worktrees/<change-name> -b <change-name>
 cd ~/Projects/kibana.worktrees/<change-name>
 
-# 2. Enable sparse-checkout
+# 2. Sparse checkout (optional, for speed)
 git sparse-checkout init --cone
-git sparse-checkout set \
-  x-pack/platform/packages/shared/<target-package> \
-  scripts \
-  .github
+git sparse-checkout set x-pack/platform/packages/shared/<target-package> scripts .github
 
 # 3. Set up OpenSpec access
 MAIN_REPO="$HOME/Projects/kibana"
 WT_ROOT="$(pwd)"
 
-# Only if this is a git worktree (has .git file)
 if [ -f "$WT_ROOT/.git" ]; then
   # Symlink .cursor (shared skills/rules)
   [ -e "$WT_ROOT/.cursor" ] || ln -s "$MAIN_REPO/.cursor" "$WT_ROOT/.cursor"
 
-  # Create independent openspec directory
+  # Create INDEPENDENT openspec directory (NOT a symlink)
+  # Each worktree gets its own changes/ so work doesn't bleed across worktrees
   if [ ! -d "$WT_ROOT/openspec" ]; then
     mkdir -p "$WT_ROOT/openspec/changes"
     cp "$MAIN_REPO/openspec/config.yaml" "$WT_ROOT/openspec/config.yaml"
-    # Symlink specs/ to main repo
+    # Symlink specs/ to main repo so all finalized specs accumulate in one place
     ln -s "$MAIN_REPO/openspec/specs" "$WT_ROOT/openspec/specs"
   fi
 fi
@@ -287,458 +252,152 @@ fi
 yarn kbn bootstrap
 ```
 
-**CRITICAL**: Never commit `openspec/` files. They are local-only artifacts.
+### Migrating Existing Worktree Symlinks
+
+If a worktree already has `openspec/` as a full symlink to the main repo, replace it:
+
+```bash
+WT_ROOT="<worktree-path>"
+MAIN_REPO="$HOME/Projects/kibana"
+
+if [ -L "$WT_ROOT/openspec" ]; then
+  rm "$WT_ROOT/openspec"
+  mkdir -p "$WT_ROOT/openspec/changes"
+  cp "$MAIN_REPO/openspec/config.yaml" "$WT_ROOT/openspec/config.yaml"
+  ln -s "$MAIN_REPO/openspec/specs" "$WT_ROOT/openspec/specs"
+fi
+```
 
 ### After Merge: Cleanup
 
-When PR is merged and change archived:
-
-```bash
-# 1. Archive in main repo first
-cd ~/Projects/kibana
-[Use openspec-archive-change skill]
-
-# 2. Clean up worktree (prompt user first)
-git worktree remove ~/Projects/kibana.worktrees/<name>
-git branch -d <branch-name>
-```
-
----
-
-## User Interaction Patterns
-
-### Pattern 1: "Implement X" (ambiguous)
-
-```
-User: Implement dark mode toggle in settings
-
-Agent: Let me analyze the complexity of this task...
-
-[Run complexity analysis:]
-- File count estimate: Search for settings UI components, theme files, state management → ~8-12 files
-- Architectural: Yes (new theme system, state management)
-- Cross-package: Possibly (theme utilities, UI components)
-- Trade-offs: Theme persistence (localStorage vs server), SSR considerations
-
-Decision: OPENSPEC - Multiple signals detected (files, architectural, trade-offs)
-
-I recommend using OpenSpec for this. This involves:
-- Multiple files (UI, state, theme config)
-- Architectural decisions (theme system design)
-- Trade-offs (storage, SSR, performance)
-
-Would you like me to:
-1. Start OpenSpec fast-forward (create all artifacts)
-2. Start OpenSpec step-by-step (explore first)
-3. Just implement directly (skip planning)
-```
-
-### Pattern 2: "Should I use OpenSpec?"
-
-```
-User: Should I use OpenSpec for fixing a typo in a comment?
-
-Agent: Let me evaluate...
-
-[Quick analysis:]
-- File count: 1 file
-- Architectural: No
-- Cross-package: No
-- Trade-offs: No
-
-Decision: DIRECT - This is a simple change.
-
-No need for OpenSpec. This is a single-file typo fix. Just make the change directly.
-
-[Proceed with direct implementation]
-```
-
-### Pattern 3: "Plan this feature"
-
-```
-User: Plan a new user authentication system
-
-Agent: This requires thorough planning. Let me analyze...
-
-[Analysis:]
-- File count: 20+ files (auth service, UI, middleware, tests)
-- Architectural: Yes (new auth system, security layer)
-- Cross-package: Yes (auth utilities, session management, UI components)
-- Trade-offs: Yes (OAuth vs local, token storage, session duration)
-
-Decision: OPENSPEC - High complexity, needs exploration.
-
-This is a significant feature that benefits from OpenSpec's structured approach.
-
-I recommend starting with exploration mode to:
-- Map out authentication flows
-- Compare OAuth providers
-- Design session management
-- Identify security requirements
-
-Shall I start `/openspec-explore` to think through the architecture?
-```
-
-### Pattern 4: Borderline case
-
-```
-User: Refactor error handling in 3 utility functions
-
-Agent: Let me analyze...
-
-[Analysis:]
-- File count: 3 files
-- Architectural: No (same pattern, different locations)
-- Cross-package: No (all in same package)
-- Trade-offs: Minimal (standardize error format)
-
-Decision: BORDERLINE - Mixed signals.
-
-This is a borderline case:
-- 3 files (at threshold)
-- Simple refactor (clear approach)
-- But affects multiple utilities (could benefit from planning)
-
-Two approaches:
-1. **OpenSpec**: Create tasks, track changes systematically
-2. **Direct**: Make changes directly (should take ~15 min)
-
-Which would you prefer?
-```
-
----
-
-## Skill Invocation Patterns
-
-### Invoke OpenSpec Skills
-
-```
-[When decision is OPENSPEC]
-
-Step 1: Start change
-- If fast: Use Skill tool with skill="openspec-ff-change"
-- If step-by-step: Use Skill tool with skill="openspec-new-change"
-
-Step 2: Explore if needed
-- Use Skill tool with skill="openspec-explore" args="<change-name>"
-
-Step 3: Implement
-- Use Skill tool with skill="openspec-apply-change" args="<change-name>"
-
-Step 4: Verify
-- Use Skill tool with skill="openspec-verify-change" args="<change-name>"
-
-Step 5: Archive
-- Use Skill tool with skill="openspec-archive-change" args="<change-name>"
-```
-
-### Direct Implementation
-
-```
-[When decision is DIRECT]
-
-1. Confirm scope with user (show files)
-2. Make changes using Edit/Write tools
-3. Run validation:
-   - Type check: yarn test:type_check --project <tsconfig.json>
-   - Lint: node scripts/eslint --fix $(git diff --name-only)
-   - Tests: yarn test:jest <path>
-   - Check: node scripts/check_changes.ts
-4. Report completion
-```
-
----
-
-## Decision Tree Visualization
-
-```
-User Request
-     │
-     ▼
-Analyze Complexity
-     │
-     ├─── File count ≥3 OR
-     ├─── Architectural OR
-     ├─── Cross-package OR
-     └─── Trade-offs present
-          │
-          ├─── All signals NO ────────► DIRECT
-          │                             Implementation
-          │
-          ├─── ≥1 signal YES ────────► OPENSPEC
-          │                             Workflow
-          │
-          └─── Mixed signals ─────────► ASK USER
-                                        Present analysis
-                                        Let them decide
-```
+1. Archive the change in the main repo first:
+   ```bash
+   cd ~/Projects/kibana
+   openspec archive <change-name>
+   ```
+2. Clean up worktree (ask user first):
+   ```bash
+   git worktree remove ~/Projects/kibana.worktrees/<name>
+   git branch -d <branch-name>
+   ```
 
 ---
 
 ## Guardrails
 
+### CRITICAL: Never Commit OpenSpec Files
+
+**NEVER** stage or commit any files under `openspec/` (config, changes, specs, archives). If accidentally staged:
+
+```bash
+git rm -r --cached openspec/
+```
+
+Ensure `.gitignore` includes `openspec/`.
+
 ### Always
 
 - Analyze before deciding (never guess)
 - Show reasoning to user
-- For borderline, present options and let user choose
-- Track progress through workflow phases
+- Complete all artifacts before implementation (in OpenSpec mode)
 - Verify before archiving
-- Never commit `openspec/` files
+- For borderline cases, present options and let user choose
 
 ### Never
 
 - Skip complexity analysis
-- Auto-select without showing reasoning
-- Implement before artifacts ready (in OpenSpec mode)
+- Implement before artifacts are ready (in OpenSpec mode)
 - Archive without verification
-- Commit OpenSpec artifacts to main branch
 - Use OpenSpec for trivial changes (1-2 files, obvious approach)
+- Skip OpenSpec for any spec, planning, or design work
 
 ### Adapt
 
-- If implementation reveals complexity → suggest migrating to OpenSpec
-- If OpenSpec artifacts become stale → offer to update
-- If user blocked → suggest exploration
-- If requirements change → update artifacts before continuing
+- If implementation reveals complexity -> suggest migrating to OpenSpec
+- If OpenSpec artifacts become stale -> offer to update
+- If user is blocked -> suggest exploration mode
+- If requirements change -> update artifacts before continuing
 
 ---
 
-## Integration with Existing Workflows
+## Key Paths
 
-### With Feature Development
-
-```
-User: Add a new dashboard widget
-
-Advisor: [Analyzes] → OPENSPEC
-├─ Start: /openspec-ff-change
-├─ Artifacts: proposal → specs → design → tasks
-├─ Implement: /openspec-apply-change
-└─ Archive: /openspec-archive-change
-```
-
-### With TDD Workflow
-
-```
-User: Build feature X with TDD
-
-Advisor: [Analyzes] → OPENSPEC + TDD
-├─ Start: /openspec-ff-change (includes test strategy)
-├─ Implement: /openspec-apply-change + TDD pattern
-│   - Write test first
-│   - Implement to pass
-│   - Refactor
-│   - Repeat per task
-└─ Archive: /openspec-archive-change
-```
-
-### With Bug Fixes
-
-```
-User: Fix authentication bug
-
-Advisor: [Analyzes] → Likely DIRECT
-├─ If simple: Direct fix
-└─ If reveals design issue: Suggest OpenSpec
-    "This looks like a deeper problem. Want to use
-     OpenSpec to document the root cause and fix properly?"
-```
-
----
-
-## Output Patterns
-
-### Analysis Output
-
-```
-## Complexity Analysis: <task-name>
-
-**Scope**: <brief description>
-
-**Signals Detected**:
-- File count: X files (threshold: 3)
-- Architectural: Yes/No - <reason>
-- Cross-package: Yes/No - <packages affected>
-- Trade-offs: Yes/No - <specific trade-offs>
-
-**Decision**: OPENSPEC / DIRECT / BORDERLINE
-
-**Reasoning**: <1-2 sentence explanation>
-
-**Recommendation**: <next steps>
-```
-
-### Decision Output (Auto-YES)
-
-```
-This requires OpenSpec workflow:
-- <primary reason>
-- <secondary reason>
-
-Starting OpenSpec...
-[Invoke appropriate skill]
-```
-
-### Decision Output (Auto-NO)
-
-```
-This is a simple change - no OpenSpec needed:
-- <reason>
-
-Proceeding with direct implementation...
-[Implement directly]
-```
-
-### Decision Output (Borderline)
-
-```
-This is a borderline case:
-- <pro OpenSpec signals>
-- <pro Direct signals>
-
-Two options:
-1. **OpenSpec** (<benefits>)
-2. **Direct** (<benefits>)
-
-Which approach do you prefer?
-```
+| Item | Path |
+|------|------|
+| OpenSpec CLI | `openspec` (globally installed via npm) |
+| Changes | `openspec/changes/<name>/` |
+| Finalized specs | `openspec/specs/` |
+| Config | `openspec/config.yaml` |
+| OpenSpec repo | https://github.com/openspecio/openspec |
 
 ---
 
 ## Error Handling
 
-### OpenSpec CLI Not Available
+### OpenSpec CLI Not Found
 
 ```
-Error: OpenSpec CLI not found.
+OpenSpec CLI is not installed. To get started:
 
-This task requires OpenSpec but the CLI isn't available.
+  npm install -g openspec
 
-Options:
-1. Install OpenSpec CLI
-2. Proceed with direct implementation (manual planning)
+Then initialize in your project:
 
-What would you like to do?
+  cd <project-root>
+  openspec init
+
+Requirements:
+- Node.js >= 18
+- npm global bin on PATH
+
+If using nvm:
+  nvm use 22 && npm install -g openspec
 ```
 
-### Active Change Exists
+### Active Change Already Exists
 
 ```
 Found active change: <existing-change-name>
 
-This task relates to the existing change.
-
 Options:
-1. Continue existing change
+1. Continue existing change (openspec change continue)
 2. Create new change
 3. Explore existing change first
-
-What would you like to do?
 ```
 
-### Implementation Reveals Complexity
+### Implementation Reveals Unexpected Complexity
 
 ```
-Implementation discovered additional complexity:
-- <new finding>
-
 This is more complex than initially analyzed.
 
 Recommendation:
 1. Migrate to OpenSpec workflow
 2. Document findings in artifacts
 3. Continue with proper planning
-
-Shall I start OpenSpec for this?
 ```
 
 ---
 
-## Success Metrics
-
-Track these to validate advisor effectiveness:
-
-- **Decision accuracy**: % of OpenSpec decisions that complete successfully
-- **Time saved**: Reduced back-and-forth on scope definition
-- **Artifact quality**: Completeness of generated artifacts
-- **User satisfaction**: Feedback on auto-decision correctness
-
----
-
-## Examples in Practice
-
-### Example 1: Clear OPENSPEC
+## Decision Tree
 
 ```
-User: Implement real-time collaboration feature
-
-Analysis:
-- Files: 15+ (WebSocket, state, UI, conflict resolution)
-- Architectural: Yes (new real-time system)
-- Cross-package: Yes (networking, state management, UI)
-- Trade-offs: Yes (WebSocket vs polling, CRDT vs OT)
-
-→ OPENSPEC (fast-forward)
+User Request
+     |
+     v
+Is it spec/planning/design work?
+     |
+     +--- YES -----------------> OPENSPEC (always)
+     |
+     +--- NO: Analyze complexity
+              |
+              +--- File count >= 3 OR
+              +--- Architectural OR
+              +--- Cross-package OR
+              +--- Trade-offs present
+                   |
+                   +--- All NO ----------> DIRECT implementation
+                   |
+                   +--- >= 1 YES --------> OPENSPEC workflow
+                   |
+                   +--- Mixed ------------> ASK USER
 ```
-
-### Example 2: Clear DIRECT
-
-```
-User: Fix typo in error message
-
-Analysis:
-- Files: 1
-- Architectural: No
-- Cross-package: No
-- Trade-offs: No
-
-→ DIRECT (immediate fix)
-```
-
-### Example 3: Borderline → ASK
-
-```
-User: Update validation logic in 3 form components
-
-Analysis:
-- Files: 3 (at threshold)
-- Architectural: No (same pattern repeated)
-- Cross-package: No
-- Trade-offs: Minimal (standardize vs customize)
-
-→ ASK USER
-Present: "OpenSpec for systematic approach OR Direct for quick fix?"
-```
-
----
-
-## Skill Metadata
-
-**Triggers**: Automatically activate when user says:
-- "implement X"
-- "build Y"
-- "add feature Z"
-- "should I use OpenSpec?"
-- "plan this change"
-
-**Dependencies**:
-- OpenSpec CLI (`openspec`)
-- OpenSpec skills: new-change, ff-change, apply-change, verify-change, archive-change, explore
-- Kibana validation tools (for direct implementation)
-
-**Compatibility**: Works in both main repo and worktrees (with proper OpenSpec setup)
-
----
-
-## Future Enhancements
-
-Potential improvements:
-- ML-based complexity prediction from historical data
-- Auto-detection of similar past changes for reference
-- Integration with promotion evidence tracking
-- Complexity trend reporting (are changes getting simpler over time?)
-
----
-
-Ready to intelligently route your next task through the optimal workflow.

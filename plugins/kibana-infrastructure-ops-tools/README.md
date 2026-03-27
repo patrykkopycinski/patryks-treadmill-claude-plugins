@@ -1,8 +1,8 @@
 # Kibana Infrastructure & Ops Tools
 
-**4 skills for infrastructure automation, monitoring, and environment management**
+**5 skills for infrastructure automation, monitoring, and environment management**
 
-Cross-repo synchronization, monitoring setup, internationalization, and multi-spike Docker management.
+Cross-repo synchronization, consistency checking, monitoring setup, internationalization, and multi-spike Docker management.
 
 ---
 
@@ -54,6 +54,15 @@ spike open <spike-dir>         # Open in browser
 spike logs <spike-dir> [svc]   # View logs
 spike clean <spike-dir>        # Delete spike data (permanent)
 ```
+
+---
+
+### @check-cross-repo-consistency
+**Cross-repo drift detector**
+
+Checks elastic-cursor-plugin and cursor-plugin-evals for Docker version drift, npm dependency mismatches, and YAML convention divergence.
+
+**Trigger:** "Check cross-repo consistency" | "Are repos in sync?" | After version bumps
 
 ---
 

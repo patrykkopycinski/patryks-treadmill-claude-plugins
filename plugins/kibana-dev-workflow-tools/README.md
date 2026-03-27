@@ -1,19 +1,19 @@
 # Kibana Dev Workflow Tools
 
-**7 skills for streamlined development workflow automation**
+**6 skills for streamlined development workflow automation**
 
-Git operations, PR optimization, OpenSpec guidance, code archaeology, conversation recall, and pre-commit validation.
+Git operations, PR optimization, OpenSpec guidance, code archaeology, and pre-commit validation.
 
 ---
 
 ## Skills
 
 ### @openspec-advisor
-**Smart complexity router**
+**Spec-driven development gateway**
 
-Automatically evaluates whether a task requires OpenSpec and orchestrates the workflow. Routes simple tasks to direct implementation, complex tasks through the full OpenSpec process.
+Automatically evaluates whether a task requires OpenSpec and orchestrates the full workflow. OpenSpec is mandatory for all specs, planning, and design work. Includes installation guidance, worktree setup, and guardrails.
 
-**Trigger:** Complex feature work | "Should I use OpenSpec?" | Multi-file changes
+**Trigger:** Complex feature work | "Should I use OpenSpec?" | "Plan this" | "Implement X"
 
 ---
 
@@ -41,17 +41,6 @@ Complete guide for interactive rebase, cherry-pick, conflict resolution, squash,
 Traces git history to understand code evolution and decision context. Uses blame tracking, PR/issue linking, and API evolution analysis.
 
 **Trigger:** "Why was this written this way?" | "Who changed this?" | Code history investigation
-
----
-
-### @cursor-chat-browser
-**Search past Cursor AI conversations**
-
-Search and retrieve past Cursor AI conversations across all workspaces. Find previous discussions, recall past decisions, look up prior implementations.
-
-**Trigger:** "We discussed this before" | "Find that conversation" | "What did we decide about X?"
-
-**Requires:** `cursor-chat-browser` MCP server
 
 ---
 

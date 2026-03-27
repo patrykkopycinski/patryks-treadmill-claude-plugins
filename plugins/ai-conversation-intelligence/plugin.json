@@ -1,0 +1,30 @@
+{
+  "name": "ai-conversation-intelligence",
+  "version": "0.1.0",
+  "description": "Unified AI conversation search, pattern mining, and automated skill/agent/hook creation from Claude Code and Cursor session history",
+  "author": "Patryk Kopycinski",
+  "skills": [
+    { "id": "mine-patterns", "path": "skills/mine-patterns/SKILL.md" },
+    { "id": "capture-learnings", "path": "skills/capture-learnings/SKILL.md" },
+    { "id": "manage-automations", "path": "skills/manage-automations/SKILL.md" }
+  ],
+  "commands": [
+    { "id": "mine-patterns", "path": "commands/mine-patterns.md" },
+    { "id": "review-nominations", "path": "commands/review-nominations.md" },
+    { "id": "setup-memory", "path": "commands/setup-memory.md" }
+  ],
+  "hooks": {
+    "SessionEnd": [
+      {
+        "type": "prompt",
+        "prompt": "A session is ending. Append this session's metadata to the analysis queue at ~/.claude/chat-browser/analysis-queue.jsonl for pattern mining in the next session. Use Bash to append a JSON line with sessionId, project (current working directory), and timestamp (ISO 8601). Do NOT perform any analysis now — just queue it."
+      }
+    ],
+    "SessionStart": [
+      {
+        "type": "prompt",
+        "prompt": "Check if ~/.claude/chat-browser/analysis-queue.jsonl exists and has entries. If it does, mention that there are pending sessions to analyze and suggest running /mine-patterns to process them. Do NOT auto-process — just inform the user."
+      }
+    ]
+  }
+}
