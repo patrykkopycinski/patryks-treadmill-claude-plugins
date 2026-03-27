@@ -89,10 +89,19 @@ When creating a new skill or agent, determine the best-fit plugin:
 3. If no clear fit, place in `ai-conversation-intelligence` as default
 4. Ask user to confirm placement before writing
 
-### Step 6: Report
+### Step 6: Marketplace Evaluation
+
+After accepting any **skill** or **agent** nomination:
+- Automatically invoke the `marketplace-advisor` skill to evaluate marketplace readiness
+- If score >= 10, suggest publishing to treadmill marketplace
+- If score 7-9, note improvements needed for future publishing
+- If score < 7, skip silently
+
+### Step 7: Report
 
 After all nominations are processed:
 - Items accepted (with file paths)
 - Items rejected
 - Items deferred (still pending)
+- Marketplace publishing actions taken or suggested
 - Suggest re-running `/mine-patterns` if significant time has passed

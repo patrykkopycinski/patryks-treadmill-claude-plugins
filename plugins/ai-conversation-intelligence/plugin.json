@@ -6,7 +6,8 @@
   "skills": [
     { "id": "mine-patterns", "path": "skills/mine-patterns/SKILL.md" },
     { "id": "capture-learnings", "path": "skills/capture-learnings/SKILL.md" },
-    { "id": "manage-automations", "path": "skills/manage-automations/SKILL.md" }
+    { "id": "manage-automations", "path": "skills/manage-automations/SKILL.md" },
+    { "id": "marketplace-advisor", "path": "skills/marketplace-advisor/SKILL.md" }
   ],
   "commands": [
     { "id": "mine-patterns", "path": "commands/mine-patterns.md" },
