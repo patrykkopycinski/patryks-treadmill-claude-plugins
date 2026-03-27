@@ -70,7 +70,9 @@ If all checks pass:
 2. Update plugin's README.md to mention the new skill
 3. Update marketplace.json if needed (new plugin or description change)
 4. Update root README.md skill count if it changed
-5. Commit all changes together
+5. **Publishing workflow** — depends on repo ownership:
+   - **Owner (Patryk)**: Commit directly to main and push
+   - **Contributors / forks**: Create a feature branch, commit changes, and open a PR against main with a description of the new skill, its marketplace readiness score, and the criteria breakdown. Never push directly to main on repos you don't own.
 
 ### Step 6: Report
 
