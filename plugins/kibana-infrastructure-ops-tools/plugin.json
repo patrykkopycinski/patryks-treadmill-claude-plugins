@@ -9,6 +9,7 @@
   "skills": [
     { "path": "skills/monitoring-setup" },
     { "path": "skills/cross-repo-sync" },
-    { "path": "skills/i18n-helper" }
+    { "path": "skills/i18n-helper" },
+    { "path": "skills/spike-manager" }
   ]
 }

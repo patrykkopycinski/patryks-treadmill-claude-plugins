@@ -10,7 +10,9 @@
     { "path": "skills/git-workflow-helper" },
     { "path": "skills/pr-optimizer" },
     { "path": "skills/openspec-advisor" },
-    { "path": "skills/skill-curator" },
-    { "path": "skills/code-archaeology" }
+    { "path": "skills/code-archaeology" },
+    { "path": "skills/cursor-chat-browser" },
+    { "path": "skills/kibana-precommit-checks" },
+    { "path": "skills/kibana-eslint-prepush" }
   ]
 }

@@ -10,6 +10,8 @@
     { "path": "skills/security-reviewer" },
     { "path": "skills/accessibility-auditor" },
     { "path": "skills/type-healer" },
-    { "path": "skills/refactor-assistant" }
+    { "path": "skills/refactor-assistant" },
+    { "path": "skills/design-super-agent" },
+    { "path": "skills/dashboard-workflow" }
   ]
 }

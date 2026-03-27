@@ -12,6 +12,9 @@
     { "path": "skills/test-data-builder" },
     { "path": "skills/flake-hunter" },
     { "path": "skills/cypress-to-scout-migrator" },
-    { "path": "skills/kbn-evals-debugger" }
+    { "path": "skills/kbn-evals-debugger" },
+    { "path": "skills/test-selector-healer" },
+    { "path": "skills/qa-browser-verification" },
+    { "path": "skills/kbn-evals-vision-reviewer" }
   ]
 }

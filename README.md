@@ -5,7 +5,7 @@
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude-Code%20Plugins-8A63D2)](https://github.com/anthropics/claude-code)
 
-28 specialized skills for testing, quality, workflow automation, performance, documentation, infrastructure, and career development.
+37 specialized skills for testing, quality, workflow automation, performance, documentation, infrastructure, and career development.
 
 ---
 
@@ -25,18 +25,28 @@ Restart Claude Code. All plugins auto-discovered.
 | Plugin | Skills | Focus |
 |--------|--------|-------|
 | 📚 [Knowledge Base System](plugins/knowledge-base-system/) | 2 | Memory & learning capture |
-| 🤖 [CI Babysitter](plugins/ci-babysitter/) | 1 | PR maintenance & CI monitoring |
-| 🧪 [Kibana Testing Tools](plugins/kibana-testing-tools/) | 6 | Test coverage, flakes, migration |
-| 🔒 [Kibana Code Quality](plugins/kibana-code-quality-suite/) | 5 | TypeScript, security, a11y |
-| 🔧 [Kibana Dev Workflow](plugins/kibana-dev-workflow-tools/) | 4 | Git, PR, OpenSpec |
+| 🤖 [CI Babysitter](plugins/ci-babysitter/) | 2 | PR maintenance, CI monitoring & debugging |
+| 🧪 [Kibana Testing Tools](plugins/kibana-testing-tools/) | 9 | Test coverage, flakes, migration, selectors, QA |
+| 🔒 [Kibana Code Quality](plugins/kibana-code-quality-suite/) | 6 | TypeScript, security, a11y, design |
+| 🔧 [Kibana Dev Workflow](plugins/kibana-dev-workflow-tools/) | 7 | Git, PR, OpenSpec, lint, chat history |
 | ⚡ [Kibana Build Performance](plugins/kibana-build-performance-tools/) | 3 | Build, bundle, deps |
 | 📖 [Kibana Docs & Release](plugins/kibana-docs-release-tools/) | 3 | Docs generation, changelogs |
-| 🏗️ [Kibana Infrastructure](plugins/kibana-infrastructure-ops-tools/) | 3 | Cross-repo, monitoring, i18n |
+| 🏗️ [Kibana Infrastructure](plugins/kibana-infrastructure-ops-tools/) | 4 | Cross-repo, monitoring, i18n, spikes |
 | 📈 [Kibana Career Dev](plugins/kibana-career-development/) | 1 | Promotion evidence |
 
-**Total: 28 skills**
+**Total: 37 skills**
 
 Click plugin names for detailed documentation.
+
+---
+
+## Companion Plugins
+
+These external plugins complement this collection:
+
+| Plugin | Author | Focus |
+|--------|--------|-------|
+| [core-ai-pm-workflow](https://github.com/davethegut/core-ai-pm-workflow) | @davethegut | PM workflows: deep-dive research, doc writing/review, presentations, security review |
 
 ---
 

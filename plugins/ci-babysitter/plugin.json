@@ -26,6 +26,10 @@
     {
       "id": "ci-babysitter",
       "path": "skills/ci-babysitter/SKILL.md"
+    },
+    {
+      "id": "buildkite-ci-debugger",
+      "path": "skills/buildkite-ci-debugger/SKILL.md"
     }
   ]
 }
