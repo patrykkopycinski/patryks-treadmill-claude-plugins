@@ -1,0 +1,123 @@
+{
+  "name": "session-safety-hooks",
+  "version": "1.0.0",
+  "description": "Production-grade safety hooks for Claude Code sessions: dangerous command blocking, secret detection, automatic backups, audit logging, and session lifecycle management. All hooks are portable and use $HOME-based paths.",
+  "author": "Patryk Kopycinski",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins"
+  },
+  "keywords": ["safety", "hooks", "security", "backup", "audit", "session", "guard"],
+  "license": "MIT",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/guard-bash.sh",
+            "statusMessage": "Checking command safety..."
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/backup-before-write.sh",
+            "statusMessage": "Backing up before write...",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/secret-guard.sh",
+            "statusMessage": "Checking for secrets..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/log-changes.sh",
+            "statusMessage": "Logging change...",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/log-failures.sh",
+            "statusMessage": "Logging failure...",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "You are a JSON-only response bot. Output raw JSON with no markdown, no code fences, no prose.\n\nReview this conversation and return exactly one JSON object:\n{\"decision\":\"allow\",\"learning\":null,\"task_type\":\"other\",\"quality_score\":70}\n\ndecision: \"allow\" if all user-requested tasks were completed, \"block\" if something was missed (add \"reason\" field).\nlearning: a one-sentence lesson if errors were resolved (root cause + fix), otherwise null.\ntask_type: one of: build, debug, refactor, test, docs, research, deploy, admin, setup, infrastructure, other.\nquality_score: 0-100 rating of session quality considering: architectural decisions (high), complex debugging (high), simple tasks (low), incomplete work (low).\n\nRESPOND WITH ONLY THE JSON OBJECT. NO OTHER TEXT.",
+            "timeout": 15,
+            "model": "haiku"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/log-stop-verdict.sh",
+            "statusMessage": "Logging session verdict...",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "auto",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-compact-handoff.sh",
+            "timeout": 5,
+            "statusMessage": "Saving state before compaction..."
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "user",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-reset.sh",
+            "timeout": 3,
+            "statusMessage": "Resetting session state..."
+          }
+        ]
+      },
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-compact-resume.sh",
+            "timeout": 10,
+            "statusMessage": "Restoring context after compaction..."
+          }
+        ]
+      }
+    ]
+  }
+}

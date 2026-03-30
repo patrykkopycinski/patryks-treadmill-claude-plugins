@@ -1,0 +1,66 @@
+{
+  "name": "agent-team-toolkit",
+  "version": "1.0.0",
+  "description": "Complete agent team coordination system: 6 specialized agents (code archaeology, scope creep detection, and Kibana dev team as reference patterns), quality gate hooks for file reservation and task validation, and a battle-tested team orchestration methodology.",
+  "author": "Patryk Kopycinski",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins"
+  },
+  "keywords": ["agents", "teams", "coordination", "teammates", "hooks", "quality-gates", "orchestration"],
+  "license": "MIT",
+  "agents": "./agents/",
+  "skills": [
+    { "id": "team-coordination", "path": "skills/team-coordination/SKILL.md" }
+  ],
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/team-file-reservation.sh",
+            "statusMessage": "Checking file reservations..."
+          }
+        ]
+      }
+    ],
+    "TaskCreated": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/team-task-created.sh",
+            "timeout": 5,
+            "statusMessage": "Validating task scope..."
+          }
+        ]
+      }
+    ],
+    "TaskCompleted": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/team-task-completed.sh",
+            "timeout": 10,
+            "statusMessage": "Checking task completion quality..."
+          }
+        ]
+      }
+    ],
+    "TeammateIdle": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/team-teammate-idle.sh",
+            "timeout": 10,
+            "statusMessage": "Checking teammate readiness to idle..."
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -127,6 +127,54 @@
       },
       "tags": ["elastic", "agent-builder", "skills", "evals", "kibana", "llm", "mcp"],
       "category": "development"
+    },
+    {
+      "name": "developer-craft-toolkit",
+      "source": "./plugins/developer-craft-toolkit",
+      "description": "Essential development skills: systematic refactoring, TDD workflows, technical writing, deep-dive research reports, and frontend design review",
+      "version": "1.0.0",
+      "author": {
+        "name": "Patryk Kopycinski",
+        "url": "https://github.com/patrykkopycinski"
+      },
+      "tags": ["refactoring", "tdd", "documentation", "design-review", "code-quality", "best-practices"],
+      "category": "development"
+    },
+    {
+      "name": "session-safety-hooks",
+      "source": "./plugins/session-safety-hooks",
+      "description": "Production-grade safety hooks: dangerous command blocking, secret detection, automatic backups, audit logging, and session lifecycle management",
+      "version": "1.0.0",
+      "author": {
+        "name": "Patryk Kopycinski",
+        "url": "https://github.com/patrykkopycinski"
+      },
+      "tags": ["safety", "hooks", "security", "backup", "audit", "session"],
+      "category": "productivity"
+    },
+    {
+      "name": "skill-ecosystem-tools",
+      "source": "./plugins/skill-ecosystem-tools",
+      "description": "Meta-tools for the Claude Code skill ecosystem: discover community skills, import from SkillsMP marketplace, and validate plugin structure before publishing",
+      "version": "1.0.0",
+      "author": {
+        "name": "Patryk Kopycinski",
+        "url": "https://github.com/patrykkopycinski"
+      },
+      "tags": ["skills", "marketplace", "ecosystem", "discovery", "validation", "meta-tools"],
+      "category": "productivity"
+    },
+    {
+      "name": "agent-team-toolkit",
+      "source": "./plugins/agent-team-toolkit",
+      "description": "Complete agent team coordination system: specialized agents, quality gate hooks for file reservation and task validation, and battle-tested team orchestration methodology",
+      "version": "1.0.0",
+      "author": {
+        "name": "Patryk Kopycinski",
+        "url": "https://github.com/patrykkopycinski"
+      },
+      "tags": ["agents", "teams", "coordination", "teammates", "hooks", "quality-gates", "orchestration"],
+      "category": "development"
     }
   ]
 }

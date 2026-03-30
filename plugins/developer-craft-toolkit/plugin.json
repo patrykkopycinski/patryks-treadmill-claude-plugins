@@ -1,0 +1,19 @@
+{
+  "name": "developer-craft-toolkit",
+  "version": "1.0.0",
+  "description": "Essential development skills: systematic refactoring (Martin Fowler methodology), TDD workflows, technical writing, deep-dive research reports, and frontend design review. Generic, language-agnostic tools for any project.",
+  "author": "Patryk Kopycinski",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins"
+  },
+  "keywords": ["refactoring", "tdd", "documentation", "design-review", "code-quality", "development", "best-practices"],
+  "license": "MIT",
+  "skills": [
+    { "id": "code-refactor", "path": "skills/code-refactor/SKILL.md" },
+    { "id": "technical-writer", "path": "skills/technical-writer/SKILL.md" },
+    { "id": "deep-dive", "path": "skills/deep-dive/SKILL.md" },
+    { "id": "frontend-design-review", "path": "skills/frontend-design-review/SKILL.md" },
+    { "id": "tdd-workflow", "path": "skills/tdd-workflow/SKILL.md" }
+  ]
+}

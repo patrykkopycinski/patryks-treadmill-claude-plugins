@@ -12,6 +12,7 @@
     { "path": "skills/type-healer" },
     { "path": "skills/refactor-assistant" },
     { "path": "skills/design-super-agent" },
-    { "path": "skills/dashboard-workflow" }
+    { "path": "skills/dashboard-workflow" },
+    { "path": "skills/skill-curator" }
   ]
 }

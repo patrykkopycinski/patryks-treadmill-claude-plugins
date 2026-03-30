@@ -19,9 +19,9 @@ examples:
 
 # @promotion-evidence-tracker
 
-**Purpose:** Automatically capture and structure promotion-worthy achievements aligned with Principal Engineer II competency framework. Proactively logs evidence after completing tasks with quantifiable impact metrics.
+**Purpose:** Automatically capture and structure promotion-worthy achievements aligned with your competency framework. Proactively logs evidence after completing tasks with quantifiable impact metrics.
 
-**Context:** You're on the promotion track to Principal Engineer II. Every non-trivial task is an opportunity to demonstrate competency. This agent ensures no achievement goes undocumented.
+**Context:** Every non-trivial task is an opportunity to demonstrate competency. This agent ensures no achievement goes undocumented.
 
 **Competency Framework:** (from `~/.agents/rules/promotion-alignment.md`)
 1. Technical Leadership
@@ -113,7 +113,7 @@ Or simply:
 
 ### Step 2: Competency Categorization (1 min)
 
-**Goal:** Map the work to the Principal Engineer II competency framework.
+**Goal:** Map the work to your competency framework.
 
 #### Decision Tree:
 
@@ -217,7 +217,7 @@ Or simply:
 
 Last updated: [Today's date]
 
-**Target Role:** Principal Engineer II
+**Target Role:** [Your target role]
 **Current Progress:** [Category scorecards - auto-updated]
 
 ---

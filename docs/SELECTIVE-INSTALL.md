@@ -1,125 +1,131 @@
-# Selective Agent Installation
+# Selective Plugin Installation
 
-You don't need to install all 20 agents. Pick what you need!
-
-## 🎯 Installation Methods
-
-### Method 1: Interactive Installer (Recommended)
-
-**Best for:** Most users who want control
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/patrykkopycinski/patryks-treadmill-claude-plugins/main/install-select.sh | bash
-```
-
-**What it does:**
-1. Shows list of available agents
-2. You pick which ones you want (e.g., "1 3 5")
-3. Creates symlinks only for selected agents
-4. Lightweight - no full clone needed
-
-**Example:**
-```
-📚 Available Agents:
-
-  [1] knowledge-base-system
-  [2] kibana-dev-tools
-  [3] elastic-utils
-  [4] agent-builder-tools
-  ...
-
-Select agents to install: 1 4
-
-✅ Installed: knowledge-base-system
-✅ Installed: agent-builder-tools
-```
+You don't need all 13 plugins. Pick what you need.
 
 ---
 
-### Method 2: Manual Symlinks
+## 🎯 Method 0: Marketplace (Recommended)
 
-**Best for:** Advanced users who want full control
+**Best for:** Most users. No cloning required.
+
+```
+/plugin marketplace add patrykkopycinski/patryks-treadmill-claude-plugins
+```
+
+Then install individual plugins:
+
+```
+/plugin install ai-conversation-intelligence@patryks-treadmill
+/plugin install session-safety-hooks@patryks-treadmill
+/plugin install developer-craft-toolkit@patryks-treadmill
+/plugin install agent-team-toolkit@patryks-treadmill
+/plugin install ci-babysitter@patryks-treadmill
+/plugin install kibana-testing-tools@patryks-treadmill
+```
+
+Or browse interactively: open `/plugin` and go to the **Discover** tab.
+
+**Benefits:**
+- No manual cloning
+- Claude Code manages updates
+- Install/uninstall in one command
+
+---
+
+## 🔧 Method 1: Manual Symlinks
+
+**Best for:** Advanced users who want full control over what's active.
 
 ```bash
-# 1. Clone marketplace
+# 1. Clone the marketplace
 cd ~/.claude/plugins
 git clone https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins treadmill
 
-# 2. Symlink only agents you want
-ln -s treadmill/plugins/knowledge-base-system knowledge-base-system
-ln -s treadmill/plugins/agent-builder-tools agent-builder-tools
+# 2. Symlink only the plugins you want
+ln -s treadmill/plugins/session-safety-hooks session-safety-hooks
+ln -s treadmill/plugins/ai-conversation-intelligence ai-conversation-intelligence
+ln -s treadmill/plugins/developer-craft-toolkit developer-craft-toolkit
 
-# 3. Done! Only those 2 agents are active
+# 3. Restart Claude Code — done
 ```
 
-**Benefits:**
-- Full control over what's installed
-- Easy to add/remove agents later
-- All agents stay up-to-date with `cd treadmill && git pull`
+**Add more later:**
+```bash
+ln -s ~/.claude/plugins/treadmill/plugins/kibana-testing-tools \
+      ~/.claude/plugins/kibana-testing-tools
+```
+
+**Remove a plugin:**
+```bash
+rm ~/.claude/plugins/session-safety-hooks  # removes symlink, not source
+```
+
+**Update everything:**
+```bash
+cd ~/.claude/plugins/treadmill && git pull
+```
 
 ---
 
-### Method 3: Git Sparse-Checkout
+## 📦 Method 2: Git Sparse-Checkout
 
-**Best for:** Bandwidth-conscious users or large marketplaces
+**Best for:** Bandwidth-conscious users or minimal disk footprint.
 
 ```bash
 cd ~/.claude/plugins
 
-# Initialize sparse-checkout
 git clone --filter=blob:none --sparse \
   https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins \
   treadmill
 
 cd treadmill
 
-# Check out only the agents you want
 git sparse-checkout set \
   .claude-plugin \
-  plugins/knowledge-base-system \
-  plugins/agent-builder-tools
-
-# Done! Only those agents are downloaded
+  plugins/session-safety-hooks \
+  plugins/ai-conversation-intelligence \
+  plugins/developer-craft-toolkit
 ```
 
-**Benefits:**
-- Minimal download (only selected agents)
-- Good for slow connections
-- Keeps disk usage low
-
-**Add more agents later:**
+**Add more plugins later:**
 ```bash
 cd ~/.claude/plugins/treadmill
-git sparse-checkout add plugins/another-agent
+git sparse-checkout add plugins/agent-team-toolkit
+git sparse-checkout add plugins/kibana-testing-tools
 ```
 
 ---
 
-### Method 4: Install All, Disable Some
+## ⚙️ Method 3: Install All, Disable Selectively
 
-**Best for:** Users who want everything available but not active
+**Best for:** Users who want everything available but not all active.
 
 ```bash
-# Install full marketplace
 cd ~/.claude/plugins
 git clone https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins treadmill
+```
 
-# Disable agents you don't want
-# Add to ~/.claude/settings.json:
+Then disable specific plugins in `~/.claude/settings.json`:
+
+```json
 {
   "enabledPlugins": {
-    "knowledge-base-system@treadmill": true,
-    "agent-builder-tools@treadmill": true,
-    "kibana-dev-tools@treadmill": false,  // Disabled
-    "elastic-utils@treadmill": false       // Disabled
+    "session-safety-hooks@treadmill": true,
+    "ai-conversation-intelligence@treadmill": true,
+    "developer-craft-toolkit@treadmill": true,
+    "agent-team-toolkit@treadmill": true,
+    "skill-ecosystem-tools@treadmill": true,
+    "kibana-testing-tools@treadmill": true,
+    "kibana-code-quality-suite@treadmill": true,
+    "kibana-dev-workflow-tools@treadmill": true,
+    "kibana-build-performance-tools@treadmill": false,
+    "kibana-docs-release-tools@treadmill": false,
+    "kibana-infrastructure-ops-tools@treadmill": false,
+    "kibana-career-development@treadmill": false,
+    "ci-babysitter@treadmill": false
   }
 }
 ```
-
-**Benefits:**
-- All agents present (can enable anytime)
-- Fine-grained control
-- Easy to toggle on/off
 
 ---
 
@@ -127,192 +133,156 @@ git clone https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins t
 
 | Method | Disk Usage | Setup | Updates | Control |
 |--------|------------|-------|---------|---------|
-| **Interactive Installer** | Low (symlinks) | Easy | Simple | High |
-| **Manual Symlinks** | Low (symlinks) | Medium | Simple | Full |
-| **Sparse-Checkout** | Minimal | Advanced | Simple | Full |
-| **Install All + Disable** | High (full) | Easy | Simple | Medium |
+| **Marketplace** | Managed | Easiest | Automatic | High |
+| **Manual Symlinks** | Low (symlinks) | Medium | `git pull` | Full |
+| **Sparse-Checkout** | Minimal | Advanced | `git pull` | Full |
+| **Install All + Disable** | Full clone | Easy | `git pull` | Medium |
 
 ---
 
 ## 🎯 Recommendations by Use Case
 
-### "I want just 1-2 agents"
-→ **Method 1: Interactive Installer**
-```bash
-curl -fsSL https://raw.githubusercontent.com/patrykkopycinski/patryks-treadmill-claude-plugins/main/install-select.sh | bash
+### "I'm new to this, just install it"
+→ **Method 0: Marketplace**
+```
+/plugin marketplace add patrykkopycinski/patryks-treadmill-claude-plugins
+/plugin install ai-conversation-intelligence@patryks-treadmill
+/plugin install session-safety-hooks@patryks-treadmill
 ```
 
-### "I want flexibility to enable/disable"
-→ **Method 2: Manual Symlinks**
+### "I only work outside Kibana"
+→ Start with 4 generic plugins:
+```
+/plugin install developer-craft-toolkit@patryks-treadmill
+/plugin install session-safety-hooks@patryks-treadmill
+/plugin install agent-team-toolkit@patryks-treadmill
+/plugin install skill-ecosystem-tools@patryks-treadmill
+```
+
+### "I want flexibility to toggle plugins"
+→ **Method 1: Manual Symlinks**
 ```bash
 git clone <repo> treadmill
 ln -s treadmill/plugins/X X
 ```
 
 ### "I'm on slow internet"
-→ **Method 3: Sparse-Checkout**
+→ **Method 2: Sparse-Checkout**
 ```bash
 git clone --sparse <repo>
-git sparse-checkout set plugins/X
+git sparse-checkout set plugins/X plugins/Y
 ```
 
 ### "I want everything available"
-→ **Method 4: Install All + Disable**
+→ **Method 3: Install All + Disable**
 ```bash
 git clone <repo> treadmill
-# Configure enabledPlugins
+# Configure enabledPlugins in settings.json
 ```
 
 ---
 
 ## 🔄 Managing Your Installation
 
-### Add More Agents Later
-
-**Interactive Installer:**
+### Check what's installed
 ```bash
-bash ~/.claude/plugins/treadmill/install-select.sh
+ls -la ~/.claude/plugins/ | grep treadmill
 ```
 
-**Manual Symlinks:**
-```bash
-ln -s ~/.claude/plugins/treadmill/plugins/new-agent ~/.claude/plugins/new-agent
-```
-
-**Sparse-Checkout:**
-```bash
-cd ~/.claude/plugins/treadmill
-git sparse-checkout add plugins/new-agent
-```
-
-### Remove Agents
-
-**Symlinks:**
-```bash
-rm ~/.claude/plugins/agent-name  # Just removes symlink, not source
-```
-
-**Disable in Settings:**
-```json
-{
-  "enabledPlugins": {
-    "agent-name@treadmill": false
-  }
-}
-```
-
-### Update All Installed Agents
-
+### Update all plugins
 ```bash
 cd ~/.claude/plugins/treadmill
 git pull origin main
 ```
+All symlinked plugins update automatically.
 
-All symlinked agents update automatically!
+### Remove everything
+```bash
+rm ~/.claude/plugins/*treadmill* 2>/dev/null
+rm -rf ~/.claude/plugins/treadmill
+```
 
 ---
 
 ## 💡 Pro Tips
 
-### Tip 1: Start Small
-Install 1-2 agents, use them for a week, then add more.
+**Start small.** Install 2-3 plugins for a week before adding more.
 
-### Tip 2: Use Symlinks
-They're lightweight and easy to manage:
+**Generic first.** If you're unsure, start with the 4 generic plugins — they work everywhere.
+
+**Symlinks are free.** The full marketplace clone costs disk space once; each additional symlink costs nothing.
+
+**Group by workflow:**
 ```bash
-# Add agent
-ln -s treadmill/plugins/X X
+# Safety + intelligence (works anywhere)
+ln -s treadmill/plugins/session-safety-hooks session-safety-hooks
+ln -s treadmill/plugins/ai-conversation-intelligence ai-conversation-intelligence
 
-# Remove agent
-rm X
-
-# No disk space wasted, source stays in treadmill/
+# Kibana dev stack
+ln -s treadmill/plugins/kibana-testing-tools kibana-testing-tools
+ln -s treadmill/plugins/kibana-code-quality-suite kibana-code-quality-suite
+ln -s treadmill/plugins/kibana-dev-workflow-tools kibana-dev-workflow-tools
+ln -s treadmill/plugins/ci-babysitter ci-babysitter
 ```
-
-### Tip 3: Group by Use Case
-Create groups for different workflows:
-
-```bash
-# Productivity agents
-ln -s treadmill/plugins/knowledge-base-system knowledge-base-system
-ln -s treadmill/plugins/promotion-tracker promotion-tracker
-
-# Development agents
-ln -s treadmill/plugins/kibana-dev-tools kibana-dev-tools
-ln -s treadmill/plugins/elastic-utils elastic-utils
-```
-
-### Tip 4: Check What's Installed
-```bash
-ls -la ~/.claude/plugins/ | grep treadmill
-```
-
-Shows all agents symlinked from treadmill.
 
 ---
 
 ## 🆘 Troubleshooting
 
-### "Agent not showing up in Claude Code"
-1. Check symlink exists: `ls -la ~/.claude/plugins/agent-name`
+### "Plugin not showing up in Claude Code"
+1. Check symlink: `ls -la ~/.claude/plugins/plugin-name`
 2. Restart Claude Code
-3. Check `/help` for agent commands
+3. Verify `plugin.json` exists in the plugin directory
 
-### "Want to uninstall everything"
-```bash
-# Remove symlinks
-rm ~/.claude/plugins/agent-*
-
-# Remove marketplace
-rm -rf ~/.claude/plugins/treadmill
+### "Want to disable one plugin temporarily"
+```json
+// ~/.claude/settings.json
+{
+  "enabledPlugins": {
+    "ci-babysitter@treadmill": false
+  }
+}
 ```
 
 ### "Accidentally cloned full repo, want sparse"
 ```bash
 cd ~/.claude/plugins/treadmill
-
-# Enable sparse-checkout
 git sparse-checkout init --cone
-
-# Set what you want
-git sparse-checkout set plugins/agent1 plugins/agent2
-
-# Git will remove other files
+git sparse-checkout set plugins/session-safety-hooks plugins/ai-conversation-intelligence
 ```
 
 ---
 
-## 📈 Disk Usage Comparison
+## 📈 Disk Usage
 
-**For 20 agents (each ~5MB):**
+**13 plugins (estimated ~3MB each):**
 
 | Method | Disk Usage |
 |--------|------------|
-| Install all 20 | ~100 MB |
-| Sparse-checkout (5 agents) | ~25 MB |
-| Symlinks (5 agents) | ~100 MB marketplace + ~0 MB links |
-| Individual repos (5 agents) | ~25 MB |
-
-**Symlinks:** Marketplace stays in one place, multiple symlinks point to it (no duplication).
+| All 13 via marketplace | ~40 MB managed |
+| Full clone (all 13) | ~40 MB |
+| Sparse-checkout (4 plugins) | ~12 MB |
+| Symlinks (any count) | ~40 MB clone + ~0 MB per link |
 
 ---
 
 ## 🎯 Quick Reference
 
 ```bash
-# Interactive install (easiest)
-curl -fsSL <install-select.sh> | bash
+# Marketplace (recommended)
+/plugin marketplace add patrykkopycinski/patryks-treadmill-claude-plugins
+/plugin install <name>@patryks-treadmill
 
-# Manual symlinks (most flexible)
+# Manual symlinks
 git clone <repo> treadmill
-ln -s treadmill/plugins/X X
+ln -s treadmill/plugins/<name> <name>
 
-# Sparse-checkout (minimal disk)
-git clone --sparse <repo>
-git sparse-checkout set plugins/X
+# Sparse-checkout
+git clone --sparse <repo> treadmill
+git sparse-checkout set plugins/<name>
 
-# Disable unwanted agents
-# Edit ~/.claude/settings.json
+# Disable a plugin
+# Set "plugin-name@treadmill": false in ~/.claude/settings.json
 
 # Update everything
 cd treadmill && git pull

@@ -1,0 +1,17 @@
+{
+  "name": "skill-ecosystem-tools",
+  "version": "1.0.0",
+  "description": "Meta-tools for the Claude Code skill ecosystem: discover community skills, import from SkillsMP marketplace (261k+ skills), and validate plugin structure before publishing.",
+  "author": "Patryk Kopycinski",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins"
+  },
+  "keywords": ["skills", "marketplace", "ecosystem", "discovery", "validation", "meta-tools"],
+  "license": "MIT",
+  "skills": [
+    { "id": "find-skills", "path": "skills/find-skills/SKILL.md" },
+    { "id": "skillsmp-importer", "path": "skills/skillsmp-importer/SKILL.md" },
+    { "id": "validate-claude-marketplace", "path": "skills/validate-claude-marketplace/SKILL.md" }
+  ]
+}
