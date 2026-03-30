@@ -48,7 +48,7 @@ The `team-coordination` skill packages the full orchestration methodology as a r
 - Team patterns: Cross-Layer Feature, Parallel Review, Investigation, Migration
 - File reservation system (`~/.claude/teams/<name>/reservations.json`)
 - Task dependency graph patterns (fan-out, fan-in, pipeline)
-- Teammate model selection rule (always `model: "sonnet"` — never Opus for teammates)
+- Teammate model selection (Sonnet by default, Opus for deep-reasoning tasks like architecture and security)
 - Escalation protocol for stuck teammates
 - Post-team lint coordination workflow
 - Anti-patterns catalogue
@@ -75,8 +75,8 @@ The `team-coordination` skill packages the full orchestration methodology as a r
    Task 4 (tests, depends on 2+3)
 
 5. SPAWN TEAMMATES
-   Each teammate gets: model: "sonnet", subagent_type: <agent-name>,
-   file boundaries, and the escalation protocol in their prompt.
+   Each teammate gets: model ("sonnet" default, "opus" for deep-reasoning),
+   subagent_type, file boundaries, and escalation protocol in their prompt.
 
 6. MONITOR + REDIRECT
    Lead checks in on teammates not messaging for >5 minutes.

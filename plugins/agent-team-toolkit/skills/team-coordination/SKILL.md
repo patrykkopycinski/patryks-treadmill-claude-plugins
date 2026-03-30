@@ -48,7 +48,7 @@ Battle-tested system for orchestrating multi-agent teams in Claude Code. Covers 
        4. TeamCreate with descriptive name
        5. Write file reservations: ~/.claude/teams/<name>/reservations.json
        6. Create task graph with dependencies (fan-out for parallelism)
-       7. Spawn teammates with model: "sonnet" + appropriate subagent_type
+       7. Spawn teammates (model: "sonnet" default, "opus" for deep-reasoning tasks) + subagent_type
        8. Assign initial tasks
        9. Monitor, redirect, synthesize
       10. Centralized lint pass after all teammates idle
@@ -89,20 +89,42 @@ Is communication between workers needed?
 
 ---
 
-## Teammate Model Selection (MANDATORY)
+## Teammate Model Selection
 
-**Every `Agent()` call spawning a teammate MUST include `model: "sonnet"`.**
+**Default to `model: "sonnet"` for teammates. Use `model: "opus"` only when the task genuinely requires deeper reasoning.**
 
 ```
-// CORRECT
+// DEFAULT — most teammate work
 Agent({ name: "backend", model: "sonnet", team_name: "...", prompt: "..." })
 
-// WRONG — inherits Opus from lead, wastes 5x quota
+// WRONG — inherits Opus from lead, wastes 5x quota for simple work
 Agent({ name: "backend", team_name: "...", prompt: "..." })
+
+// JUSTIFIED — task requires deep architectural reasoning
+Agent({ name: "architect", model: "opus", team_name: "...", prompt: "..." })
 ```
 
-- **Lead**: Opus — orchestration, synthesis, quality judgment
-- **All teammates**: Sonnet — implementation, review, testing, research
+### When to use Opus for a teammate
+
+| Signal | Example | Why Opus helps |
+|--------|---------|----------------|
+| Architectural design decisions | "Design the data model for X" | Needs to reason about trade-offs, constraints, future extensibility |
+| Complex root-cause debugging | "Find why X causes Y only under Z" | Multi-step causal reasoning across many files |
+| Security-critical review | "Audit auth flow for bypasses" | Must reason adversarially about attack vectors |
+| Cross-cutting refactor planning | "Plan how to decouple X from Y across 50 files" | Needs holistic understanding of dependency graph |
+
+### When Sonnet is sufficient (most work)
+
+| Task type | Examples |
+|-----------|---------|
+| Implementation | Build a component, add an API route, write a service |
+| Test writing | Jest unit tests, Scout E2E tests, test fixtures |
+| Focused review | Check for N+1 queries, verify i18n, lint correctness |
+| Research | Git blame investigation, codebase exploration |
+| Migration | Rename across files, convert test frameworks |
+
+- **Lead**: Opus — orchestration, synthesis, final quality judgment
+- **Teammates**: Sonnet by default, Opus when the task requires deep reasoning (see table above)
 
 ---
 
@@ -338,4 +360,4 @@ const label = i18n.translate('xpack.<plugin>.<area>.<key>', { defaultMessage: '.
 | No file boundaries | Teammates overwrite each other's work | Always set reservations.json first |
 | Lead doing implementation | Lead competes with teammates instead of orchestrating | Lead coordinates only |
 | Forgetting `TeamDelete` | Orphaned teams accumulate and consume context | Always clean up when done |
-| Opus for teammates | 5x token cost for focused work Sonnet handles equally well | Always pass `model: "sonnet"` |
+| Opus for simple work | 5x token cost for implementation/tests Sonnet handles equally well | Default to `model: "sonnet"`, use Opus only for deep-reasoning tasks (architecture, security audit, complex debugging) |
