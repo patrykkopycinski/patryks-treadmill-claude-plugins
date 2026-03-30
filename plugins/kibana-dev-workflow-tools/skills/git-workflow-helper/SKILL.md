@@ -1,3 +1,8 @@
+---
+name: git-workflow-helper
+description: Guide complex Git operations including interactive rebase, cherry-pick, conflict resolution, reflog recovery, and history rewriting with safety warnings and step-by-step guidance.
+---
+
 # Git Workflow Helper Agent
 
 ## Description

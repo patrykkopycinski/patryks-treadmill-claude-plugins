@@ -1,3 +1,8 @@
+---
+name: refactor-assistant
+description: Guide systematic refactoring with safety checks, metrics, and test-driven validation.
+---
+
 # Refactor Assistant
 
 **Purpose:** Guide systematic refactoring with safety checks, metrics, and test-driven validation.

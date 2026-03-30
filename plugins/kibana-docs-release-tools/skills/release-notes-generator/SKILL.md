@@ -1,3 +1,8 @@
+---
+name: release-notes-generator
+description: Generate comprehensive release notes from git commits and PRs between releases, categorizing features, bug fixes, breaking changes, and deprecations.
+---
+
 # Release Notes Generator
 
 ## Purpose

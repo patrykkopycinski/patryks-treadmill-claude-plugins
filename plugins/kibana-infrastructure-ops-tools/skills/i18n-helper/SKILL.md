@@ -1,3 +1,8 @@
+---
+name: i18n-helper
+description: Internationalization helper for Kibana - find hardcoded strings, generate translations, and validate i18n implementation.
+---
+
 # i18n Helper
 
 ## Purpose

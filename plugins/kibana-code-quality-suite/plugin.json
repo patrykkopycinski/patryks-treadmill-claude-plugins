@@ -7,12 +7,12 @@
     "url": "https://github.com/patrykkopycinski"
   },
   "skills": [
-    { "path": "skills/security-reviewer" },
-    { "path": "skills/accessibility-auditor" },
-    { "path": "skills/type-healer" },
-    { "path": "skills/refactor-assistant" },
-    { "path": "skills/design-super-agent" },
-    { "path": "skills/dashboard-workflow" },
-    { "path": "skills/skill-curator" }
+    { "id": "security-reviewer", "path": "skills/security-reviewer/SKILL.md" },
+    { "id": "accessibility-auditor", "path": "skills/accessibility-auditor/SKILL.md" },
+    { "id": "type-healer", "path": "skills/type-healer/SKILL.md" },
+    { "id": "refactor-assistant", "path": "skills/refactor-assistant/SKILL.md" },
+    { "id": "design-super-agent", "path": "skills/design-super-agent/SKILL.md" },
+    { "id": "dashboard-workflow", "path": "skills/dashboard-workflow/SKILL.md" },
+    { "id": "skill-curator", "path": "skills/skill-curator/SKILL.md" }
   ]
 }

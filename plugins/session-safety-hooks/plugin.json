@@ -78,6 +78,24 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/log-stop-verdict.sh",
             "statusMessage": "Logging session verdict...",
             "async": true
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/track-usage.sh",
+            "statusMessage": "Tracking session usage...",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/backup-settings.sh",
+            "statusMessage": "Backing up settings...",
+            "async": true
           }
         ]
       }

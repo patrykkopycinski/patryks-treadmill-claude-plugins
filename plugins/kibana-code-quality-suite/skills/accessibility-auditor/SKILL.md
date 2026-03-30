@@ -1,3 +1,8 @@
+---
+name: accessibility-auditor
+description: Audit UI components and pages for accessibility issues and suggest fixes to ensure Kibana is usable by everyone.
+---
+
 # Accessibility Auditor
 
 ## Purpose

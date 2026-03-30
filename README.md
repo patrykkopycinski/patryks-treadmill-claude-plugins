@@ -5,7 +5,7 @@
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude-Code%20Plugins-8A63D2)](https://github.com/anthropics/claude-code)
 
-50 skills · 6 agents · 13 hooks
+50 skills · 6 agents · 15 hooks
 
 ---
 
@@ -60,7 +60,7 @@ Includes generic agents (`archaeologist`, `yak-shave-detector`) plus Kibana-spec
 |--------|-----------|-------|
 | [Agent Team Toolkit](plugins/agent-team-toolkit/) | 6 agents, 4 hooks, 1 skill | Team coordination, quality gate hooks, specialized agents |
 | [Developer Craft Toolkit](plugins/developer-craft-toolkit/) | 5 skills | Systematic refactoring (Martin Fowler), TDD, technical writing, deep-dive research, frontend design review |
-| [Session Safety Hooks](plugins/session-safety-hooks/) | 9 hooks | Command guard, secret detection, auto-backup, audit logging, session lifecycle |
+| [Session Safety Hooks](plugins/session-safety-hooks/) | 11 hooks | Command guard, secret detection, auto-backup, audit logging, usage tracking, settings backup, session lifecycle |
 | [Skill Ecosystem Tools](plugins/skill-ecosystem-tools/) | 3 skills | Discover community skills, import from SkillsMP, validate plugins |
 
 ### Kibana & AI
@@ -106,7 +106,9 @@ Includes generic agents (`archaeologist`, `yak-shave-detector`) plus Kibana-spec
 | `log-stop-verdict.sh` | Records session stop verdicts |
 | `pre-compact-handoff.sh` | Saves context before conversation compaction |
 | `post-compact-resume.sh` | Restores context after compaction |
-| `session-reset.sh` | Cleanup on session end |
+| `session-reset.sh` | Resets stale state on new session |
+| `track-usage.sh` | Session usage stats (duration, tool count, files changed) |
+| `backup-settings.sh` | Auto-backup settings.json and agents on session end |
 
 ### Skill Ecosystem Tools
 

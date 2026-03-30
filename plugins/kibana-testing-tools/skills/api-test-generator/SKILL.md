@@ -1,3 +1,8 @@
+---
+name: api-test-generator
+description: Auto-generate comprehensive Scout API tests from Kibana route definitions, including valid/invalid request tests, RBAC tests, and schema-driven test data generation.
+---
+
 # API Test Generator
 
 Auto-generate comprehensive Scout API tests from Kibana route definitions.

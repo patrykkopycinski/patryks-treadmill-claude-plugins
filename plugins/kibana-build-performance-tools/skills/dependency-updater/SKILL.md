@@ -1,3 +1,8 @@
+---
+name: dependency-updater
+description: Review and manage dependency updates in Kibana by analyzing Renovate PRs, checking changelogs for breaking changes, batching merges, and monitoring security advisories.
+---
+
 # Dependency Updater Agent
 
 ## Description

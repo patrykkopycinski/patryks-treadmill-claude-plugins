@@ -7,8 +7,8 @@
     "url": "https://github.com/patrykkopycinski"
   },
   "skills": [
-    { "path": "skills/perf-optimizer" },
-    { "path": "skills/bundle-analyzer" },
-    { "path": "skills/dependency-updater" }
+    { "id": "perf-optimizer", "path": "skills/perf-optimizer/SKILL.md" },
+    { "id": "bundle-analyzer", "path": "skills/bundle-analyzer/SKILL.md" },
+    { "id": "dependency-updater", "path": "skills/dependency-updater/SKILL.md" }
   ]
 }

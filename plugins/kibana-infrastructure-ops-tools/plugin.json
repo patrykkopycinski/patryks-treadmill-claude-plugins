@@ -7,10 +7,10 @@
     "url": "https://github.com/patrykkopycinski"
   },
   "skills": [
-    { "path": "skills/monitoring-setup" },
-    { "path": "skills/cross-repo-sync" },
-    { "path": "skills/i18n-helper" },
-    { "path": "skills/spike-manager" },
-    { "path": "skills/check-cross-repo-consistency" }
+    { "id": "monitoring-setup", "path": "skills/monitoring-setup/SKILL.md" },
+    { "id": "cross-repo-sync", "path": "skills/cross-repo-sync/SKILL.md" },
+    { "id": "i18n-helper", "path": "skills/i18n-helper/SKILL.md" },
+    { "id": "spike-manager", "path": "skills/spike-manager/SKILL.md" },
+    { "id": "check-cross-repo-consistency", "path": "skills/check-cross-repo-consistency/SKILL.md" }
   ]
 }

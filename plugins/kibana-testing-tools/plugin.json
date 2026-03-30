@@ -7,14 +7,14 @@
     "url": "https://github.com/patrykkopycinski"
   },
   "skills": [
-    { "path": "skills/test-coverage-analyzer" },
-    { "path": "skills/api-test-generator" },
-    { "path": "skills/test-data-builder" },
-    { "path": "skills/flake-hunter" },
-    { "path": "skills/cypress-to-scout-migrator" },
-    { "path": "skills/kbn-evals-debugger" },
-    { "path": "skills/test-selector-healer" },
-    { "path": "skills/qa-browser-verification" },
-    { "path": "skills/kbn-evals-vision-reviewer" }
+    { "id": "test-coverage-analyzer", "path": "skills/test-coverage-analyzer/SKILL.md" },
+    { "id": "api-test-generator", "path": "skills/api-test-generator/SKILL.md" },
+    { "id": "test-data-builder", "path": "skills/test-data-builder/SKILL.md" },
+    { "id": "flake-hunter", "path": "skills/flake-hunter/SKILL.md" },
+    { "id": "cypress-to-scout-migrator", "path": "skills/cypress-to-scout-migrator/SKILL.md" },
+    { "id": "kbn-evals-debugger", "path": "skills/kbn-evals-debugger/SKILL.md" },
+    { "id": "test-selector-healer", "path": "skills/test-selector-healer/SKILL.md" },
+    { "id": "qa-browser-verification", "path": "skills/qa-browser-verification/SKILL.md" },
+    { "id": "kbn-evals-vision-reviewer", "path": "skills/kbn-evals-vision-reviewer/SKILL.md" }
   ]
 }

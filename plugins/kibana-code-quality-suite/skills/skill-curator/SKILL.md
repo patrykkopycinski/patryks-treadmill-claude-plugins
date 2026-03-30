@@ -3,8 +3,9 @@ name: skill-curator
 description: >
   Maintain skill ecosystem quality, discoverability, and security. Auto-runs after skill creation/modification
   to validate conventions, check security, detect similarity overlaps, generate searchable catalog,
-  suggest MCP tool integrations, and track usage analytics. Use when creating/reviewing skills,
-  generating skill catalog, checking for duplicates, or maintaining ecosystem health.
+  suggest MCP tool integrations, track usage analytics, and optimize skills for token efficiency.
+  Use when creating/reviewing skills, generating skill catalog, checking for duplicates, maintaining
+  ecosystem health, or reducing token footprint of a skill.
 trigger: |
   - "review this skill"
   - "is there a skill that does X?"
@@ -12,6 +13,10 @@ trigger: |
   - "check skill ecosystem health"
   - "find duplicate skills"
   - "suggest MCP tools for this skill"
+  - "optimize skill tokens"
+  - "compress this skill"
+  - "reduce skill token count"
+  - "how many tokens does this skill use?"
   - Auto-trigger after creating/modifying any skill
 examples:
   - input: "Review the newly created flake-hunter skill"
@@ -20,6 +25,8 @@ examples:
     output: "Searches skill catalog for 'test migration', finds cypress-to-scout-migrator (95% match), shows description, usage examples, and trigger phrases"
   - input: "Generate skill catalog"
     output: "Scans 34 skills in ~/.agents/skills/, categorizes by domain (Kibana-specific: 8, Development workflow: 12, Quality: 6, Documentation: 4, Security: 4), generates ~/.agents/SKILL_CATALOG.md with searchable index"
+  - input: "Optimize skill tokens for the flake-hunter skill"
+    output: "Counts ~340 tokens (260 words * 1.3), identifies 4 opportunities (redundant headings, verbose examples, duplicate triggers, filler prose), shows before/after diff with ~38% savings, applies changes after approval"
 ---
 
 # @skill-curator
@@ -53,6 +60,7 @@ examples:
 - `suggest-tools <skill-path>` — Suggest relevant MCP tools
 - `usage-analytics` — Analyze skill usage from conversation history
 - `auto-update <api-name>` — Find skills using deprecated API
+- `token-optimize <skill-path>` — Analyze and reduce token footprint of a skill
 
 ---
 
@@ -165,6 +173,62 @@ See `references/catalog-template.md` for full template.
 
 ---
 
+### Mode 8: Token Optimization
+
+**Goal:** Reduce the token footprint of a SKILL.md by 30-70% without losing meaning or trigger coverage.
+
+**Trigger phrases:** "optimize skill tokens" | "compress this skill" | "reduce skill token count" | "how many tokens does this skill use?"
+
+**Steps:**
+1. **Count tokens** — estimate: `word_count * 1.3`. Report as "~N tokens (M words * 1.3)".
+2. **Audit for opportunities** — scan the skill body for each technique below and list findings.
+3. **Show before/after diff** — present a side-by-side summary of proposed changes with estimated per-change savings.
+4. **Get approval** — ask "Apply these optimizations? (yes / yes, all / skip N)" before writing.
+5. **Apply** — rewrite the file with approved changes.
+6. **Verify triggers** — confirm every trigger phrase still appears (or is covered by a condensed variant) in the updated file.
+7. **Report savings** — "Reduced from ~N to ~M tokens (~X% savings)."
+
+**Optimization techniques:**
+
+| Technique | When to apply | Typical savings |
+|-----------|--------------|-----------------|
+| Remove redundant headings | Section title restates what the content already makes obvious | 5-15 tokens/heading |
+| Compress examples | Multi-line code block can be expressed inline | 10-30 tokens/example |
+| Deduplicate trigger phrases | Two triggers convey the same intent ("fix tests" + "fix the tests") | 5-10 tokens/duplicate |
+| Replace prose with tables | 3+ parallel items described in sentences | 20-40% of that block |
+| Remove filler phrases | "This skill will help you to", "In order to", "Please note that" | 3-8 tokens/phrase |
+| Consolidate step lists | Steps 2-4 are a single logical action split arbitrarily | 10-20 tokens/merge |
+| Move data to frontmatter | Trigger examples duplicated in both frontmatter and body | Dedupe body entries |
+| Prune rare examples | Keep the 2-3 highest-frequency triggers; cut niche edge-case examples | 20-50 tokens/example removed |
+
+**Constraints (never violate):**
+- Every unique intent covered by the original trigger list must remain triggerable after optimization.
+- Do not remove required frontmatter fields (`name`, `description`, `trigger`, `examples`).
+- Do not merge steps that have distinct preconditions or failure modes.
+- If a quality gate (`≤500 lines`) is already met, still report token count — caller may want the reduction for other reasons.
+
+**Output format:**
+
+```
+Token Optimization Report — <skill-name>
+=========================================
+Current: ~680 tokens (523 words * 1.3)
+Target:  ~400 tokens (estimated)
+
+Opportunities found:
+  [1] Remove filler preamble in Purpose section      → -18 tokens
+  [2] Deduplicate 3 trigger phrases (review/check)   → -12 tokens
+  [3] Replace 4-paragraph prose with table (Mode 3)  → -55 tokens
+  [4] Compress verbose example #2 to inline          → -28 tokens
+  [5] Prune 2 rarely-triggered edge-case examples    → -42 tokens
+
+Projected savings: ~155 tokens (~23%)
+
+Apply? (yes / yes,all / skip 3,5 / no)
+```
+
+---
+
 ## Quality Gates (Auto-Enforced)
 
 After every skill review, enforce these gates:
@@ -177,6 +241,7 @@ After every skill review, enforce these gates:
 | Similarity (HIGH overlap >85%) | 0 | ❌ BLOCK: Merge or clarify |
 | Similarity (MEDIUM overlap 70-85%) | Allowed | ⚠️ WARN: Clarify distinction |
 | SKILL.md length | ≤500 lines | ⚠️ WARN: Use progressive disclosure |
+| Token footprint | ≤1500 tokens (~1150 words) | ℹ️ INFO: Run `token-optimize` mode |
 | MCP tool suggestions | ≥1 (if applicable) | ℹ️ INFO: Review suggestions |
 
 ---

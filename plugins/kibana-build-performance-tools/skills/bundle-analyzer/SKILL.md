@@ -1,3 +1,8 @@
+---
+name: bundle-analyzer
+description: Analyze Kibana bundle size and performance with webpack-bundle-analyzer, duplicate detection, and tree-shaking optimization recommendations.
+---
+
 # Bundle Analyzer Agent
 
 ## Description

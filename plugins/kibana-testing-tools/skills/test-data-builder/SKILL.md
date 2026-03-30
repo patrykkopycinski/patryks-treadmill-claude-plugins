@@ -1,3 +1,8 @@
+---
+name: test-data-builder
+description: Generate high-quality test data for Kibana tests by creating mocks from TypeScript interfaces, generating ES archives, building reusable data factories, and producing schema-driven fixtures.
+---
+
 # Test Data Builder Agent
 
 ## Description

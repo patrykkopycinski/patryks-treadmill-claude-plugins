@@ -1,3 +1,8 @@
+---
+name: migration-planner
+description: Plan and execute large-scale migrations in Kibana by analyzing scope, estimating effort, generating phased rollout plans, tracking progress, and producing stakeholder reports.
+---
+
 # Migration Planner Agent
 
 ## Description

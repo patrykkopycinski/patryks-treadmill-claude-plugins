@@ -1,3 +1,8 @@
+---
+name: pr-optimizer
+description: Optimize PR size, structure, and reviewability to accelerate code review cycles.
+---
+
 # PR Optimizer
 
 ## Purpose

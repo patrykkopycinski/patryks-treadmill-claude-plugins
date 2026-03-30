@@ -14,6 +14,8 @@ All hooks use `$HOME`-based paths — no hardcoded user directories.
 | `log-changes.sh` | `PostToolUse` (async) | `Write\|Edit\|NotebookEdit` | Appends every file write/edit to `~/.claude/logs/audit-trail.md` with timestamp and tool name. |
 | `log-failures.sh` | `PostToolUseFailure` (async) | `*` | Categorizes tool failures (BUILD, API, FILESYSTEM, NETWORK, PERMISSION) and logs to `~/.claude/logs/failure-log.md` and `incident-log.md`. |
 | `log-stop-verdict.sh` | `Stop` | — | Receives the haiku quality verdict JSON, writes it to `verdicts.jsonl`, logs to the daily work log, and nominates learnings for the memory system. |
+| `track-usage.sh` | `Stop` (async) | — | Records session stats to `usage.jsonl`: duration (minutes), tool count, files changed. Appends a summary line to the daily log. Writes weekly/monthly aggregate totals on Sundays and end-of-month. |
+| `backup-settings.sh` | `SessionEnd` (async) | — | Backs up `settings.json` (with md5 change detection, skips if unchanged) and `agents/` to `~/.claude/backups/settings/`. Rotates to keep max 30 daily backups. Logs the backup event to `audit-trail.md`. |
 | `session-reset.sh` | `SessionStart` | `user` | On fresh session start: clears stale gate files, resets session-volatile JSONL files, validates hook executability, and prunes oversized logs (audit trail >5000 lines, failure log >1000 lines, daily logs older than 14 days). |
 | `pre-compact-handoff.sh` | `PreCompact` | `auto` | Writes a compaction marker file before auto-compaction so the resume hook can detect it. |
 | `post-compact-resume.sh` | `SessionStart` | `compact` | Detects the compaction marker, cleans up stale state, and injects resumption instructions into Claude's context so it reloads memory and continues seamlessly. |
@@ -38,14 +40,16 @@ All logs are written to `~/.claude/logs/`:
 - `failure-log.md` — categorized tool failures
 - `incident-log.md` — security blocks, critical failures, compaction events
 - `verdicts.jsonl` — per-session quality scores (JSONL for trend analysis)
-- `daily-YYYY-MM-DD.md` — daily work summary
+- `usage.jsonl` — per-session usage stats: duration, tool count, files changed (JSONL for trend analysis)
+- `daily-YYYY-MM-DD.md` — daily work summary (includes usage stats and periodic aggregates)
 
 Backups land in `~/.claude/backups/YYYY-MM-DD/` with `filename.HHMMSS.bak` naming.
 
 ## Requirements
 
-- `jq` — used by guard-bash, secret-guard, log-stop-verdict
-- Standard Unix tools: `bash`, `grep`, `find`, `cp`, `chmod`, `wc`, `sed`, `date`
+- `jq` — used by guard-bash, secret-guard, log-stop-verdict, track-usage
+- `rsync` — used by backup-settings (agents/ directory sync)
+- Standard Unix tools: `bash`, `grep`, `find`, `cp`, `chmod`, `wc`, `sed`, `date`, `shasum`
 
 No external dependencies, no network calls, no LLM usage (except the haiku Stop prompt which is part of the Stop event flow).
 

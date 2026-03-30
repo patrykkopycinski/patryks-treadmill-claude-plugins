@@ -7,12 +7,12 @@
     "url": "https://github.com/patrykkopycinski"
   },
   "skills": [
-    { "path": "skills/git-workflow-helper" },
-    { "path": "skills/pr-optimizer" },
-    { "path": "skills/openspec-advisor" },
-    { "path": "skills/code-archaeology" },
-    { "path": "skills/kibana-precommit-checks" },
-    { "path": "skills/kibana-eslint-prepush" },
-    { "path": "skills/cursor-chat-browser" }
+    { "id": "git-workflow-helper", "path": "skills/git-workflow-helper/SKILL.md" },
+    { "id": "pr-optimizer", "path": "skills/pr-optimizer/SKILL.md" },
+    { "id": "openspec-advisor", "path": "skills/openspec-advisor/SKILL.md" },
+    { "id": "code-archaeology", "path": "skills/code-archaeology/SKILL.md" },
+    { "id": "kibana-precommit-checks", "path": "skills/kibana-precommit-checks/SKILL.md" },
+    { "id": "kibana-eslint-prepush", "path": "skills/kibana-eslint-prepush/SKILL.md" },
+    { "id": "cursor-chat-browser", "path": "skills/cursor-chat-browser/SKILL.md" }
   ]
 }

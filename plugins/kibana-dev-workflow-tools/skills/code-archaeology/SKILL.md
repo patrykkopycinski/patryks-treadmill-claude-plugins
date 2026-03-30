@@ -1,3 +1,8 @@
+---
+name: code-archaeology
+description: Understand code history and context through git archaeology to answer "why", "who", and "when" questions about code.
+---
+
 # Code Archaeology
 
 ## Purpose

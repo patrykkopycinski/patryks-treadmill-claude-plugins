@@ -1,3 +1,8 @@
+---
+name: flake-hunter
+description: Identify, debug, and fix flaky tests systematically by detecting root causes, applying targeted fixes, and verifying stability to eliminate intermittent CI failures.
+---
+
 # flake-hunter
 
 Identify, debug, and fix flaky tests systematically.

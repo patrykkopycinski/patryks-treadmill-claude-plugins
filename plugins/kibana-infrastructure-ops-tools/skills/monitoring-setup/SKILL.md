@@ -1,3 +1,8 @@
+---
+name: monitoring-setup
+description: Add monitoring and observability to Kibana features including APM tracing, custom metrics, structured logging, dashboards, and alerting.
+---
+
 # Monitoring Setup
 
 ## Purpose

@@ -1,3 +1,8 @@
+---
+name: perf-optimizer
+description: Identify and fix performance bottlenecks in Kibana build, test, and CI workflows by analyzing slow operations, diagnosing root causes, and measuring optimization impact.
+---
+
 # Performance Optimizer
 
 ## Description
