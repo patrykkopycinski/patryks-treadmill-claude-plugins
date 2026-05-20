@@ -175,6 +175,18 @@
       },
       "tags": ["agents", "teams", "coordination", "teammates", "hooks", "quality-gates", "orchestration"],
       "category": "development"
+    },
+    {
+      "name": "product-shaping",
+      "source": "./plugins/product-shaping",
+      "description": "Take a product from a raw idea to a scaffolded codebase: structured discovery, schema-locked PRDs, agent-friendly tech stack selection, safe bootstrap, and brownfield assessment. Worktree-aware and safe to run inside an existing repo — shaping notes are shared across worktrees and never committed to host git history.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Patryk Kopycinski",
+        "url": "https://github.com/patrykkopycinski"
+      },
+      "tags": ["product", "shaping", "prd", "tech-stack", "bootstrap", "discovery", "greenfield", "brownfield", "onboarding", "worktree-safe"],
+      "category": "productivity"
     }
   ]
 }

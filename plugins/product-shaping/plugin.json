@@ -1,0 +1,26 @@
+{
+  "name": "product-shaping",
+  "version": "1.0.0",
+  "description": "Take a product from a raw idea to a scaffolded codebase with structured discovery, schema-locked PRDs, agent-friendly tech stack selection, safe bootstrap, and brownfield assessment skills. Worktree-aware: shaping notes live at the main repo root and are shared across all worktrees, and the plugin auto-excludes them from git so they never get committed to a host repo.",
+  "author": "Patryk Kopycinski",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins"
+  },
+  "keywords": ["product", "shaping", "prd", "tech-stack", "bootstrap", "discovery", "greenfield", "brownfield", "onboarding", "worktree-safe"],
+  "license": "MIT",
+  "skills": [
+    { "id": "shape-workflow-guide", "path": "skills/shape-workflow-guide/SKILL.md" },
+    { "id": "shape-init", "path": "skills/shape-init/SKILL.md" },
+    { "id": "shape-idea", "path": "skills/shape-idea/SKILL.md" },
+    { "id": "shape-prd", "path": "skills/shape-prd/SKILL.md" },
+    { "id": "shape-tech-stack", "path": "skills/shape-tech-stack/SKILL.md" },
+    { "id": "shape-bootstrap", "path": "skills/shape-bootstrap/SKILL.md" },
+    { "id": "shape-stack-assess", "path": "skills/shape-stack-assess/SKILL.md" },
+    { "id": "shape-health-check", "path": "skills/shape-health-check/SKILL.md" },
+    { "id": "shape-infra-research", "path": "skills/shape-infra-research/SKILL.md" },
+    { "id": "shape-agents-md", "path": "skills/shape-agents-md/SKILL.md" },
+    { "id": "shape-rule-review", "path": "skills/shape-rule-review/SKILL.md" },
+    { "id": "shape-lesson", "path": "skills/shape-lesson/SKILL.md" }
+  ]
+}

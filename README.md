@@ -1,11 +1,11 @@
 # Patryk's Treadmill
 
-**13 Claude Code plugins for Kibana development, AI conversation intelligence, developer craft, and team coordination**
+**14 Claude Code plugins for Kibana development, AI conversation intelligence, developer craft, product shaping, and team coordination**
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude-Code%20Plugins-8A63D2)](https://github.com/anthropics/claude-code)
 
-50 skills · 6 agents · 15 hooks
+62 skills · 6 agents · 15 hooks
 
 ---
 
@@ -25,7 +25,7 @@ Browse and install interactively:
 /plugin install developer-craft-toolkit@patryks-treadmill
 ```
 
-Or open the **Discover** tab in `/plugin` to browse all 13 plugins.
+Or open the **Discover** tab in `/plugin` to browse all 14 plugins.
 
 ### Manual
 
@@ -60,6 +60,7 @@ Includes generic agents (`archaeologist`, `yak-shave-detector`) plus Kibana-spec
 |--------|-----------|-------|
 | [Agent Team Toolkit](plugins/agent-team-toolkit/) | 6 agents, 4 hooks, 1 skill | Team coordination, quality gate hooks, specialized agents |
 | [Developer Craft Toolkit](plugins/developer-craft-toolkit/) | 5 skills | Systematic refactoring (Martin Fowler), TDD, technical writing, deep-dive research, frontend design review |
+| [Product Shaping](plugins/product-shaping/) | 12 skills | Idea → PRD → tech stack → scaffolded codebase pipeline, plus brownfield stack assessment, health checks, infra research, AGENTS.md generation. Worktree-aware: notes are shared across all worktrees of the same repo and never accidentally committed to the host repo. |
 | [Session Safety Hooks](plugins/session-safety-hooks/) | 11 hooks | Command guard, secret detection, auto-backup, audit logging, usage tracking, settings backup, session lifecycle |
 | [Skill Ecosystem Tools](plugins/skill-ecosystem-tools/) | 3 skills | Discover community skills, import from SkillsMP, validate plugins |
 
@@ -82,7 +83,24 @@ Includes generic agents (`archaeologist`, `yak-shave-detector`) plus Kibana-spec
 ## Full Skill Catalog
 
 <details>
-<summary>All 50 skills across 13 plugins</summary>
+<summary>All 62 skills across 14 plugins</summary>
+
+### Product Shaping
+
+| Skill | Trigger |
+|-------|---------|
+| `shape-workflow-guide` | "where do I start?", "what's next?", auto-orients you in the pipeline |
+| `shape-init` | "set up context/", "scaffold the workspace", first-time setup |
+| `shape-idea` | "I have an idea", "shape this", "from scratch", "brownfield change" |
+| `shape-prd` | "write the PRD", "generate PRD from notes", "turn shape-notes into a PRD" |
+| `shape-tech-stack` | "what stack should I use?", "pick a stack", "choose framework" |
+| `shape-bootstrap` | "bootstrap the project", "scaffold the app", "set up the codebase" |
+| `shape-stack-assess` | "assess my stack", "is my stack agent-friendly?", brownfield evaluation |
+| `shape-health-check` | "health check", "audit my project", brownfield readiness |
+| `shape-infra-research` | "where should I deploy?", "pick a hosting platform", MVP infra decisions |
+| `shape-agents-md` | "create AGENTS.md", "agent onboarding doc", "contributor guide for agents" |
+| `shape-rule-review` | "review my AGENTS.md", "audit CLAUDE.md", "score my agent instructions" |
+| `shape-lesson` | "capture this lesson", "save this rule", append to `lessons.md` |
 
 ### Developer Craft Toolkit
 
