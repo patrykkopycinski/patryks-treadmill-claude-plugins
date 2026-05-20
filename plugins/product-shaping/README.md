@@ -121,6 +121,48 @@ At any point you can also run `/shape-infra-research` to pick a deployment platf
 
 ---
 
+## What about OpenSpec? (the change-level companion)
+
+The product-shaping pipeline answers a **product-level** question: *what are we building, for whom, on what kind of stack?* It produces stable, upstream artifacts (`prd.md`, `tech-stack.md`) — written once per product, then read by everything downstream.
+
+OpenSpec answers a **change-level** question: *what's the next concrete delta, with what spec deltas and tasks?* It produces per-change artifacts (`proposal/specs/design/tasks`) — one folder per change, in `openspec/changes/<change-name>/`.
+
+These are complementary, not redundant. The recommended workflow:
+
+```
+/shape-idea → /shape-prd → /shape-tech-stack → /shape-bootstrap → /shape-agents-md
+                                                                   ↓
+                                                              openspec init
+                                                                   ↓
+                              For each concrete change you make against the PRD:
+                              /openspec-advisor → openspec change create → implement → archive
+```
+
+The hand-off happens at exactly two points, and the relevant `/shape-*` skills surface OpenSpec for you:
+
+- **After `/shape-prd`** — the closing message tells you OpenSpec is the right tool for implementation chunks downstream, but you're still routed to the next product-level step (`/shape-tech-stack` greenfield, `/shape-stack-assess` brownfield) first. The PRD comes before any change.
+- **After `/shape-bootstrap`** — the closing message recommends running `openspec init` in the freshly scaffolded project alongside `/shape-agents-md`. This is the natural attach point because OpenSpec needs a real codebase to bind to.
+
+### The altitude boundary
+
+| | Product-shaping | OpenSpec |
+|---|---|---|
+| Question answered | What are we building? | What's the next change? |
+| Granularity | One per product | One per change (delta) |
+| Lives in | `context/foundation/` (shared across worktrees of this repo) | `openspec/changes/<name>/` (independent per worktree by design) |
+| Source of truth for | The product itself: PRD, scope, success criteria, tech-stack choice | This specific change: proposal, spec deltas, design, task list |
+| Lifecycle | Stable; updated by re-running `/shape-prd` brownfield-mode | Created → implemented → archived per change |
+
+PRD-level shaping never goes inside `openspec/`. OpenSpec changes always reference the existing `context/foundation/prd.md` as their stable upstream input. The two systems anchor at different levels — and they anchor at different levels in worktrees too: shaping `context/` is shared across worktrees of one repo (one PRD), but `openspec/changes/` is intentionally independent per worktree (so two branches can have two pending changes without bleed). That property is preserved by both this plugin's worktree handling and `/openspec-advisor`'s.
+
+### Without OpenSpec
+
+OpenSpec is recommended, not required. If you don't want to use it, set the `no openspec` hint in your shape-notes (or just ignore the OpenSpec line in the closing summaries) — the pipeline works the same way either way. `/shape-bootstrap`'s closing summary will still flag it; you decide.
+
+For everything OpenSpec-specific (CLI install, `change create` modes, archival, worktree handling for `openspec/`), see the `openspec-advisor` skill in the `kibana-dev-workflow-tools` plugin.
+
+---
+
 ## Install
 
 ### Via marketplace (recommended)

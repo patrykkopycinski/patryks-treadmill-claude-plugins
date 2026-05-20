@@ -2,10 +2,15 @@
 name: openspec-advisor
 description: >
   Intelligently decide if a task requires OpenSpec and orchestrate the full spec-driven workflow.
-  OpenSpec is MANDATORY for all specs, planning, and design work -- no exceptions. Auto-evaluates
-  complexity signals and seamlessly guides through OpenSpec or direct implementation. Also handles
-  installation guidance when OpenSpec CLI is missing. Triggers on "implement X", "plan this feature",
-  "add feature X", "build Y", "should I use OpenSpec?", "design X", "spec this out".
+  OpenSpec is MANDATORY for all change-level specs, planning, and design work -- no exceptions
+  EXCEPT product-level shaping (PRD, tech-stack selection, initial bootstrap), which is upstream
+  of OpenSpec and lives in the product-shaping plugin (/shape-idea, /shape-prd, /shape-tech-stack,
+  /shape-bootstrap). When no context/foundation/prd.md exists yet and the user is shaping a new
+  product, defer to product-shaping. Once a PRD exists and the user is implementing changes
+  against it, OpenSpec takes over. Auto-evaluates complexity signals and seamlessly guides
+  through OpenSpec or direct implementation. Also handles installation guidance when OpenSpec
+  CLI is missing. Triggers on "implement X", "plan this feature", "add feature X", "build Y",
+  "should I use OpenSpec?", "design X", "spec this out".
 ---
 
 # OpenSpec Advisor
@@ -14,10 +19,43 @@ Automatically decide if a task requires OpenSpec, then orchestrate the appropria
 
 ## Hard Rules
 
-1. **Specs, planning, and design work ALWAYS use OpenSpec** -- regardless of file count or complexity. No exceptions.
+1. **Specs, planning, and design work ALWAYS use OpenSpec** -- regardless of file count or complexity. No exceptions, except the product-shaping carve-out below.
 2. **"Implement X" triggers mandatory OpenSpec first** -- complete ALL artifacts (proposal -> specs -> design -> tasks) before writing any code.
 3. **Never commit `openspec/` files** -- they are local-only planning artifacts and must never appear in PRs or git history.
 4. **Never skip straight to code on complex tasks** -- the artifacts ARE the deliverable for tracking decisions.
+5. **Product-level shaping is upstream of OpenSpec.** When the user is shaping the *product itself* (the PRD, the initial tech stack, the first scaffold) and a `context/foundation/prd.md` does not yet exist, defer to the `product-shaping` plugin (`/shape-idea`, `/shape-prd`, `/shape-tech-stack`, `/shape-bootstrap`). OpenSpec attaches at the *change* level — once the product is shaped and scaffolded, every concrete delta against the PRD goes through OpenSpec. PRD shaping never goes inside `openspec/`.
+
+---
+
+## Altitude carve-out: product-shaping vs OpenSpec
+
+This is the single, narrow exception to "spec work always uses OpenSpec":
+
+| Question | Answer | Tool |
+|---|---|---|
+| What are we building, for whom, on what kind of stack? | Product-level. One file per product. Lives in `context/foundation/`. | `product-shaping` plugin (`/shape-idea`, `/shape-prd`, `/shape-tech-stack`) |
+| What's the next concrete change against the product, with spec deltas and tasks? | Change-level. One folder per change. Lives in `openspec/changes/`. | OpenSpec (this skill) |
+
+**Decision rule the advisor must apply at the very top, before any complexity analysis:**
+
+```
+If the request is to shape a NEW product or write a PRD AND
+  context/foundation/prd.md does NOT exist
+→ Defer: redirect the user to /shape-idea (or /shape-prd if shape-notes.md exists).
+  Do NOT invoke OpenSpec. The PRD comes first; OpenSpec changes reference it later.
+
+If context/foundation/prd.md exists AND
+  the request is for an implementation change against that product
+→ This is OpenSpec's territory. Continue with the standard advisor flow below.
+
+If the request is product-shaping work for an EXISTING product
+  (the user already has a prd.md and is amending / re-shaping it)
+→ Defer to /shape-prd or /shape-idea (brownfield mode). PRD revisions are
+  product-level and don't go through OpenSpec; OpenSpec then references the
+  updated PRD on the next change.
+```
+
+The triggers `/shape-prd`, `/shape-tech-stack`, `/shape-idea` are **never** OpenSpec entry points — they are upstream of it. Once the user is past `/shape-bootstrap` (a scaffolded project exists), every subsequent "implement X" / "design Y" / "spec out Z" against that product is OpenSpec's job.
 
 ---
 

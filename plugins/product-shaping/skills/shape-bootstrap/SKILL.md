@@ -215,7 +215,15 @@ Sequence:
    Scaffold:    <one-line scaffold summary>.
    Audit:       <one-line audit summary>.
 
-   Next: a future skill will set up agent context (CLAUDE.md, AGENTS.md). For now, your project is scaffolded and verified — happy hacking.
+   Next steps (run in either order, or skip):
+     • /shape-agents-md   — write AGENTS.md / CLAUDE.md so future agents have repo-specific context.
+     • openspec init      — set up spec-driven change tracking. From here on, each concrete
+                            change (feature, refactor, delta against the PRD) gets its own
+                            proposal/specs/design/tasks. /openspec-advisor walks you through it.
+
+   PRD-level shaping (context/foundation/prd.md) stays as-is — it's the upstream source of truth that future OpenSpec changes reference. You don't need to re-do it in OpenSpec.
+
+   Your project is scaffolded and verified — happy hacking.
    ```
 
    Substitute the actual resolved path for `$CONTEXT_ROOT` in the printed message. When `CONTEXT_ROOT == cwd`, the path can be printed as the relative `context/changes/bootstrap-verification/verification.md` for cleanliness.

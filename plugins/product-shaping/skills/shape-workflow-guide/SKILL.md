@@ -222,26 +222,46 @@ You've picked a stack. Time to scaffold.
 #### Case F — Project is scaffolded but no AGENTS.md
 
 ```
-Your project is scaffolded. The last optional step writes AGENTS.md so future
-AI agents have a concise onboarding doc.
+Your project is scaffolded. Two things you can do next, in either order:
 
-► Next: /shape-agents-md
-   (it inspects your repo — package manifest, scripts, layout, lint/test
-    config — and writes a small contributor guide ordered with critical rules
-    at the top)
+  1. /shape-agents-md   — write AGENTS.md / CLAUDE.md so future AI agents
+                          have a concise onboarding doc (inspects your repo
+                          and writes a small contributor guide ordered with
+                          critical rules at the top).
+
+  2. openspec init      — set up spec-driven change tracking. From here on,
+                          each concrete change against the PRD (a feature,
+                          a refactor, a delta) goes through OpenSpec
+                          (proposal → specs → design → tasks per change).
+                          The /openspec-advisor skill walks you through it.
+
+PRD-level shaping (context/foundation/prd.md) stays as your stable, upstream
+source of truth — OpenSpec changes reference it, they don't replace it.
+
+► Next: /shape-agents-md   (run this first if you'll be working with AI
+                            agents on this codebase)
 ```
 
 #### Case G — Everything on disk, pipeline complete
 
 ```
-The pipeline is complete. Optional follow-ups:
+The product-shaping pipeline is complete. From here, the day-to-day pattern is:
+
+  Each concrete change → /openspec-advisor → openspec change create
+                       → proposal/specs/design/tasks → implement → archive
+
+  /openspec-advisor will decide whether each new task warrants the full
+  OpenSpec flow or is small enough for direct implementation.
+
+Optional product-shaping follow-ups any time:
 
   /shape-infra-research — pick a deployment platform with researched scoring
   /shape-rule-review     — audit AGENTS.md or any AI rules file
   /shape-lesson          — capture a learning when you hit something tricky
 
-For shaping a new feature on top of this project, re-run /shape-idea — it
-will auto-detect brownfield mode based on your project state.
+For shaping a brand-new feature on top of this product, re-run /shape-idea —
+it will auto-detect brownfield mode based on your project state, and the
+result becomes a PRD update that the next OpenSpec change references.
 ```
 
 ### Step 4 — When the situation is ambiguous, ask once

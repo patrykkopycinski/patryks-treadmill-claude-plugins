@@ -426,6 +426,22 @@ If the input notes carried forward-looking concerns (tech-stack preferences, imp
 
 Skip the block entirely if the input didn't carry any of those.
 
+After the next-step block, append a one-time pointer to OpenSpec — but only as a downstream signpost, not a redirect. The user's immediate next step is still the stack step (greenfield: `/shape-tech-stack`, brownfield: `/shape-stack-assess`); OpenSpec comes in *later*, once the user starts breaking the PRD into individual implementation changes. Print this verbatim block once, after the next-step recommendation:
+
+```
+  For implementation later:
+    Once the project is scaffolded, each concrete change (a feature, a
+    refactor, a delta against this PRD) should go through OpenSpec —
+    `openspec change create` produces proposal/specs/design/tasks per
+    change, with this PRD as the stable source of truth.
+
+    The /openspec-advisor skill will walk you through it when the time
+    comes. PRD-level shaping (this file) is upstream of OpenSpec; you
+    don't need to re-do anything here in OpenSpec.
+```
+
+If the user has explicitly signaled they don't use OpenSpec (e.g., a freeform invocation note "no openspec"), suppress this block. Default is to print it.
+
 STOP. Do not chain into another skill automatically.
 
 ## Critical guardrails
