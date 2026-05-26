@@ -28,6 +28,13 @@ Brownfield:  /shape-idea → /shape-prd → /shape-stack-assess → /shape-healt
 
 Auxiliary skills (`/shape-infra-research`, `/shape-rule-review`, `/shape-lesson`) can run anytime and don't need an upstream input.
 
+Lifecycle (per-change execution — after PRD/roadmap):
+
+```
+/shape-roadmap → /shape-new → /shape-frame → /shape-research → /shape-plan
+→ /shape-plan-review → /shape-implement → /shape-impl-review → /shape-archive
+```
+
 ## When to use this skill
 
 Use when:
@@ -229,14 +236,15 @@ Your project is scaffolded. Two things you can do next, in either order:
                           and writes a small contributor guide ordered with
                           critical rules at the top).
 
-  2. openspec init      — set up spec-driven change tracking. From here on,
-                          each concrete change against the PRD (a feature,
-                          a refactor, a delta) goes through OpenSpec
-                          (proposal → specs → design → tasks per change).
-                          The /openspec-advisor skill walks you through it.
+  2. /shape-roadmap     — turn your PRD into a sequenced set of milestones.
+                          From here on, each concrete change against the PRD
+                          (a feature, a refactor, a delta) goes through the
+                          lifecycle pipeline:
+                          /shape-new → /shape-frame → /shape-research
+                          → /shape-plan → /shape-implement → /shape-archive
 
 PRD-level shaping (context/foundation/prd.md) stays as your stable, upstream
-source of truth — OpenSpec changes reference it, they don't replace it.
+source of truth — lifecycle changes reference it, they don't replace it.
 
 ► Next: /shape-agents-md   (run this first if you'll be working with AI
                             agents on this codebase)
@@ -247,11 +255,20 @@ source of truth — OpenSpec changes reference it, they don't replace it.
 ```
 The product-shaping pipeline is complete. From here, the day-to-day pattern is:
 
-  Each concrete change → /openspec-advisor → openspec change create
-                       → proposal/specs/design/tasks → implement → archive
+  Lifecycle — per-change execution:
 
-  /openspec-advisor will decide whether each new task warrants the full
-  OpenSpec flow or is small enough for direct implementation.
+    /shape-roadmap       — turn your PRD into sequenced milestones
+    /shape-new <id>      — create a change folder for a milestone
+    /shape-frame <id>    — challenge assumptions before planning
+    /shape-research <id> — research the codebase comprehensively
+    /shape-plan <id>     — create a detailed implementation plan
+    /shape-plan-review   — validate the plan before execution
+    /shape-implement <id> phase N — execute the plan phase by phase
+    /shape-impl-review   — review implementation against plan
+    /shape-archive <id>  — close and archive completed changes
+
+  Start with: /shape-roadmap (to sequence your PRD into slices)
+  Then pick a slice and run: /shape-new <change-id>
 
 Optional product-shaping follow-ups any time:
 
@@ -260,8 +277,7 @@ Optional product-shaping follow-ups any time:
   /shape-lesson          — capture a learning when you hit something tricky
 
 For shaping a brand-new feature on top of this product, re-run /shape-idea —
-it will auto-detect brownfield mode based on your project state, and the
-result becomes a PRD update that the next OpenSpec change references.
+it will auto-detect brownfield mode based on your project state.
 ```
 
 ### Step 4 — When the situation is ambiguous, ask once
