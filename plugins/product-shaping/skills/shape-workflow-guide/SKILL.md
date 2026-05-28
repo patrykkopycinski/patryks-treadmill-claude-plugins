@@ -280,6 +280,10 @@ For shaping a brand-new feature on top of this product, re-run /shape-idea —
 it will auto-detect brownfield mode based on your project state.
 ```
 
+**Model tip**: use architect-tier models (Opus, Sonnet, Gemini Pro) for planning and review skills, and implementor-tier models (DeepSeek V4 Flash, Qwen3 Coder) for `/shape-implement` — see the README Model Selection section for the benchmark rationale.
+
+**Autonomous mode tip**: when a plan is concrete and scope is closed, `/shape-implement` can be driven headlessly with `/goal` — one command + a stop condition, no mid-session steering needed.
+
 ### Step 4 — When the situation is ambiguous, ask once
 
 If Step 1 detection is mixed (e.g. `shape-notes.md` exists but is older than the project's last commit) or the user described their situation in a way the disk state doesn't match, ask one orienting question:

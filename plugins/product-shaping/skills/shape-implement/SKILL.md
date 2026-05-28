@@ -58,6 +58,23 @@ When things don't match the plan:
 - Present the mismatch clearly
 - Use AskUserQuestion to get a decision: "Adapt and continue" / "Skip this part" / "Stop and re-plan"
 
+## Autonomous mode: `/goal`
+
+When a plan is concrete, scope is closed, and completion is measurable, this skill can be driven headlessly via `/goal` (Claude Code and Codex):
+
+```
+/goal Use shape-implement skill to implement all phases of context/changes/<id>/plan.md.
+      Each phase is committed separately. All phases marked done in plan progress.
+      Stop after 20 turns if not complete.
+```
+
+An evaluator sub-model checks the stop condition after each turn — continues if not met, stops if met. Control shifts to PR review and your decision, not mid-session steering.
+
+**Use `/goal` when**: plan is concrete, scope is closed, completion is clearly measurable.
+**Use interactive mode when**: decisions arise mid-implementation, domain is unfamiliar, or the plan has known ambiguities.
+
+**Model tip**: this skill is an implementor task — DeepSeek V4 Flash or Qwen3 Coder are strong choices at a fraction of architect-tier cost. Switch intentionally; don't use Opus for mechanical phase execution.
+
 ## Verification Approach
 
 After implementing a phase:

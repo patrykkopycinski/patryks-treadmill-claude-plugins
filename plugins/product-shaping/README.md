@@ -27,6 +27,8 @@ What should I do? I want to start a new project.
 | I have an existing codebase and want to assess it | `/shape-stack-assess` |
 | I want to write `AGENTS.md` for this repo | `/shape-agents-md` |
 | I want to capture a learning or pattern | `/shape-lesson` |
+| I have a PRD and want to plan the next change | `/shape-roadmap` then `/shape-new <id>` |
+| I'm ready to implement an approved plan | `/shape-implement <change-id>` |
 
 ---
 
@@ -198,14 +200,77 @@ Restart Claude Code. The `/shape-*` slash commands will be discovered automatica
 | **`shape-stack-assess`** | `/shape-stack-assess` | `context/foundation/stack-assessment.md` | Existing project |
 | **`shape-health-check`** | `/shape-health-check` | `context/foundation/health-check.md` | Existing project |
 
-### Auxiliary skills (run anytime)
+### Lifecycle skills (per-change, after PRD + roadmap)
 
-| Skill | Slash command | What it produces |
+| Skill | Slash command | What it does |
 |---|---|---|
-| **`shape-infra-research`** | `/shape-infra-research` | `context/foundation/infrastructure.md` — researched deployment platform pick |
-| **`shape-agents-md`** | `/shape-agents-md` | `AGENTS.md` — concise onboarding doc for AI coding agents |
-| **`shape-rule-review`** | `/shape-rule-review <path>` | 5-point scorecard with fixes for any AI rules file |
-| **`shape-lesson`** | `/shape-lesson` | Adds an entry to `context/foundation/lessons.md` |
+| **`shape-roadmap`** | `/shape-roadmap` | Decompose PRD into vertical slices in dependency order |
+| **`shape-new`** | `/shape-new <id>` | Create `context/changes/<id>/` identity folder |
+| **`shape-frame`** | `/shape-frame <id>` | Challenge framing BEFORE planning (bug-shape / scope-shape) |
+| **`shape-research`** | `/shape-research <id>` | Codebase + external research via parallel sub-agents |
+| **`shape-plan`** | `/shape-plan <id>` | Create phase-by-phase implementation plan |
+| **`shape-plan-review`** | `/shape-plan-review <id>` | Validate plan before execution |
+| **`shape-implement`** | `/shape-implement <id>` | Execute plan phase by phase; supports `/goal` headless mode |
+| **`shape-impl-review`** | `/shape-impl-review <id>` | Review implementation; surfaces lessons for `/shape-lesson` |
+| **`shape-archive`** | `/shape-archive <id>` | Close and archive a completed change |
+
+---
+
+## Model selection: Architect vs Implementor
+
+Not every task needs the same model. The pipeline splits naturally into two tiers:
+
+| Role | Which skills | Best choices | Why |
+|---|---|---|---|
+| **Architect** | `shape-idea`, `shape-prd`, `shape-research`, `shape-frame`, `shape-plan`, `shape-plan-review`, `shape-rule-review` | Claude Opus/Sonnet, Gemini Pro, GPT-5 | Reasoning quality matters — discovery, planning, framing |
+| **Implementor** | `shape-implement` | DeepSeek V4 Flash, Qwen3 Coder, Qwen3.6 Plus | Benchmarks show these match or beat premium models at coding at a fraction of the cost |
+
+Key finding from a 22-model benchmark: DeepSeek V4 Flash scored 82.5 on implementation vs Opus 4.7's 76.8 — at $0.02/task vs $8.69. The gap is in *reasoning* tasks where architect-tier models win. Keep the model switch intentional.
+
+---
+
+## Parallel changes: running multiple slices simultaneously
+
+When you have two independent slices from the roadmap, you can run them in parallel using git worktrees — the same pattern the plugin is already built for.
+
+### Check independence first
+
+Before creating worktrees, ask the agent:
+
+```
+Check the roadmap and plans for <id-a> and <id-b>. Assess whether they can be
+implemented in parallel. Pay attention to shared files, schema migrations,
+contracts, and external services that may cause conflicts.
+```
+
+### One worktree per slice
+
+```bash
+git worktree add ../<repo>-<id-a> -b feature/<id-a>
+git worktree add ../<repo>-<id-b> -b feature/<id-b>
+```
+
+Each worktree runs an independent agent session. The shared `context/` (at the main checkout) means both agents read the same PRD and roadmap — but write to their own `context/changes/<id>/` folders.
+
+**Rule**: start with 2, not 5. Review bandwidth is the real constraint.
+
+---
+
+## Autonomous implementation: `/goal` mode
+
+When a plan is concrete, scope is closed, and completion conditions are measurable, Claude Code and Codex support headless execution via `/goal`:
+
+```
+/goal Use shape-implement skill to implement all phases of context/changes/<id>/plan.md.
+      Each phase is committed separately. All phases marked done in plan progress.
+      Stop after 20 turns if not complete.
+```
+
+- One command + one completion condition
+- An evaluator sub-model checks the condition after each turn — continues if not met, stops if met
+- Control shifts to: PR review + your decision (not mid-session steering)
+- **Use when**: plan is concrete, scope is closed, completion is measurable
+- **Use interactive `/shape-implement` when**: decisions need to be made mid-implementation, domain is unfamiliar, or the plan has known ambiguities
 
 ---
 

@@ -60,7 +60,17 @@ Each finding has: ID, Severity, Impact, Dimension, Title, Location, Detail, Fix 
 
 Dimensions: Plan Adherence / Scope Discipline / Safety & Quality / Architecture / Pattern Consistency / Success Criteria
 
-Overall verdict: **APPROVED** / **NEEDS ATTENTION** / **REJECTED**
+Overall verdict: **APPROVED** / **NEEDS FIXES** / **REJECTED**
+
+## Step 5: Interactive triage
+
+For each finding, present three disposition options:
+
+1. **Fix now** — fix before PR; block on this
+2. **Defer** — log to `context/changes/<id>/deferred.md` or backlog; don't block
+3. **Capture as lesson** → run `/shape-lesson` — this is the compounding flywheel: lessons land in `context/foundation/lessons.md` and become priors for every future frame, plan, and review in this project. Recurring patterns that aren't captured here become repeated mistakes.
+
+When a finding maps to a pattern the agent has seen before (or that exists in `lessons.md`), always prefer option 3 alongside option 1 or 2 — capture the recurring rule, not just the instance.
 
 Present report with box-drawing format. Then ask: "Triage findings" / "Save report & triage later" / "Save report only"
 
