@@ -1,20 +1,25 @@
 ---
 name: shape-research
 description: Research codebase comprehensively using parallel sub-agents
-argument-hint: "[change-id or research question]"
 allowed-tools:
-  - Read
-  - Write
-  - Bash
-  - Task
-  - AskUserQuestion
+ - Read
+ - Glob
+ - Grep
+ - Bash
+ - Task
+ - Write
+ - AskUserQuestion
+ - TaskCreate
+ - TaskUpdate
+ - TaskList
+ - TaskGet
 ---
 
 # Research Codebase
 
 You are tasked with conducting comprehensive research across the codebase to answer user questions by spawning parallel sub-agents and synthesizing their findings.
 
-## Initial Setup
+## Initial Setup:
 
 When this command is invoked, respond with:
 
@@ -27,101 +32,192 @@ Then wait for the user's research query.
 ## Steps to follow after receiving the research query:
 
 1. **Read any directly mentioned files first:**
-   - If the user mentions specific files, read them FULLY first
-   - Read `context/foundation/lessons.md` if present and treat its entries as known-pattern priors
+ - If the user mentions specific files (tickets, docs, JSON), read them FULLY first (no limit/offset)
+ - **CRITICAL**: Read these files yourself in the main context before spawning any sub-tasks
+ - Read `context/foundation/lessons.md` if present and treat its entries as known-pattern priors when shaping the research areas — recurring rules already accepted by the team narrow what's worth re-investigating.
 
 2. **Analyze and decompose the research question:**
-   - Break down the user's query into composable research areas
-   - Identify specific components, patterns, or concepts to investigate
-   - **Signal for external research**: if the question involves choosing between libraries, algorithms, or protocols with non-obvious trade-offs (e.g. SRS algorithm choice, payment provider schema, routing model), flag that external research via AI-native search + live docs is needed before internal codebase analysis
+ - Break down the user's query into composable research areas
+ - Take time to ultrathink about the underlying patterns, connections, and architectural implications the user might be seeking
+ - Identify specific components, patterns, or concepts to investigate
+ - Create research tasks using TaskCreate to track each research area (these appear in the user's status bar). Update them via TaskUpdate as each area completes.
+ - Consider which directories, files, or architectural patterns are relevant
 
-3. **External research (when needed):**
+3. **Clarify research scope using AskUserQuestion**:
 
-   If the question involves domain decisions that propagate to contracts (schema shapes, API boundaries, algorithm parameters), do NOT rely on model training-data recall alone. Ground in current sources:
+ After decomposing the research question, use `AskUserQuestion` to align on scope and focus before spawning sub-agents.
 
-   - **AI-native search** (Cursor uses Exa.ai; Claude Code uses WebSearch tool) — not plain ChatGPT from memory, which hits training cutoffs and hallucinations
-   - **Live docs via WebFetch** — fetch the actual README, CHANGELOG, or technical spec from the source URL; get grounded in current source, not training data
-   - **Synthesize findings into the research doc** with explicit source citations
+ **Rules for structuring questions:**
+ - Each question should have 2-4 concrete options (not vague)
+ - Add a clear `description` to each option explaining what it means for the research
+ - Keep `header` short (max 12 chars): "Scope", "Depth", "Focus"
+ - The user can always choose "Other" for free-form input
+ - Skip this step if the research query is unambiguous and tightly scoped
 
-   The signal that external research is mandatory: the agent starts asking domain questions you can't answer yet ("what shape should ReviewState be?", "which rating scale?", "which normalization algorithm?"). Stop, research, decide, then plan — never let the agent pick domain contracts arbitrarily.
+ **What to ask about** (pick 1-3 based on the query):
+ - **Scope**: How broadly to search — just this feature, or related systems too?
+ - **Depth**: Surface-level overview vs deep architectural dive
+ - **Focus areas**: Which specific aspects matter most (performance, patterns, history, integration points)
+ - **Output format**: Quick summary vs comprehensive research document
 
-4. **Clarify research scope using AskUserQuestion**:
-   After decomposing the research question, use AskUserQuestion to align on scope and focus before spawning sub-agents. Skip if the query is unambiguous.
+ **Example** — for an ambiguous query like "how does authentication work":
+ AskUserQuestion with questions:
+ - question: "How deep should this research go?"
+ header: "Depth"
+ options:
+ - label: "Quick overview"
+ description: "High-level flow, key files, entry points. ~10 min research."
+ - label: "Detailed analysis"
+ description: "Full architecture, edge cases, security considerations. Comprehensive doc."
+ - label: "Specific question"
+ description: "I have a focused question — I'll clarify what exactly I need."
+ multiSelect: false
+ - question: "Which aspects matter most?"
+ header: "Focus"
+ options:
+ - label: "Architecture & patterns"
+ description: "How it's structured, design decisions, conventions used."
+ - label: "Integration points"
+ description: "How it connects to other systems, API boundaries, data flow."
+ - label: "History & evolution"
+ description: "How it changed over time, past decisions from `context/changes/**/` and `context/archive/**/`."
+ multiSelect: true
 
-5. **Spawn parallel sub-agent tasks for comprehensive research:**
-   - Create multiple Task agents to research different aspects concurrently
-   - Spawn 2-4 agents in parallel in a single message for concurrent execution
-   - Each focused on a specific research dimension
-   - Request specific file:line references in responses
+ For a clear, scoped query like "find all files using the TaskCreate tool":
+ - Skip AskUserQuestion entirely — the query is unambiguous.
 
-6. **Wait for all sub-agents to complete and synthesize findings:**
-   - Compile results with specific file:line references
-   - Connect findings across components
-   - Answer the user's questions with concrete evidence
+4. **Spawn parallel sub-agent tasks for comprehensive research:**
+ - Create multiple Task agents to research different aspects concurrently
 
-7. **Resolve change folder and gather metadata:**
-   - If invoked as `/shape-research <change-id>` and `context/changes/<change-id>/` exists, use it.
-   - Otherwise derive a kebab-case change-id and create the folder + `change.md` (mirroring `/shape-new` semantics).
-   - Refuse if the resolved path starts with `context/archive/`.
-   - Update `change.md`: set `updated: <today>` and advance `status` to `preparing` if currently `new`.
+ Use the Task tool with parallel sub-agents:
+ - **Explore agent** (`subagent_type: "Explore"`) — fast file/pattern search, code structure analysis. Use for finding files, tracing code paths, searching for patterns.
+ - **general-purpose agent** (`subagent_type: "general-purpose"`) — deep analysis requiring reading many files and multi-step reasoning. Use for understanding complex systems.
 
-8. **Generate research document** at `context/changes/<change-id>/research.md`:
+ Spawn 2-4 agents in parallel in a single message for concurrent execution:
+ - Each focused on a specific research dimension
+ - Request specific file:line references in responses
+ - Example: one Explore for "find all files related to X", another for "find prior decisions about Y in `context/changes/**/` and `context/archive/**/`", a general-purpose for "analyze how Z system works"
 
-   ```markdown
-   ---
-   date: [Current date and time with timezone in ISO format]
-   researcher: [Researcher name]
-   git_commit: [Current commit hash]
-   branch: [Current branch name]
-   repository: [Repository name]
-   topic: "[User's Question/Topic]"
-   tags: [research, codebase, relevant-component-names]
-   status: complete
-   last_updated: [Current date in YYYY-MM-DD format]
-   ---
+5. **Wait for all sub-agents to complete and synthesize findings:**
+ - IMPORTANT: Wait for ALL sub-agent tasks to complete before proceeding
+ - Compile results: prioritize live codebase findings, use `context/changes/**/` and `context/archive/**/` as supplementary historical context
+ - Connect findings across components with specific file:line references
+ - Answer the user's questions with concrete evidence and architectural patterns
 
-   # Research: [User's Question/Topic]
+6. **Resolve change folder and gather metadata for the research document:**
+ - Determine the change-id:
+ - If invoked as `/shape-research <change-id>` and `context/changes/<change-id>/` exists, use it.
+ - Otherwise derive a kebab-case change-id from the topic and create the folder + `change.md` (mirroring `/shape-new` semantics) before writing.
+ - Refuse if the resolved path starts with `context/archive/` — print: "This change is archived. Open a new change with `/shape-new` instead." and STOP.
+ - Update `change.md`: set `updated: <today>` and, only if current `status` is `new`, advance to `status: preparing`.
+ - Filename: `context/changes/<change-id>/research.md` (single artifact per change).
+ - Generate the metadata listed below for the frontmatter.
 
-   ## Research Question
+7. **Generate research document:**
+ - Use the metadata gathered in step 5
+ - Structure the document with YAML frontmatter followed by content:
 
-   [Original user query]
+ ```markdown
+ ---
+ date: [Current date and time with timezone in ISO format]
+ researcher: [Researcher name]
+ git_commit: [Current commit hash]
+ branch: [Current branch name]
+ repository: [Repository name]
+ topic: "[User's Question/Topic]"
+ tags: [research, codebase, relevant-component-names]
+ status: complete
+ last_updated: [Current date in YYYY-MM-DD format]
+ last_updated_by: [Researcher name]
+ ---
 
-   ## Summary
+ # Research: [User's Question/Topic]
 
-   [High-level findings answering the user's question]
+ **Date**: [Current date and time with timezone from step 5]
+ **Researcher**: [Researcher name]
+ **Git Commit**: [Current commit hash from step 5]
+ **Branch**: [Current branch name from step 5]
+ **Repository**: [Repository name]
 
-   ## Detailed Findings
+ ## Research Question
 
-   ### [Component/Area 1]
+ [Original user query]
 
-   - Finding with reference ([file.ext:line](link))
-   - Connection to other components
+ ## Summary
 
-   ### [Component/Area 2]
+ [High-level findings answering the user's question]
 
-   ...
+ ## Detailed Findings
 
-   ## Code References
+ ### [Component/Area 1]
 
-   - `path/to/file.py:123` - Description
-   - `another/file.ts:45-67` - Description
+ - Finding with reference ([file.ext:line](link))
+ - Connection to other components
+ - Implementation details
 
-   ## Architecture Insights
+ ### [Component/Area 2]
 
-   [Patterns, conventions, and design decisions discovered]
+...
 
-   ## Open Questions
+ ## Code References
 
-   [Any areas that need further investigation]
-   ```
+ - `path/to/file.py:123` - Description of what's there
+ - `another/file.ts:45-67` - Description of the code block
 
-8. **Present findings and handle follow-ups:**
-   - Present a concise summary
-   - Include key file references
-   - Ask if they have follow-up questions
+ ## Architecture Insights
+
+ [Patterns, conventions, and design decisions discovered]
+
+ ## Historical Context (from prior changes)
+
+ [Relevant insights from `context/changes/**/` and `context/archive/**/` with references]
+
+ - `context/changes/<other-change>/plan.md` - Historical decision about X
+ - `context/archive/YYYY-MM-DD-<other-change>/research.md` - Past exploration of Y
+
+ ## Related Research
+
+ [Links to other research artifacts under `context/changes/**/research.md` or `context/archive/**/research.md`]
+
+ ## Open Questions
+
+ [Any areas that need further investigation]
+ ```
+
+8. **Add GitHub permalinks (if applicable):**
+ - Check if on main branch or if commit is pushed: `git branch --show-current` and `git status`
+ - If on main/master or pushed, generate GitHub permalinks:
+ - Get repo info: `gh repo view --json owner,name`
+ - Create permalinks: `https://github.com/{owner}/{repo}/blob/{commit}/{file}#L{line}`
+ - Replace local file references with permalinks in the document
+
+9. **Sync and present findings:**
+ - Present a concise summary of findings to the user
+ - Include key file references for easy navigation
+ - Ask if they have follow-up questions or need clarification
+
+10. **Handle follow-up questions:**
+
+- If the user has follow-up questions, append to the same research document
+- Update the frontmatter fields `last_updated` and `last_updated_by` to reflect the update
+- Add `last_updated_note: "Added follow-up research for [brief description]"` to frontmatter
+- Add a new section: `## Follow-up Research [timestamp]`
+- Spawn new sub-agents as needed for additional investigation
+- Continue updating the document and syncing
 
 ## Important notes:
 
-- Use parallel Task agents for efficiency
-- Sub-agent prompts should be specific, read-only, requesting file:line references
-- Research documents should be self-contained with file paths, line numbers, and cross-component patterns
+- Use parallel Task agents for efficiency — main agent synthesizes, sub-agents do deep reading
+- Sub-agent prompts should be specific, read-only, requesting file:line references and usage patterns (not just definitions)
+- Always run fresh codebase research; use `context/changes/**/` and `context/archive/**/` as supplementary historical context
+- Research documents should be self-contained with file paths, line numbers, cross-component patterns, and temporal context
+- Link to GitHub permalinks when possible for permanent references
+- **Research scoping**: Use AskUserQuestion to clarify scope/depth/focus before spawning agents, unless the query is already tight and unambiguous
+- **Progress tracking**: Use TaskCreate at the start to create research area tasks, TaskUpdate to mark them completed — this gives the user visible progress in their status bar
+- **File reading**: Always read mentioned files FULLY (no limit/offset) before spawning sub-tasks
+- **Critical ordering**: Follow the numbered steps exactly
+ - ALWAYS read mentioned files first before spawning sub-tasks (step 1)
+ - ALWAYS wait for all sub-agents to complete before synthesizing (step 5)
+ - ALWAYS gather metadata before writing the document (step 6 before step 7)
+ - NEVER write the research document with placeholder values
+- **Frontmatter consistency**: Always include YAML frontmatter, keep fields consistent across documents, use snake_case for multi-word fields, update when adding follow-up research
