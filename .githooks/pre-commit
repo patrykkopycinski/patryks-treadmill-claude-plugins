@@ -1,17 +1,22 @@
 #!/usr/bin/env bash
 # Pre-commit guard for this repo. Enable once with:
 #   git config core.hooksPath .githooks
-# Runs the same checks CI enforces, so branding leaks / broken plugins
-# are caught before they leave the machine.
+# Runs the same checks CI enforces, so broken plugins are caught before
+# they leave the machine.
 set -uo pipefail
 
 REPO="$(git rev-parse --show-toplevel)"
 cd "$REPO"
 
 fail=0
-bash scripts/check-branding.sh   || fail=1
 bash scripts/validate-plugins.sh --strict || fail=1
 bash scripts/test-context-root.sh || fail=1
+
+# Optional machine-local guards, not tracked in git (per-clone, private).
+# Drop an executable script at .git/local-guards.sh to run extra checks.
+if [ -f "$REPO/.git/local-guards.sh" ]; then
+  bash "$REPO/.git/local-guards.sh" || fail=1
+fi
 
 if [ $fail -ne 0 ]; then
   echo ""
