@@ -258,6 +258,22 @@ Includes generic agents (`archaeologist`, `yak-shave-detector`) plus Kibana-spec
 
 Contributions welcome. [Issues](https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins/issues) · [Discussions](https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins/discussions) · [PRs](https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins/pulls)
 
+### Local checks
+
+CI runs three gates that you can (and should) run locally:
+
+```bash
+bash scripts/validate-plugins.sh --strict   # plugin.json + skill frontmatter
+bash scripts/check-branding.sh              # no upstream branding / artifacts
+bash scripts/test-context-root.sh           # worktree-safety protocol guard
+```
+
+Enable the pre-commit hook to run the first two automatically before every commit:
+
+```bash
+git config core.hooksPath .githooks
+```
+
 ## License
 
 MIT — free to use, modify, and distribute.
