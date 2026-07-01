@@ -735,7 +735,7 @@ STOP. Do not chain into another skill automatically — the user picks when to p
 
 10. **Foundation-doc convention.** `roadmap.md` is a foundation doc per `context/foundation/README.md`. Default collision handling is archive-then-replace (history goes to `foundation/archive/<today>-roadmap.md`); surgical refinement is out of scope for this skill (edit by hand if you need it).
 
-11. **Universal language only.** No the course / cohort / certification references in any user-facing output or any artifact written to disk. The skill is a generic roadmap generator.
+11. **Universal language only.** No organizational / cohort / certification references in any user-facing output or any artifact written to disk. The skill is a generic roadmap generator.
 
 12. **Never chain automatically.** Step 10 is an announcement, not an invocation. The user picks when (and which) slice to feed to `/shape-plan`. Auto-chaining would skip the human's review of the generated roadmap.
 

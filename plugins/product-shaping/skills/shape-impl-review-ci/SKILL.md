@@ -169,7 +169,7 @@ TaskUpdate: activeForm "Saving report"
 
 Derive the change directory from the resolved plan path — it's the plan's parent folder (`$(dirname "$PLAN")`), which resolves to `context/changes/<change-id>` at the repo root or `projects/<app>/context/changes/<change-id>` in a monorepo. Write the report to `<change-dir>/reviews/impl-review.md`. Also update `<change-dir>/change.md` in-place: set `status: impl_reviewed` and `updated: <today>` — the CI commit in Step 7 carries this back to the PR branch alongside the review.
 
-**The directory is derived from the plan, not chosen: the report goes in the `reviews/` folder beside the plan's `change.md` (`<…>/context/changes/<change-id>/reviews/impl-review.md`).** Do NOT write the report to `.Codex-pr/`, `.github/`, the repo root, or any other location — even if the Codex Action's default prompt suggests one. Downstream triage tooling reads only from this derived path. Formatting must match the surrounding reviews: oxfmt-compatible (the project runs `oxfmt --check .` in CI).
+**The directory is derived from the plan, not chosen: the report goes in the `reviews/` folder beside the plan's `change.md` (`<…>/context/changes/<change-id>/reviews/impl-review.md`).** Do NOT write the report to `.codex-pr/`, `.github/`, the repo root, or any other location — even if the Codex Action's default prompt suggests one. Downstream triage tooling reads only from this derived path. Formatting must match the surrounding reviews: oxfmt-compatible (the project runs `oxfmt --check .` in CI).
 
 ### Output contract (load-bearing)
 
