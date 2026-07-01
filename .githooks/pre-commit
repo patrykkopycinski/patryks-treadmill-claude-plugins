@@ -11,6 +11,7 @@ cd "$REPO"
 fail=0
 bash scripts/check-branding.sh   || fail=1
 bash scripts/validate-plugins.sh --strict || fail=1
+bash scripts/test-context-root.sh || fail=1
 
 if [ $fail -ne 0 ]; then
   echo ""
