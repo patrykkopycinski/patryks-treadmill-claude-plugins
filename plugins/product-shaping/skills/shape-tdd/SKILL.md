@@ -374,3 +374,15 @@ Follow the convention discovered in Setup. Defaults if none exists:
 ### If you get stuck
 
 Use sub-tasks sparingly — `Explore` for fast file/pattern search, `general-purpose` for multi-step analysis of unfamiliar territory. First make sure you've read the relevant code; consider that the codebase may have evolved since the plan was written.
+
+## Ship Pipeline Chain
+
+After all phases/risks are complete, chain to the ship pipeline before opening a PR:
+
+1. **Ship audit** — invoke `verify-and-self-fix` for the full ship-readiness checklist.
+2. **If audit finds issues** — fix them in the verify-and-self-fix loop (max 5 iterations).
+3. **After audit passes** — proceed to PR creation.
+4. **CI monitoring** — invoke `ci-babysitter` to watch CI until green.
+
+### Composition chain
+`shape-implement`/`shape-tdd`/`shape-e2e` → `verify-and-self-fix` → PR → `ci-babysitter`

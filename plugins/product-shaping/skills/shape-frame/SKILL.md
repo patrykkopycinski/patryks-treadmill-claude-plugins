@@ -8,13 +8,18 @@ description: >
   "broken", "root cause", "should we even", "is this the right", "challenge
   the assumption", "rethink", "before I plan". Use BEFORE /shape-plan, not in
   place of it.
-argument-hint: "[change-id or problem description]"
 allowed-tools:
   - Read
+  - Glob
+  - Grep
   - Write
   - Bash
   - Task
   - AskUserQuestion
+  - TaskCreate
+  - TaskUpdate
+  - TaskList
+  - TaskGet
 ---
 
 # Frame: Challenge the Framing Before Planning
@@ -132,9 +137,12 @@ Going to investigate each in parallel before deciding.
 
 ### Step 3: Spawn parallel hypothesis agents
 
-Spawn parallel sub-agents — typically 2–4, capped at 5 — using the Task tool, **all in one message** for concurrency.
+Use TaskCreate to register one task per plausible dimension. Then spawn parallel sub-agents — typically 2–4, capped at 5 — using the Task tool, **all in one message** for concurrency.
 
 For each hypothesis, the sub-agent investigates: "**If the framing broke at this dimension, what evidence would we expect to see, and does that evidence exist?**"
+
+- Use `subagent_type: "Explore"` for "find the code or document that handles X, show me the structure".
+- Use `subagent_type: "general-purpose"` for "trace this chain and tell me whether assumption Y holds".
 
 Each prompt must include:
 
@@ -203,7 +211,7 @@ Step 1, unchanged.]
 
 - **User's stated cause or approach**: [from Step 1]
 - **User's proposed direction**: [from Step 1]
-- **Pre-dispatch narrowing**: [from Step 1.5]
+- **Pre-dispatch narrowing**: [from Step 1.5 — the observation/scope position the user picked, in their words; "not separated yet" is itself a valid answer worth recording]
 
 ## Dimension Map
 
@@ -225,6 +233,9 @@ The observation could originate at any of these dimensions:
 
 ## Narrowing Signals
 
+Decisive observations from Step 4 (user reports + sub-agent findings) that
+narrowed the hypothesis space:
+
 - [Observation that ruled in or out a dimension]
 - [Observation that ruled in or out a dimension]
 
@@ -238,7 +249,10 @@ hypothesis match the convention?]
 > **The actual problem to plan around is**: [one sentence — root, not surface]
 
 [2–3 sentences explaining why this is the real problem and what would change
-if it were addressed.]
+if it were addressed. If the original framing held up, say so explicitly:
+"The initial framing was correct — proceed with the originally proposed
+direction." Do not manufacture a reframing if the evidence doesn't support
+one.]
 
 ## Confidence
 
@@ -251,12 +265,14 @@ if it were addressed.]
 
 ## What Changes for /shape-plan
 
-[1–2 sentences: what the plan should actually be about, given the reframe.]
+[1–2 sentences: what the plan should actually be about, given the reframe.
+If reframe is "no change", state that the original framing held up.]
 
 ## References
 
 - Source files: [file:line]
 - Related research: `context/changes/<change-id>/research.md` (if present)
+- Investigation tasks: [list of TaskCreate IDs from Step 3]
 ````
 
 Keep the brief tight — aim for ~80–150 lines. The hypothesis table is the heart; everything else supports it.
@@ -301,26 +317,33 @@ If the user picks "Hand off to /shape-plan", copy the command to clipboard:
 echo -n "/shape-plan <change-id>" | pbcopy 2>/dev/null || echo -n "/shape-plan <change-id>" | clip.exe 2>/dev/null || echo -n "/shape-plan <change-id>" | xclip -selection clipboard 2>/dev/null || true
 ```
 
+```powershell
+# PowerShell (Windows)
+Set-Clipboard "/shape-plan <change-id>"
+```
+
 And print: `→ /shape-plan <change-id> (✓ copied)`
 
 ## Critical guardrails
 
-1. **Allowed conclusion: "the framing was right."** If the hypothesis investigation confirms the user's initial framing, that IS a successful frame — say so plainly and stop. Manufactured reframings are worse than no frame.
+1. **Allowed conclusion: "the framing was right."** This skill is not value-additive only when it produces a reframing. If the hypothesis investigation confirms the user's initial framing, that IS a successful frame — say so plainly and stop. Manufactured reframings are worse than no frame: they introduce confusion the user has to untangle later.
 
-2. **Observation and stated cause stay separate.** Through every step. The Frame Brief preserves the original framing verbatim — even when reframed.
+2. **Observation and stated cause stay separate.** Through every step. The Frame Brief preserves the original framing verbatim — even when reframed — because future readers (and /shape-plan-review) need to see what was assumed vs what was discovered.
 
-3. **No solution design.** This skill never picks an implementation approach. It produces ONE artifact: the reframed (or confirmed) problem statement. /shape-plan owns the solution.
+3. **No solution design.** This skill never picks an implementation approach. It does not propose phases, file changes, or technical decisions. It produces ONE artifact: the reframed (or confirmed) problem statement. /shape-plan owns the solution.
 
-4. **Narrowing questions ≠ solution questions.** /shape-plan asks "which approach?". /shape-frame asks "where in the dimension map does the actual problem live?".
+4. **Narrowing questions ≠ solution questions.** /shape-plan asks "which approach?". /shape-frame asks "where in the dimension map does the actual problem live?". This rule binds both Step 1.5 (pre-dispatch scope/observation narrowing) and Step 4 (post-dispatch hypothesis narrowing). Options describe observations or design positions, not choices about how to address them. If you find yourself drafting a question whose answer changes the *direction*, you've crossed into /shape-plan territory — stop.
 
-5. **Read the source material before reaching for priors.** Hypotheses must come from the dimension map you constructed in Step 2 from THIS material, and evidence must come from sub-agent reads of THIS project.
+5. **Read the source material before reaching for priors.** Source material means code, docs, prior decisions, or whatever the framing actually rests on. It is tempting to recognize a shape from training-data familiarity and propose a reframing before investigating. Don't. Hypotheses must come from the dimension map you constructed in Step 2 from THIS material, and evidence must come from sub-agent reads of THIS project. A confident-sounding reframe with no file:line or document:section evidence is the failure mode this skill exists to prevent.
 
-6. **No hypothesis padding.** If only two dimensions are plausible, investigate two.
+6. **No hypothesis padding.** If only two dimensions are plausible, investigate two. Spawning agents to investigate hypotheses with no plausibility burns budget and signals false rigor.
 
-7. **Time-box the investigation.** Frame should typically complete in 2–4 sub-agent rounds and 2–5 questions. If it's dragging past that, recommend reproduction and stop.
+7. **Time-box the investigation.** Frame should typically complete in 2–4 sub-agent rounds and 2–5 questions. If it's dragging past that, the case probably needs reproduction or evidence-gathering before any further analysis — recommend that and stop.
 
 ## Notes
 
 - This is a **framing** skill. Investigate and report — do not edit code, do not write plans.
 - Be specific. Specifics with `file:line` or `document:section` beat hand-waves.
+- Distinguish "evidence found in this project" (verifiable, with file:line or document:section) from "I have a hunch from past systems I've seen" (prior, unverified). Priors are useful for forming hypotheses; only verified evidence belongs in the Frame Brief.
+- If the user pushes back on the reframe, take it seriously — they may know context the investigation missed. Re-run Step 3 against their objection rather than defending the reframe.
 - The Frame Brief is the only artifact. Keep it short, scannable, and actionable for /shape-plan.

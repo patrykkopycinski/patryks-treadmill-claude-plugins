@@ -3,16 +3,16 @@ name: shape-impl-review
 description: Review implementation against plan for drift, dangerous decisions, and pattern compliance
 argument-hint: <plan-path> [phase N] | <saved-review-path>
 allowed-tools:
- - Read
- - Glob
- - Grep
- - Bash
- - Agent
- - AskUserQuestion
- - TaskCreate
- - TaskUpdate
- - TaskList
- - TaskGet
+  - Read
+  - Glob
+  - Grep
+  - Bash
+  - Agent
+  - AskUserQuestion
+  - TaskCreate
+  - TaskUpdate
+  - TaskList
+  - TaskGet
 ---
 
 # Implementation Review
@@ -47,12 +47,12 @@ TaskCreate: "Implementation Review" / activeForm "Loading context"
 4. **Scope**: specific phase requested → that phase only; else all phases whose Progress checkboxes are fully `[x]` (i.e., completed phases).
 5. **Extract** from phases under review: file paths from "Changes Required", architectural decisions, success criteria (Automated/Manual bullets in Phase blocks + their `[ ]`/`[x]` mirror in Progress), and the "What We're NOT Doing" list (scope guardrails).
 6. **Git scope detection** — what actually changed:
- ```bash
- PLAN_DATE="<YYYY-MM-DD from filename>"
- git log --oneline --after="${PLAN_DATE}" --.
- git diff --name-only $(git log --reverse --after="${PLAN_DATE}" --format="%H" | head -1)^..HEAD 2>/dev/null
- ```
- If the range can't be cleanly determined, fall back to commits whose messages reference the plan/feature.
+   ```bash
+   PLAN_DATE="<YYYY-MM-DD from filename>"
+   git log --oneline --after="${PLAN_DATE}" -- .
+   git diff --name-only $(git log --reverse --after="${PLAN_DATE}" --format="%H" | head -1)^..HEAD 2>/dev/null
+   ```
+   If the range can't be cleanly determined, fall back to commits whose messages reference the plan/feature.
 
 Compare changed-file list against plan-file list:
 - **In plan AND in diff** → expected change, verify content matches intent
@@ -85,10 +85,10 @@ Give it: the full list of changed files to read, the project root path.
 Instructions:
 
 1. **Safety & quality scan** on each changed file. Flag:
- - **Security**: injection risks (SQL, command, XSS), hardcoded secrets, missing authn/authz at system boundaries, overly permissive CORS/permissions.
- - **Performance**: N+1 queries, unbounded iteration/recursion, missing pagination, unnecessary sync I/O.
- - **Reliability**: missing error handling at external boundaries (API calls, file I/O, DB), race conditions, resource leaks.
- - **Data safety**: destructive DB ops without rollback, schema changes without migration path, data loss potential.
+   - **Security**: injection risks (SQL, command, XSS), hardcoded secrets, missing authn/authz at system boundaries, overly permissive CORS/permissions.
+   - **Performance**: N+1 queries, unbounded iteration/recursion, missing pagination, unnecessary sync I/O.
+   - **Reliability**: missing error handling at external boundaries (API calls, file I/O, DB), race conditions, resource leaks.
+   - **Data safety**: destructive DB ops without rollback, schema changes without migration path, data loss potential.
 
 2. **Pattern compliance** — for each changed file, find 1–2 similar existing files and compare naming, error handling approach, module structure, imports/exports, test structure, config patterns. **Only report substantive mismatches** (e.g., a new module uses camelCase where siblings use snake_case; a new endpoint skips the auth middleware pattern the rest of the API uses). Skip trivial style differences — if the code works and follows the plan, minor formatting is not a finding.
 
@@ -167,87 +167,87 @@ Plain text, box-drawing. PASS dimensions appear only in the verdicts table, neve
 
 ```
 ═══════════════════════════════════════════════════════════
- IMPLEMENTATION REVIEW: [Plan Title]
- Scope: Phase [N] of [Total] | Date: YYYY-MM-DD
- Findings: [N critical] [N warnings] [N observations]
+  IMPLEMENTATION REVIEW: [Plan Title]
+  Scope: Phase [N] of [Total]  |  Date: YYYY-MM-DD
+  Findings: [N critical] [N warnings] [N observations]
 ═══════════════════════════════════════════════════════════
 
- Plan Adherence PASS ✅
- Scope Discipline WARNING ⚠️ (1 finding)
- Safety & Quality FAIL ❌ (1 finding)
- Architecture PASS ✅
- Pattern Consistency WARNING ⚠️ (1 finding)
- Success Criteria PASS ✅
+  Plan Adherence        PASS    ✅
+  Scope Discipline      WARNING ⚠️   (1 finding)
+  Safety & Quality      FAIL    ❌   (1 finding)
+  Architecture          PASS    ✅
+  Pattern Consistency   WARNING ⚠️   (1 finding)
+  Success Criteria      PASS    ✅
 
- ► Overall: NEEDS ATTENTION
-
-═══════════════════════════════════════════════════════════
- CRITICAL FINDINGS ❌
-═══════════════════════════════════════════════════════════
-
- F1 — SQL injection in auth handler
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- Severity: ❌ CRITICAL
- Impact: 🔎 MEDIUM — real tradeoff; pause to reason through it
- Dimension: Safety & Quality
- Location: src/auth/handler.ts:42
-
- Detail:
- SQL query built with string concatenation. Plan specified
- parameterized queries but implementation uses template literals.
-
- Fix: Replace the template literal with a parameterized query using
- db.query($1, [value]).
- Strength: Matches the pattern in src/users/query.ts and removes
- the injection class entirely.
- Tradeoff: Minor — one call site, a few-line change.
- Confidence: HIGH — identical pattern used elsewhere in this repo.
- Blind spot: None significant.
+  ► Overall: NEEDS ATTENTION
 
 ═══════════════════════════════════════════════════════════
- WARNING FINDINGS ⚠️
+  CRITICAL FINDINGS ❌
 ═══════════════════════════════════════════════════════════
 
- F2 — Unplanned /api/status endpoint
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- Severity: ⚠️ WARNING
- Impact: 🔬 HIGH — architectural stakes; think carefully before deciding
- Dimension: Scope Discipline
- Location: src/api/routes.ts:18
+  F1 — SQL injection in auth handler
+  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+    Severity:  ❌ CRITICAL
+    Impact:    🔎 MEDIUM — real tradeoff; pause to reason through it
+    Dimension: Safety & Quality
+    Location:  src/auth/handler.ts:42
 
- Detail:
- New GET /api/status endpoint not in plan. Functionality is
- related to planned work but extends public API surface.
+    Detail:
+    SQL query built with string concatenation. Plan specified
+    parameterized queries but implementation uses template literals.
 
- Fix A ⭐ Recommended: Document in the plan as an addendum
- Strength: Preserves the work already done; updates the source of
- truth before future reviews use the plan as ground truth.
- Tradeoff: Plan becomes a slightly moving target.
- Confidence: HIGH — this repo's plan updates regularly pick up
- discovered scope through addenda.
- Blind spot: Stakeholders who reviewed the original scope aren't
- notified.
+    Fix: Replace the template literal with a parameterized query using
+         db.query($1, [value]).
+      Strength:   Matches the pattern in src/users/query.ts and removes
+                  the injection class entirely.
+      Tradeoff:   Minor — one call site, a few-line change.
+      Confidence: HIGH — identical pattern used elsewhere in this repo.
+      Blind spot: None significant.
 
- Fix B: Remove and add to follow-up work
- Strength: Keeps scope discipline strict.
- Tradeoff: Loses implemented work; another PR needed later.
- Confidence: MEDIUM — depends whether anything already depends on it.
- Blind spot: Haven't checked for callers of /api/status.
+═══════════════════════════════════════════════════════════
+  WARNING FINDINGS ⚠️
+═══════════════════════════════════════════════════════════
 
- ···
+  F2 — Unplanned /api/status endpoint
+  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+    Severity:  ⚠️ WARNING
+    Impact:    🔬 HIGH — architectural stakes; think carefully before deciding
+    Dimension: Scope Discipline
+    Location:  src/api/routes.ts:18
 
- F3 — camelCase vs. snake_case
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- Severity: ⚠️ WARNING
- Impact: 🏃 LOW — quick decision; fix is obvious and narrowly scoped
- Dimension: Pattern Consistency
- Location: src/utils/format.ts
+    Detail:
+    New GET /api/status endpoint not in plan. Functionality is
+    related to planned work but extends public API surface.
 
- Detail:
- Uses camelCase (formatDate, parseInput) while existing utils use
- snake_case (format_date, parse_input).
+    Fix A ⭐ Recommended: Document in the plan as an addendum
+      Strength:   Preserves the work already done; updates the source of
+                  truth before future reviews use the plan as ground truth.
+      Tradeoff:   Plan becomes a slightly moving target.
+      Confidence: HIGH — this repo's plan updates regularly pick up
+                  discovered scope through addenda.
+      Blind spot: Stakeholders who reviewed the original scope aren't
+                  notified.
 
- Fix: Rename exports to snake_case to match src/utils/.
+    Fix B: Remove and add to follow-up work
+      Strength:   Keeps scope discipline strict.
+      Tradeoff:   Loses implemented work; another PR needed later.
+      Confidence: MEDIUM — depends whether anything already depends on it.
+      Blind spot: Haven't checked for callers of /api/status.
+
+  ···
+
+  F3 — camelCase vs. snake_case
+  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+    Severity:  ⚠️ WARNING
+    Impact:    🏃 LOW — quick decision; fix is obvious and narrowly scoped
+    Dimension: Pattern Consistency
+    Location:  src/utils/format.ts
+
+    Detail:
+    Uses camelCase (formatDate, parseInput) while existing utils use
+    snake_case (format_date, parse_input).
+
+    Fix: Rename exports to snake_case to match src/utils/.
 
 ═══════════════════════════════════════════════════════════
 ```
@@ -265,12 +265,12 @@ After the report, ask:
 question: "Review complete. How would you like to proceed?"
 header: "Implementation Review — [N] findings"
 options:
- - label: "Triage findings"
- description: "Walk through each finding and decide."
- - label: "Save report & triage later"
- description: "Save the full report. Resume with /shape-impl-review <report-path>."
- - label: "Save report only"
- description: "Save and finish — I'll handle the findings myself."
+  - label: "Triage findings"
+    description: "Walk through each finding and decide."
+  - label: "Save report & triage later"
+    description: "Save the full report. Resume with /shape-impl-review <report-path>."
+  - label: "Save report only"
+    description: "Save and finish — I'll handle the findings myself."
 multiSelect: false
 ```
 
@@ -309,10 +309,10 @@ Save to `context/changes/<change-id>/reviews/impl-review.md` (or `context/change
 - **Location**: src/auth/handler.ts:42
 - **Detail**: SQL query built with string concatenation. Plan specified parameterized queries.
 - **Fix**: Replace the template literal with a parameterized query using db.query($1, [value]).
- - Strength: Matches pattern in src/users/query.ts; removes injection class.
- - Tradeoff: Minor — one call site, a few-line change.
- - Confidence: HIGH — identical pattern used elsewhere.
- - Blind spot: None significant.
+  - Strength: Matches pattern in src/users/query.ts; removes injection class.
+  - Tradeoff: Minor — one call site, a few-line change.
+  - Confidence: HIGH — identical pattern used elsewhere.
+  - Blind spot: None significant.
 - **Decision**: PENDING
 
 ### F2 — Unplanned /api/status endpoint
@@ -323,15 +323,15 @@ Save to `context/changes/<change-id>/reviews/impl-review.md` (or `context/change
 - **Location**: src/api/routes.ts:18
 - **Detail**: New GET /api/status endpoint not in plan.
 - **Fix A ⭐ Recommended**: Document in the plan as an addendum
- - Strength: Preserves the work; updates source of truth.
- - Tradeoff: Plan becomes a slightly moving target.
- - Confidence: HIGH — addendum pattern used regularly here.
- - Blind spot: Original-scope stakeholders not notified.
+  - Strength: Preserves the work; updates source of truth.
+  - Tradeoff: Plan becomes a slightly moving target.
+  - Confidence: HIGH — addendum pattern used regularly here.
+  - Blind spot: Original-scope stakeholders not notified.
 - **Fix B**: Remove and add to follow-up work
- - Strength: Keeps scope discipline strict.
- - Tradeoff: Loses implemented work; another PR later.
- - Confidence: MEDIUM — depends on callers.
- - Blind spot: Haven't checked for callers.
+  - Strength: Keeps scope discipline strict.
+  - Tradeoff: Loses implemented work; another PR later.
+  - Confidence: MEDIUM — depends on callers.
+  - Blind spot: Haven't checked for callers.
 - **Decision**: PENDING
 
 ### F3 — camelCase vs. snake_case
@@ -367,14 +367,14 @@ Walk findings in severity order (CRITICAL → WARNING → OBSERVATION). For each
 question: "F[N] — [title]\n\nSeverity: [sev icon] [SEV]\nImpact: [impact icon] [LEVEL] — [meaning]\nDimension: [dim]\nLocation: [loc]\n\nDetail: [detail]\n\n[Fix A block]\n\n[Fix B block]"
 header: "Finding [current] of [total remaining]"
 options:
- - label: "Apply Fix A ⭐"
- description: "[Fix A one-liner]"
- - label: "Apply Fix B"
- description: "[Fix B one-liner]"
- - label: "Skip"
- description: "Not worth fixing now."
- - label: "Record as lesson"
- description: "Save as a recurring project rule via /shape-lesson."
+  - label: "Apply Fix A ⭐"
+    description: "[Fix A one-liner]"
+  - label: "Apply Fix B"
+    description: "[Fix B one-liner]"
+  - label: "Skip"
+    description: "Not worth fixing now."
+  - label: "Record as lesson"
+    description: "Save as a recurring project rule via /shape-lesson."
 multiSelect: false
 ```
 
@@ -383,14 +383,14 @@ multiSelect: false
 question: "F[N] — [title]\n\nSeverity: [sev icon] [SEV]\nImpact: [impact icon] [LEVEL] — [meaning]\nDimension: [dim]\nLocation: [loc]\n\nDetail: [detail]\n\n[Fix block]"
 header: "Finding [current] of [total remaining]"
 options:
- - label: "Fix now"
- description: "[Fix one-liner]"
- - label: "Fix differently"
- description: "Different approach — let's discuss."
- - label: "Skip"
- description: "Not worth fixing now."
- - label: "Record as lesson"
- description: "Save as a recurring project rule via /shape-lesson."
+  - label: "Fix now"
+    description: "[Fix one-liner]"
+  - label: "Fix differently"
+    description: "Different approach — let's discuss."
+  - label: "Skip"
+    description: "Not worth fixing now."
+  - label: "Record as lesson"
+    description: "Save as a recurring project rule via /shape-lesson."
 multiSelect: false
 ```
 
@@ -399,14 +399,14 @@ multiSelect: false
 - **Fix differently**: ask the preferred approach, apply, mark FIXED.
 - **Record as lesson**: pre-fill four lessons-entry fields directly from the finding — `Context` from the finding's Location, `Problem` from the finding's Detail, `Rule` and `Applies to` left as empty placeholders for the user to fill. Show the proposed entry as a complete markdown block and ask the user to edit / confirm via AskUserQuestion ("Approve this entry?" / "Edit before saving" / "Cancel"). On confirm, append the entry as a new H2 section to `context/foundation/lessons.md` — if the file does not exist, create it first with this canonical 5-line header (no separate template file; the header is embedded inline here):
 
- ```
- # Lessons Learned
+  ```
+  # Lessons Learned
 
- > Append-only register of recurring rules and patterns. Re-read at start by /shape-frame, /shape-research, /shape-plan, /shape-plan-review, /shape-implement, /shape-impl-review.
+  > Append-only register of recurring rules and patterns. Re-read at start by /shape-frame, /shape-research, /shape-plan, /shape-plan-review, /shape-implement, /shape-impl-review.
 
- ```
+  ```
 
- The pre-fill-then-confirm flow is the load-bearing UX detail; the user must see the full proposed entry with the pre-filled Context/Problem and have a chance to edit Rule and Applies-to before append. After the append succeeds, **always** ask a follow-up via AskUserQuestion: "Lesson saved. Also apply the fix to the current code?" with options "Yes — fix now" / "No — lesson only". **Never skip this question or decide on the user's behalf** — whether the fix is trivial, out of scope, or spans many files, the decision belongs to the user. If yes: show the before/after code change, apply, mark `FIXED + ACCEPTED-AS-RULE: <rule title>`. If no: mark `ACCEPTED-AS-RULE: <rule title>` (finding stays unfixed, rule is recorded for future work).
+  The pre-fill-then-confirm flow is the load-bearing UX detail; the user must see the full proposed entry with the pre-filled Context/Problem and have a chance to edit Rule and Applies-to before append. After the append succeeds, **always** ask a follow-up via AskUserQuestion: "Lesson saved. Also apply the fix to the current code?" with options "Yes — fix now" / "No — lesson only". **Never skip this question or decide on the user's behalf** — whether the fix is trivial, out of scope, or spans many files, the decision belongs to the user. If yes: show the before/after code change, apply, mark `FIXED + ACCEPTED-AS-RULE: <rule title>`. If no: mark `ACCEPTED-AS-RULE: <rule title>` (finding stays unfixed, rule is recorded for future work).
 - **Skip** → SKIPPED. Move on, don't argue.
 - **Other (free text)**: interpret the user's intent. Common intents: "fix differently" (especially in dual-fix context) → ask the preferred approach, apply, mark FIXED; "accept risk" → mark ACCEPTED with the user's justification; "dismiss"/"disagree" → mark DISMISSED.
 
@@ -416,13 +416,13 @@ After each decision, if working from a saved file, update its `Decision:` field.
 
 ```
 ═══════════════════════════════════════════════════════════
- TRIAGE COMPLETE
+  TRIAGE COMPLETE
 ═══════════════════════════════════════════════════════════
 
- Fixed: F1, F2 (Fix A) (2)
- Rule: F3 (+ fixed) (1)
- Skipped: F4 (1)
- Accepted: F5 (1)
+  Fixed:     F1, F2 (Fix A)   (2)
+  Rule:      F3 (+ fixed)     (1)
+  Skipped:   F4               (1)
+  Accepted:  F5               (1)
 
 ═══════════════════════════════════════════════════════════
 ```

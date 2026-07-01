@@ -26,7 +26,7 @@ allowed-tools:
 argument-hint: "<change-id> [phase N] | @context/changes/<change-id>/plan.md"
 ---
 
-# shape E2E — Risk-Driven E2E Plan Execution
+# Shape E2E — Risk-Driven E2E Plan Execution
 
 You drive an approved technical plan from `context/changes/<change-id>/plan.md` to **browser-level coverage**, one phase at a time, one risk at a time. An agent can generate a *passing* E2E test in seconds; the hard part is making it **protect a real risk** and **survive tomorrow's refactor**. This skill drives only the phases where that work belongs — a risk that crosses several system boundaries (auth, routing, API, DB) or exists only in the rendered UI — and for each one runs the loop:
 
@@ -120,7 +120,7 @@ This skill assumes Playwright is already installed; it won't set it up. Options:
 
 6. **Ensure the two quality levers exist (the one-time per-project setup).** These do the heavy lifting — the prompt stays thin.
    - **Seed test** (`seed.spec.ts`): the exemplar every generated test is modeled on. *What you show is what you get* — if the seed uses `getByRole`, generated tests do too; if it has `waitForTimeout`, every generated test inherits it. If absent, create it from `references/seed-test-pattern.md`, adapted to this app's real routes and roles. See also `references/browser-driven-generation.md`.
-   - **E2E rules**: the rules file the agent reads automatically before generating code (`CLAUDE.md`, `.cursor/rules/`, or a dedicated file in the test dir). If absent, create it from `references/e2e-quality-rules.md`.
+   - **E2E rules**: the rules file the agent reads automatically before generating code (`AGENTS.md`, `.cursor/rules/`, or a dedicated file in the test dir). If absent, create it from `references/e2e-quality-rules.md`.
    - Treat both as part of the **first phase's** touched-file set so they land in that phase's commit. Once they exist, leave them — don't recreate them each phase.
 
 7. **Update `change.md`**: set `status: implementing` (only if currently in `{planned, plan_reviewed}`) and `updated: <today>`.
@@ -396,3 +396,15 @@ The seed, rules, and prompt-template ship tuned for Playwright, and the browser-
 - `references/seed-test-pattern.md` — the `seed.spec.ts` exemplar + the four patterns.
 - `references/e2e-prompt-template.md` — the paste-ready generation prompt + worked example.
 - `references/browser-driven-generation.md` — driving the browser yourself to plan and generate one spec per risk (accessibility-tree workflow, snapshot over screenshots, one test per file, write-from-real-execution, the auto-heal boundary).
+
+## Ship Pipeline Chain
+
+After all phases/risks are complete, chain to the ship pipeline before opening a PR:
+
+1. **Ship audit** — invoke `verify-and-self-fix` for the full ship-readiness checklist.
+2. **If audit finds issues** — fix them in the verify-and-self-fix loop (max 5 iterations).
+3. **After audit passes** — proceed to PR creation.
+4. **CI monitoring** — invoke `ci-babysitter` to watch CI until green.
+
+### Composition chain
+`shape-implement`/`shape-tdd`/`shape-e2e` → `verify-and-self-fix` → PR → `ci-babysitter`

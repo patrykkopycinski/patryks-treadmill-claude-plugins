@@ -1,11 +1,11 @@
 ---
 name: shape-plan-review
 description: >
- Review implementation plans for substance, feasibility, and architectural fitness.
- Use when user asks to review a plan, says "is this plan good", "check my plan",
- "review this plan", mentions plan review, or references a plan file and asks
- for feedback. Also trigger when user finishes /shape-plan and wants validation
- before starting /shape-implement.
+  Review implementation plans for substance, feasibility, and architectural fitness.
+  Use when user asks to review a plan, says "is this plan good", "check my plan",
+  "review this plan", mentions plan review, or references a plan file and asks
+  for feedback. Also trigger when user finishes /shape-plan and wants validation
+  before starting /shape-implement.
 ---
 
 # Plan Review
@@ -45,11 +45,11 @@ Before any code verification, check the plan against itself. These three scans o
 - **Contract breaks** (when the plan defines or uses API endpoints): trace data flow across endpoints — if step B needs a token/ID from step A, does A's response include it? Flag unresolved design decisions the implementer would have to guess at (which endpoint, which auth method, which storage for rate-limit state).
 - **Contract surfaces touched**: if `docs/reference/contract-surfaces.md` exists in the project, read it and extract the list of H2 headings as surface names. Run `grep -F` against the plan text with one `-e <surface name>` per heading. For each hit, read the relevant H2 section of `contract-surfaces.md` and verify (a) the plan accurately reports the current shape of the surface, and (b) any rename or schema change is flagged as breaking with a migration story for downstream consumers. If the file does not exist, skip this check silently — it's an opt-in convention self-bootstrapped on first use by `/shape-contract` or `/shape-impl-review`'s triage branch. The H2-derived grep list means: when a consumer adds a new surface to their file, the next plan-review picks it up automatically — no SKILL.md edit needed.
 - **Progress↔Phase consistency** (mechanical contract — see `references/progress-format.md`):
- - Exactly one `## Progress` heading at the bottom of plan.md.
- - Each `## Phase N: <name>` in the plan body has a matching `### Phase N: <name>` in Progress.
- - Every Success Criteria bullet (under `#### Automated Verification:` / `#### Manual Verification:`) in a Phase block has a matching `- [ ] N.M <title>` (or `- [x]`) in the corresponding Progress subsection.
- - Phase blocks contain plain `- ` bullets only — no `- [ ]` or `- [x]` outside the Progress section.
- Treat any of these as a CRITICAL finding under Plan Completeness — `/shape-implement` will fail to parse a malformed Progress section.
+  - Exactly one `## Progress` heading at the bottom of plan.md.
+  - Each `## Phase N: <name>` in the plan body has a matching `### Phase N: <name>` in Progress.
+  - Every Success Criteria bullet (under `#### Automated Verification:` / `#### Manual Verification:`) in a Phase block has a matching `- [ ] N.M <title>` (or `- [x]`) in the corresponding Progress subsection.
+  - Phase blocks contain plain `- ` bullets only — no `- [ ]` or `- [x]` outside the Progress section.
+  Treat any of these as a CRITICAL finding under Plan Completeness — `/shape-implement` will fail to parse a malformed Progress section.
 
 ## Step 2: Grounding
 
@@ -145,88 +145,88 @@ Plain text, box-drawing. Findings grouped by severity; omit empty groups. PASS d
 
 ```
 ═══════════════════════════════════════════════════════════
- PLAN REVIEW: [Plan Title]
- Mode: Deep / Quick | Date: YYYY-MM-DD
- Findings: [N critical] [N warnings] [N observations]
+  PLAN REVIEW: [Plan Title]
+  Mode: Deep / Quick  |  Date: YYYY-MM-DD
+  Findings: [N critical] [N warnings] [N observations]
 ═══════════════════════════════════════════════════════════
 
- End-State Alignment PASS ✅
- Lean Execution WARNING ⚠️ (1 finding)
- Architectural Fitness PASS ✅
- Blind Spots FAIL ❌ (1 finding)
- Plan Completeness WARNING ⚠️ (1 finding)
+  End-State Alignment    PASS    ✅
+  Lean Execution         WARNING ⚠️   (1 finding)
+  Architectural Fitness  PASS    ✅
+  Blind Spots            FAIL    ❌   (1 finding)
+  Plan Completeness      WARNING ⚠️   (1 finding)
 
- Grounding: 5/5 paths ✓, 3/3 symbols ✓, brief↔plan ✓
- ► Overall: REVISE
-
-═══════════════════════════════════════════════════════════
- CRITICAL FINDINGS ❌
-═══════════════════════════════════════════════════════════
-
- F1 — No rollback for 50M-row backfill
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- Severity: ❌ CRITICAL
- Impact: 🔬 HIGH — architectural stakes; think carefully before deciding
- Dimension: Blind Spots
- Location: Phase 3 — Database Changes
-
- Detail:
- Plan adds a NOT NULL column to users (50M rows) but no phase
- covers rollback if the backfill fails mid-way. Partial backfill
- leaves the table in an inconsistent state.
-
- Fix A ⭐ Recommended: Make column nullable + separate restartable backfill
- Strength: Restartable; partial progress isn't destructive; matches
- the pattern used for users.email_verified_at last quarter.
- Tradeoff: Two deploys (add nullable → backfill → enforce NOT NULL).
- Confidence: HIGH — this exact approach shipped cleanly 3 months ago.
- Blind spot: Enforce step still needs its own rollback note.
-
- Fix B: Add explicit rollback phase with full table snapshot
- Strength: Single deploy; rollback is atomic.
- Tradeoff: 50M-row snapshot is expensive in disk and lock time.
- Confidence: MEDIUM — haven't measured snapshot cost on a table this size.
- Blind spot: Replication lag during snapshot is unverified.
+  Grounding: 5/5 paths ✓, 3/3 symbols ✓, brief↔plan ✓
+  ► Overall: REVISE
 
 ═══════════════════════════════════════════════════════════
- WARNING FINDINGS ⚠️
+  CRITICAL FINDINGS ❌
 ═══════════════════════════════════════════════════════════
 
- F2 — Provider pattern for 2 config sources
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- Severity: ⚠️ WARNING
- Impact: 🔎 MEDIUM — real tradeoff; pause to reason through it
- Dimension: Lean Execution
- Location: Phase 1 — Config Refactor
+  F1 — No rollback for 50M-row backfill
+  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+    Severity:  ❌ CRITICAL
+    Impact:    🔬 HIGH — architectural stakes; think carefully before deciding
+    Dimension: Blind Spots
+    Location:  Phase 3 — Database Changes
 
- Detail:
- Plan builds a full provider-pattern config system for only two
- sources (env + file). A direct dict merge achieves the same end
- state with ~1/3 the code.
+    Detail:
+    Plan adds a NOT NULL column to users (50M rows) but no phase
+    covers rollback if the backfill fails mid-way. Partial backfill
+    leaves the table in an inconsistent state.
 
- Fix: Replace config provider abstraction with direct dict merge in
- load_config(). Introduce the provider pattern only when a third
- source appears.
- Strength: Less code, fewer concepts to maintain.
- Tradeoff: If a third source ships soon, we refactor twice.
- Confidence: HIGH — the existing codebase follows this "add abstraction
- when needed" pattern everywhere else.
- Blind spot: Plans for additional config sources not surveyed.
+    Fix A ⭐ Recommended: Make column nullable + separate restartable backfill
+      Strength:   Restartable; partial progress isn't destructive; matches
+                  the pattern used for users.email_verified_at last quarter.
+      Tradeoff:   Two deploys (add nullable → backfill → enforce NOT NULL).
+      Confidence: HIGH — this exact approach shipped cleanly 3 months ago.
+      Blind spot: Enforce step still needs its own rollback note.
 
- ···
+    Fix B: Add explicit rollback phase with full table snapshot
+      Strength:   Single deploy; rollback is atomic.
+      Tradeoff:   50M-row snapshot is expensive in disk and lock time.
+      Confidence: MEDIUM — haven't measured snapshot cost on a table this size.
+      Blind spot: Replication lag during snapshot is unverified.
 
- F3 — Vague "refactor utils as needed"
- ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
- Severity: ⚠️ WARNING
- Impact: 🏃 LOW — quick decision; fix is obvious and narrowly scoped
- Dimension: Plan Completeness
- Location: Phase 2
+═══════════════════════════════════════════════════════════
+  WARNING FINDINGS ⚠️
+═══════════════════════════════════════════════════════════
 
- Detail:
- "Refactor format_output as needed" — format_output is imported by
- 12 files across 4 modules. Implementer has no guidance.
+  F2 — Provider pattern for 2 config sources
+  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+    Severity:  ⚠️ WARNING
+    Impact:    🔎 MEDIUM — real tradeoff; pause to reason through it
+    Dimension: Lean Execution
+    Location:  Phase 1 — Config Refactor
 
- Fix: Specify exact signature changes and list callers needing updates.
+    Detail:
+    Plan builds a full provider-pattern config system for only two
+    sources (env + file). A direct dict merge achieves the same end
+    state with ~1/3 the code.
+
+    Fix: Replace config provider abstraction with direct dict merge in
+         load_config(). Introduce the provider pattern only when a third
+         source appears.
+      Strength:   Less code, fewer concepts to maintain.
+      Tradeoff:   If a third source ships soon, we refactor twice.
+      Confidence: HIGH — the existing codebase follows this "add abstraction
+                  when needed" pattern everywhere else.
+      Blind spot: Plans for additional config sources not surveyed.
+
+  ···
+
+  F3 — Vague "refactor utils as needed"
+  ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+    Severity:  ⚠️ WARNING
+    Impact:    🏃 LOW — quick decision; fix is obvious and narrowly scoped
+    Dimension: Plan Completeness
+    Location:  Phase 2
+
+    Detail:
+    "Refactor format_output as needed" — format_output is imported by
+    12 files across 4 modules. Implementer has no guidance.
+
+    Fix: Specify exact signature changes and list callers needing updates.
 
 ═══════════════════════════════════════════════════════════
 ```
@@ -244,12 +244,12 @@ Then ask:
 question: "Plan review complete. How would you like to proceed?"
 header: "Plan Review — [N] findings"
 options:
- - label: "Triage findings"
- description: "Walk through each finding and decide."
- - label: "Save report & triage later"
- description: "Save the full report. Resume with /shape-plan-review <report-path>."
- - label: "Save report only"
- description: "Save and finish — I'll handle the findings myself."
+  - label: "Triage findings"
+    description: "Walk through each finding and decide."
+  - label: "Save report & triage later"
+    description: "Save the full report. Resume with /shape-plan-review <report-path>."
+  - label: "Save report only"
+    description: "Save and finish — I'll handle the findings myself."
 multiSelect: false
 ```
 
@@ -290,15 +290,15 @@ Save to `context/changes/<change-id>/reviews/plan-review.md` (one plan-review pe
 - **Location**: Phase 3 — Database Changes
 - **Detail**: Plan adds a NOT NULL column to users (50M rows) but no phase covers rollback if the backfill fails mid-way.
 - **Fix A ⭐ Recommended**: Make column nullable + separate restartable backfill
- - Strength: Restartable; partial progress isn't destructive.
- - Tradeoff: Two deploys.
- - Confidence: HIGH — this approach shipped cleanly last quarter.
- - Blind spot: Enforce step still needs its own rollback note.
+  - Strength: Restartable; partial progress isn't destructive.
+  - Tradeoff: Two deploys.
+  - Confidence: HIGH — this approach shipped cleanly last quarter.
+  - Blind spot: Enforce step still needs its own rollback note.
 - **Fix B**: Add explicit rollback phase with full table snapshot
- - Strength: Single deploy; rollback is atomic.
- - Tradeoff: 50M-row snapshot is expensive in disk and lock time.
- - Confidence: MEDIUM — snapshot cost unverified at this size.
- - Blind spot: Replication lag during snapshot is unverified.
+  - Strength: Single deploy; rollback is atomic.
+  - Tradeoff: 50M-row snapshot is expensive in disk and lock time.
+  - Confidence: MEDIUM — snapshot cost unverified at this size.
+  - Blind spot: Replication lag during snapshot is unverified.
 - **Decision**: PENDING
 
 ### F3 — Vague "refactor utils as needed"
@@ -332,18 +332,18 @@ Walk findings in severity order (CRITICAL → WARNING → OBSERVATION). For each
 question: "F[N] — [title]\n\nSeverity: [sev icon] [SEV]\nImpact: [impact icon] [LEVEL] — [meaning]\nDimension: [dim]\nLocation: [loc]\n\nDetail: [detail]\n\n[Fix A block]\n\n[Fix B block]"
 header: "Finding [current] of [total remaining]"
 options:
- - label: "Apply Fix A ⭐"
- description: "[Fix A one-liner]"
- - label: "Apply Fix B"
- description: "[Fix B one-liner]"
- - label: "Fix differently"
- description: "Different approach — let's discuss."
- - label: "Skip"
- description: "Not worth addressing now."
- - label: "Accept risk"
- description: "Understood — I'll handle during implementation."
- - label: "Disagree"
- description: "Not actually an issue — dismiss."
+  - label: "Apply Fix A ⭐"
+    description: "[Fix A one-liner]"
+  - label: "Apply Fix B"
+    description: "[Fix B one-liner]"
+  - label: "Fix differently"
+    description: "Different approach — let's discuss."
+  - label: "Skip"
+    description: "Not worth addressing now."
+  - label: "Accept risk"
+    description: "Understood — I'll handle during implementation."
+  - label: "Disagree"
+    description: "Not actually an issue — dismiss."
 multiSelect: false
 ```
 
@@ -360,15 +360,15 @@ After each decision, if working from a saved file, update its `Decision:` field.
 
 ```
 ═══════════════════════════════════════════════════════════
- TRIAGE COMPLETE
+  TRIAGE COMPLETE
 ═══════════════════════════════════════════════════════════
 
- Fixed: F1 (Fix A), F3 (2)
- Skipped: F4 (1)
- Accepted: F2 (1)
- Dismissed: F5 (1)
+  Fixed:     F1 (Fix A), F3   (2)
+  Skipped:   F4               (1)
+  Accepted:  F2               (1)
+  Dismissed: F5               (1)
 
- ► Verdict after fixes: [updated if fixes changed it, e.g. REVISE → SOUND]
+  ► Verdict after fixes: [updated if fixes changed it, e.g. REVISE → SOUND]
 ═══════════════════════════════════════════════════════════
 ```
 
