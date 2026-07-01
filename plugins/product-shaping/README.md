@@ -194,6 +194,8 @@ Restart Claude Code. The `/shape-*` slash commands will be discovered automatica
 | **`shape-workflow-guide`** | `/shape-workflow-guide` | Guidance — picks the right next skill for you | Your situation |
 | **`shape-init`** | `/shape-init` | `context/{changes,archive,foundation}/` skeleton + READMEs | Nothing |
 | **`shape-idea`** | `/shape-idea [idea]` | `context/foundation/shape-notes.md` | A rough idea |
+| **`shape-mom-test`** | `/shape-mom-test [path]` | Non-leading critique + interview guide + go/no-go criteria | A draft idea / notes |
+| **`shape-opportunity-map`** | `/shape-opportunity-map [idea]` | Build-vs-buy-vs-complement-vs-wait decision artifact | A recurring friction / unmet need |
 | **`shape-prd`** | `/shape-prd [path]` | `context/foundation/prd.md` (10 sections greenfield, 11 brownfield) | `shape-notes.md` |
 | **`shape-tech-stack`** | `/shape-tech-stack [path]` | `context/foundation/tech-stack.md` | `prd.md` (greenfield) |
 | **`shape-bootstrap`** | `/shape-bootstrap [path]` | Scaffolded project + `verification.md` | `tech-stack.md` |
@@ -210,9 +212,21 @@ Restart Claude Code. The `/shape-*` slash commands will be discovered automatica
 | **`shape-research`** | `/shape-research <id>` | Codebase + external research via parallel sub-agents |
 | **`shape-plan`** | `/shape-plan <id>` | Create phase-by-phase implementation plan |
 | **`shape-plan-review`** | `/shape-plan-review <id>` | Validate plan before execution |
+| **`shape-tdd`** | `/shape-tdd <id>` | Test-first execution of a plan (red → green → refactor) |
+| **`shape-test-plan`** | `/shape-test-plan` | Stateful, phased test rollout orchestrator |
+| **`shape-e2e`** | `/shape-e2e` | Risk-driven end-to-end test plan execution |
 | **`shape-implement`** | `/shape-implement <id>` | Execute plan phase by phase; supports `/goal` headless mode |
+| **`shape-auto-implement`** | `/shape-auto-implement <id>` | Unattended plan execution under `/goal` with a quality-gate stack |
 | **`shape-impl-review`** | `/shape-impl-review <id>` | Review implementation; surfaces lessons for `/shape-lesson` |
+| **`shape-impl-review-ci`** | `/shape-impl-review-ci` | Non-interactive implementation review against a PR in CI |
 | **`shape-archive`** | `/shape-archive <id>` | Close and archive a completed change |
+
+### Setup & onboarding
+
+| Skill | Slash command | What it does |
+|---|---|---|
+| **`shape-cli-setup`** | `/shape-cli-setup` | First-time install / setup of the product-shaping skills for your AI tool |
+| **`shape-cli-guide`** | `/shape-cli-guide` | Day-to-day usage guidance — which command to run, where artifacts land, troubleshooting |
 
 ---
 

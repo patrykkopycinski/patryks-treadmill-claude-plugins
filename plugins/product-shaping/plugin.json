@@ -7,13 +7,16 @@
     "type": "git",
     "url": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins"
   },
-  "keywords": ["product", "shaping", "prd", "tech-stack", "bootstrap", "discovery", "greenfield", "brownfield", "onboarding", "worktree-safe"],
   "license": "MIT",
   "keywords": ["product", "shaping", "prd", "tech-stack", "bootstrap", "discovery", "greenfield", "brownfield", "onboarding", "worktree-safe", "lifecycle", "planning", "implementation", "roadmap"],
   "skills": [
     { "id": "shape-workflow-guide", "path": "skills/shape-workflow-guide/SKILL.md" },
+    { "id": "shape-cli-setup", "path": "skills/shape-cli-setup/SKILL.md" },
+    { "id": "shape-cli-guide", "path": "skills/shape-cli-guide/SKILL.md" },
     { "id": "shape-init", "path": "skills/shape-init/SKILL.md" },
     { "id": "shape-idea", "path": "skills/shape-idea/SKILL.md" },
+    { "id": "shape-mom-test", "path": "skills/shape-mom-test/SKILL.md" },
+    { "id": "shape-opportunity-map", "path": "skills/shape-opportunity-map/SKILL.md" },
     { "id": "shape-prd", "path": "skills/shape-prd/SKILL.md" },
     { "id": "shape-tech-stack", "path": "skills/shape-tech-stack/SKILL.md" },
     { "id": "shape-bootstrap", "path": "skills/shape-bootstrap/SKILL.md" },
@@ -29,8 +32,13 @@
     { "id": "shape-roadmap", "path": "skills/shape-roadmap/SKILL.md" },
     { "id": "shape-plan", "path": "skills/shape-plan/SKILL.md" },
     { "id": "shape-plan-review", "path": "skills/shape-plan-review/SKILL.md" },
+    { "id": "shape-tdd", "path": "skills/shape-tdd/SKILL.md" },
+    { "id": "shape-test-plan", "path": "skills/shape-test-plan/SKILL.md" },
+    { "id": "shape-e2e", "path": "skills/shape-e2e/SKILL.md" },
     { "id": "shape-implement", "path": "skills/shape-implement/SKILL.md" },
+    { "id": "shape-auto-implement", "path": "skills/shape-auto-implement/SKILL.md" },
     { "id": "shape-impl-review", "path": "skills/shape-impl-review/SKILL.md" },
+    { "id": "shape-impl-review-ci", "path": "skills/shape-impl-review-ci/SKILL.md" },
     { "id": "shape-archive", "path": "skills/shape-archive/SKILL.md" }
   ]
 }

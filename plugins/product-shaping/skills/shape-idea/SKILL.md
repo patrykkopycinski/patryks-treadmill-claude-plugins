@@ -82,7 +82,7 @@ The protocol is a no-op when you're not in a git repo, when `context/` is alread
 
 If you delegate to `/shape-init` later in this step, you can skip running the protocol inline — `/shape-init`'s Step 0 runs the same protocol. But if `context/foundation/` (under `$CONTEXT_ROOT`) already exists and `/shape-init` is skipped, you must run the protocol here directly to capture `CONTEXT_ROOT` for the rest of this skill's execution.
 
-Then check the the product-shaping workflow scaffold by testing two paths:
+Then check the product-shaping workflow scaffold by testing two paths:
 
 ```bash
 test -d "$CONTEXT_ROOT/context/foundation"
