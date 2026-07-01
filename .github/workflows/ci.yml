@@ -12,3 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: bash scripts/validate-plugins.sh --strict
+
+  branding-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/check-branding.sh
