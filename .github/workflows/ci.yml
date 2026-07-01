@@ -18,3 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: bash scripts/check-branding.sh
+
+  context-root-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/test-context-root.sh
