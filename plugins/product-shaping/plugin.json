@@ -2,43 +2,11 @@
   "name": "product-shaping",
   "version": "1.0.0",
   "description": "Take a product from a raw idea to a scaffolded codebase and through the full implementation lifecycle. Includes structured discovery, schema-locked PRDs, agent-friendly tech stack selection, safe bootstrap, brownfield assessment, roadmapping, per-change planning, implementation with verification, and archiving. Worktree-aware: shaping notes live at the main repo root and are shared across all worktrees, and the plugin auto-excludes them from git so they never get committed to a host repo.",
-  "author": "Patryk Kopycinski",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins"
+  "author": {
+    "name": "Patryk Kopycinski",
+    "url": "https://github.com/patrykkopycinski"
   },
+  "repository": "https://github.com/patrykkopycinski/patryks-treadmill-claude-plugins",
   "license": "MIT",
-  "keywords": ["product", "shaping", "prd", "tech-stack", "bootstrap", "discovery", "greenfield", "brownfield", "onboarding", "worktree-safe", "lifecycle", "planning", "implementation", "roadmap"],
-  "skills": [
-    { "id": "shape-workflow-guide", "path": "skills/shape-workflow-guide/SKILL.md" },
-    { "id": "shape-cli-setup", "path": "skills/shape-cli-setup/SKILL.md" },
-    { "id": "shape-cli-guide", "path": "skills/shape-cli-guide/SKILL.md" },
-    { "id": "shape-init", "path": "skills/shape-init/SKILL.md" },
-    { "id": "shape-idea", "path": "skills/shape-idea/SKILL.md" },
-    { "id": "shape-mom-test", "path": "skills/shape-mom-test/SKILL.md" },
-    { "id": "shape-opportunity-map", "path": "skills/shape-opportunity-map/SKILL.md" },
-    { "id": "shape-prd", "path": "skills/shape-prd/SKILL.md" },
-    { "id": "shape-tech-stack", "path": "skills/shape-tech-stack/SKILL.md" },
-    { "id": "shape-bootstrap", "path": "skills/shape-bootstrap/SKILL.md" },
-    { "id": "shape-stack-assess", "path": "skills/shape-stack-assess/SKILL.md" },
-    { "id": "shape-health-check", "path": "skills/shape-health-check/SKILL.md" },
-    { "id": "shape-infra-research", "path": "skills/shape-infra-research/SKILL.md" },
-    { "id": "shape-agents-md", "path": "skills/shape-agents-md/SKILL.md" },
-    { "id": "shape-rule-review", "path": "skills/shape-rule-review/SKILL.md" },
-    { "id": "shape-lesson", "path": "skills/shape-lesson/SKILL.md" },
-    { "id": "shape-frame", "path": "skills/shape-frame/SKILL.md" },
-    { "id": "shape-new", "path": "skills/shape-new/SKILL.md" },
-    { "id": "shape-research", "path": "skills/shape-research/SKILL.md" },
-    { "id": "shape-roadmap", "path": "skills/shape-roadmap/SKILL.md" },
-    { "id": "shape-plan", "path": "skills/shape-plan/SKILL.md" },
-    { "id": "shape-plan-review", "path": "skills/shape-plan-review/SKILL.md" },
-    { "id": "shape-tdd", "path": "skills/shape-tdd/SKILL.md" },
-    { "id": "shape-test-plan", "path": "skills/shape-test-plan/SKILL.md" },
-    { "id": "shape-e2e", "path": "skills/shape-e2e/SKILL.md" },
-    { "id": "shape-implement", "path": "skills/shape-implement/SKILL.md" },
-    { "id": "shape-auto-implement", "path": "skills/shape-auto-implement/SKILL.md" },
-    { "id": "shape-impl-review", "path": "skills/shape-impl-review/SKILL.md" },
-    { "id": "shape-impl-review-ci", "path": "skills/shape-impl-review-ci/SKILL.md" },
-    { "id": "shape-archive", "path": "skills/shape-archive/SKILL.md" }
-  ]
+  "keywords": ["product", "shaping", "prd", "tech-stack", "bootstrap", "discovery", "greenfield", "brownfield", "onboarding", "worktree-safe", "lifecycle", "planning", "implementation", "roadmap"]
 }
