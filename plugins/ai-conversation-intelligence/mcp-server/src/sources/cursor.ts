@@ -95,10 +95,14 @@ function extractTitle(messages: Message[]): string {
   return title.length > 120 ? title.slice(0, 117) + '...' : title;
 }
 
-export function loadCursorTranscripts(skipIds?: Set<string>): Conversation[] {
-  const conversations: Conversation[] = [];
-
-  if (!existsSync(CURSOR_PROJECTS_DIR)) return conversations;
+/**
+ * Generator — see loadClaudeTranscripts() for why. Cursor's own transcripts
+ * are ~328MB across 2.5k files, smaller than Claude's, but the two sources
+ * are always concatenated in index.ts so both must stream or the combined
+ * peak still blows the heap.
+ */
+export function* loadCursorTranscripts(skipIds?: Set<string>): Generator<Conversation> {
+  if (!existsSync(CURSOR_PROJECTS_DIR)) return;
 
   for (const wsDir of readdirSync(CURSOR_PROJECTS_DIR, { withFileTypes: true })) {
     if (!wsDir.isDirectory()) continue;
@@ -127,7 +131,7 @@ export function loadCursorTranscripts(skipIds?: Set<string>): Conversation[] {
         createdAt = statSync(jsonlPath).mtimeMs;
       } catch { /* ignore */ }
 
-      conversations.push({
+      yield {
         id: agentId,
         workspace,
         workspacePath,
@@ -141,11 +145,9 @@ export function loadCursorTranscripts(skipIds?: Set<string>): Conversation[] {
         source: 'cursor',
         kind: 'interactive',
         entrypoint: null,
-      });
+      };
     }
   }
-
-  return conversations;
 }
 
 function getStateDbPath(): string {

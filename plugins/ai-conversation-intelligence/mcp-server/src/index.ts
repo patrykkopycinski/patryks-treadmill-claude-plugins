@@ -6,29 +6,45 @@ import { z } from 'zod';
 import { loadClaudeTranscripts } from './sources/claude.js';
 import { loadCursorTranscripts, loadCursorComposerMetadata } from './sources/cursor.js';
 import { SearchIndex } from './search-index.js';
-import type { Source } from './types.js';
+import type { Conversation, Source } from './types.js';
 
 const SERVER_NAME = 'ai-chat-browser';
-const SERVER_VERSION = '0.1.0';
+const SERVER_VERSION = '0.2.0';
 
 const sourceEnum = z.enum(['claude', 'cursor']).optional().describe('Filter by source: "claude" or "cursor"');
+
+/** Chain two Conversation generators without materializing either as an array. */
+function* chain(...gens: Array<Generator<Conversation>>): Generator<Conversation> {
+  for (const g of gens) yield* g;
+}
 
 async function main() {
   const startTime = Date.now();
 
-  const index = await SearchIndex.create();
+  const index = SearchIndex.create();
   const existingIds = index.getIndexedIds();
 
-  const claudeTranscripts = loadClaudeTranscripts(existingIds);
-  const cursorTranscripts = loadCursorTranscripts(existingIds);
-  const allTranscripts = [...claudeTranscripts, ...cursorTranscripts];
+  // Streaming: each transcript is parsed and inserted one at a time. No array
+  // of all conversations is ever held in memory — this is what fixes the OOM
+  // that killed cursor-chat-browser (and the pre-fix version of this plugin)
+  // against a large ~/.claude/projects + ~/.cursor/projects corpus.
+  let cursorTranscriptCount = 0;
+  const cursorGen = loadCursorTranscripts(existingIds);
+  const countingCursorGen = (function* () {
+    for (const c of cursorGen) {
+      cursorTranscriptCount++;
+      yield c;
+    }
+  })();
 
-  const indexed = index.indexConversations(allTranscripts);
+  const indexed = index.indexConversationsStreaming(
+    chain(loadClaudeTranscripts(existingIds), countingCursorGen)
+  );
   const stats = index.stats();
   const elapsed = Date.now() - startTime;
 
   // Enrich Cursor metadata in background
-  if (cursorTranscripts.length > 0) {
+  if (cursorTranscriptCount > 0) {
     setImmediate(() => {
       try {
         const composerMeta = loadCursorComposerMetadata();

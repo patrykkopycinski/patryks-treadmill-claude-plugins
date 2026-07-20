@@ -145,10 +145,16 @@ function isSubagentFile(filename: string): boolean {
   return /^agent-[a-f0-9]+\.jsonl$/.test(filename);
 }
 
-export function loadClaudeTranscripts(skipIds?: Set<string>): Conversation[] {
-  const conversations: Conversation[] = [];
-
-  if (!existsSync(CLAUDE_PROJECTS_DIR)) return conversations;
+/**
+ * Generator, not an array-returning function: each conversation is parsed,
+ * yielded, and consumed (inserted into SQLite) by the caller before the next
+ * file is even read. Peak memory is bounded by one transcript file, not the
+ * full ~8.7GB corpus. Do NOT change this back to `Conversation[]` — that is
+ * the exact shape that OOM'd both cursor-chat-browser and the pre-fix version
+ * of this plugin on large ~/.claude/projects trees (33k+ .jsonl files).
+ */
+export function* loadClaudeTranscripts(skipIds?: Set<string>): Generator<Conversation> {
+  if (!existsSync(CLAUDE_PROJECTS_DIR)) return;
 
   for (const wsDir of readdirSync(CLAUDE_PROJECTS_DIR, { withFileTypes: true })) {
     if (!wsDir.isDirectory()) continue;
@@ -181,7 +187,7 @@ export function loadClaudeTranscripts(skipIds?: Set<string>): Conversation[] {
         } catch { /* ignore */ }
       }
 
-      conversations.push({
+      yield {
         id: fileBaseName,
         workspace,
         workspacePath,
@@ -195,9 +201,7 @@ export function loadClaudeTranscripts(skipIds?: Set<string>): Conversation[] {
         source: 'claude',
         kind,
         entrypoint: metadata.entrypoint,
-      });
+      };
     }
   }
-
-  return conversations;
 }

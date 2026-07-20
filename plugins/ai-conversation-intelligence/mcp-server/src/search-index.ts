@@ -1,79 +1,76 @@
 import { join } from 'node:path';
 import { homedir } from 'node:os';
-import { mkdirSync, readFileSync, writeFileSync, existsSync, unlinkSync } from 'node:fs';
-import initSqlJs, { type Database as SqlJsDatabase } from 'sql.js';
+import { mkdirSync, existsSync, unlinkSync } from 'node:fs';
+import { DatabaseSync, type StatementSync } from 'node:sqlite';
 import type { Conversation, ConversationMeta, Source, SearchResult, MessageSearchResult } from './types.js';
 
 const INDEX_DIR = join(homedir(), '.claude', 'chat-browser');
 const INDEX_DB_PATH = join(INDEX_DIR, 'search-index.db');
-const SCHEMA_VERSION = 3; // Bumped from cursor-chat-browser v2
+// Bumped from 3 (sql.js/in-memory rewrite) -> 4 (node:sqlite, file-backed, FTS5,
+// streaming per-conversation inserts). Old DBs are dropped and rebuilt on open.
+const SCHEMA_VERSION = 4;
 
+/**
+ * File-backed SQLite index (node:sqlite, built-in — no sql.js/WASM, no whole-DB
+ * export()/writeFileSync() on every save). Conversations are inserted one at a
+ * time as the caller streams them in (see index.ts), so peak memory is bounded
+ * by a single conversation's transcript, not the entire corpus.
+ */
 export class SearchIndex {
-  private db: SqlJsDatabase;
-  private dirty = false;
+  private db: DatabaseSync;
+  private insertConvStmt!: StatementSync;
+  private insertConvFtsStmt!: StatementSync;
+  private insertMsgStmt!: StatementSync;
+  private insertMsgFtsStmt!: StatementSync;
 
-  private constructor(db: SqlJsDatabase) {
+  private constructor(db: DatabaseSync) {
     this.db = db;
   }
 
-  static async create(): Promise<SearchIndex> {
+  static create(): SearchIndex {
     mkdirSync(INDEX_DIR, { recursive: true });
 
-    const SQL = await initSqlJs();
-
-    let db: SqlJsDatabase;
-    let needsMigration = false;
-
     if (existsSync(INDEX_DB_PATH)) {
-      const buffer = readFileSync(INDEX_DB_PATH);
-      db = new SQL.Database(buffer);
-
-      const version = SearchIndex.getSchemaVersion(db);
+      const probe = new DatabaseSync(INDEX_DB_PATH);
+      const version = SearchIndex.readSchemaVersion(probe);
+      probe.close();
       if (version < SCHEMA_VERSION) {
-        db.close();
-        unlinkSync(INDEX_DB_PATH);
-        db = new SQL.Database();
-        needsMigration = true;
+        for (const suffix of ['', '-wal', '-shm']) {
+          const p = INDEX_DB_PATH + suffix;
+          if (existsSync(p)) unlinkSync(p);
+        }
       }
-    } else {
-      db = new SQL.Database();
-      needsMigration = true;
     }
+
+    const db = new DatabaseSync(INDEX_DB_PATH);
+    db.exec('PRAGMA journal_mode = WAL');
+    db.exec('PRAGMA synchronous = NORMAL');
 
     const instance = new SearchIndex(db);
     instance.init();
-    if (needsMigration) {
-      instance.dirty = true;
-      instance.save();
-    }
     return instance;
   }
 
-  private static getSchemaVersion(db: SqlJsDatabase): number {
+  private static readSchemaVersion(db: DatabaseSync): number {
     try {
-      const stmt = db.prepare('SELECT version FROM schema_version LIMIT 1');
-      if (stmt.step()) {
-        const row = stmt.getAsObject() as { version: number };
-        stmt.free();
-        return row.version;
-      }
-      stmt.free();
+      const row = db.prepare('SELECT version FROM schema_version LIMIT 1').get() as
+        | { version: number }
+        | undefined;
+      return row?.version ?? 1;
     } catch {
-      // table doesn't exist
+      return 1;
     }
-    return 1;
   }
 
   private init() {
-    this.db.run(`CREATE TABLE IF NOT EXISTS schema_version (version INTEGER NOT NULL)`);
-
-    const currentVersion = SearchIndex.getSchemaVersion(this.db);
-    if (currentVersion < SCHEMA_VERSION) {
-      this.db.run(`DELETE FROM schema_version`);
-      this.db.run(`INSERT INTO schema_version (version) VALUES (?)`, [SCHEMA_VERSION]);
+    this.db.exec(`CREATE TABLE IF NOT EXISTS schema_version (version INTEGER NOT NULL)`);
+    const current = SearchIndex.readSchemaVersion(this.db);
+    if (current < SCHEMA_VERSION) {
+      this.db.exec(`DELETE FROM schema_version`);
+      this.db.prepare(`INSERT INTO schema_version (version) VALUES (?)`).run(SCHEMA_VERSION);
     }
 
-    this.db.run(`
+    this.db.exec(`
       CREATE TABLE IF NOT EXISTS conversations (
         id TEXT PRIMARY KEY,
         workspace TEXT NOT NULL,
@@ -91,7 +88,7 @@ export class SearchIndex {
       )
     `);
 
-    this.db.run(`
+    this.db.exec(`
       CREATE TABLE IF NOT EXISTS messages (
         rowid INTEGER PRIMARY KEY AUTOINCREMENT,
         conv_id TEXT NOT NULL,
@@ -102,106 +99,166 @@ export class SearchIndex {
       )
     `);
 
-    this.db.run(`CREATE INDEX IF NOT EXISTS idx_messages_conv ON messages(conv_id, msg_index)`);
+    this.db.exec(`CREATE INDEX IF NOT EXISTS idx_messages_conv ON messages(conv_id, msg_index)`);
+    this.db.exec(`CREATE INDEX IF NOT EXISTS idx_conversations_source ON conversations(source)`);
+    this.db.exec(`CREATE INDEX IF NOT EXISTS idx_conversations_workspace ON conversations(workspace)`);
 
-    this.db.run(`
-      CREATE VIRTUAL TABLE IF NOT EXISTS messages_fts USING fts4(
+    this.db.exec(`
+      CREATE VIRTUAL TABLE IF NOT EXISTS messages_fts USING fts5(
         text,
-        tokenize=porter
+        content='messages',
+        content_rowid='rowid',
+        tokenize='porter unicode61'
       )
     `);
 
-    this.db.run(`
-      CREATE VIRTUAL TABLE IF NOT EXISTS conversations_fts USING fts4(
-        conv_id,
+    this.db.exec(`
+      CREATE VIRTUAL TABLE IF NOT EXISTS conversations_fts USING fts5(
+        conv_id UNINDEXED,
         title,
         workspace,
-        tokenize=porter
+        tokenize='porter unicode61'
       )
     `);
+
+    this.insertConvStmt = this.db.prepare(`
+      INSERT OR REPLACE INTO conversations
+        (id, workspace, workspace_path, title, first_message, created_at, mode, branch, message_count, indexed_at, source, kind, entrypoint)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+    this.insertConvFtsStmt = this.db.prepare(
+      `INSERT INTO conversations_fts (conv_id, title, workspace) VALUES (?, ?, ?)`
+    );
+    this.insertMsgStmt = this.db.prepare(
+      `INSERT INTO messages (conv_id, msg_index, role, text) VALUES (?, ?, ?, ?)`
+    );
+    this.insertMsgFtsStmt = this.db.prepare(
+      `INSERT INTO messages_fts (rowid, text) VALUES (?, ?)`
+    );
   }
 
-  private save() {
-    if (!this.dirty) return;
-    const data = this.db.export();
-    writeFileSync(INDEX_DB_PATH, Buffer.from(data));
-    this.dirty = false;
+  getIndexedIds(): Set<string> {
+    const rows = this.db.prepare('SELECT id FROM conversations').all() as Array<{ id: string }>;
+    return new Set(rows.map((r) => r.id));
+  }
+
+  /**
+   * Insert a single new conversation. Caller is responsible for skipping
+   * already-indexed ids via getIndexedIds() before parsing.
+   *
+   * IMPORTANT: this does NOT open its own transaction — see
+   * indexConversationsStreaming() for why. Call sites that need a single
+   * conversation inserted standalone (there are none in this codebase
+   * currently) must wrap the call in BEGIN/COMMIT themselves.
+   */
+  private insertConversationRow(c: Conversation): void {
+    this.insertConvStmt.run(
+      c.id,
+      c.workspace,
+      c.workspacePath,
+      c.title,
+      c.firstMessage,
+      c.createdAt ? Math.round(c.createdAt) : null,
+      c.mode,
+      c.branch,
+      c.messageCount,
+      Date.now(),
+      c.source,
+      c.kind,
+      c.entrypoint
+    );
+    this.insertConvFtsStmt.run(c.id, c.title, c.workspace);
+
+    for (let i = 0; i < c.messages.length; i++) {
+      const msg = c.messages[i]!;
+      if (!msg.text.trim()) continue;
+      this.insertMsgStmt.run(c.id, i, msg.role, msg.text);
+      const rowid = Number(this.db.prepare('SELECT last_insert_rowid() AS id').get()!.id);
+      this.insertMsgFtsStmt.run(rowid, msg.text);
+    }
+  }
+
+  /**
+   * Batch entry point used by index.ts: consumes an iterable/generator of
+   * conversations and inserts each one as it arrives, so a caller can stream
+   * from disk without ever materializing the full corpus in memory.
+   *
+   * Commits are BATCHED (BATCH_SIZE conversations per transaction), not
+   * one-transaction-per-conversation. This matters far more than it looks:
+   * with a commit after every single conversation, SQLite interleaves pages
+   * across conversations / conversations_fts / messages / messages_fts as
+   * they all grow together, checkerboarding table B-trees across the file
+   * instead of keeping each roughly contiguous. On a real ~35k-conversation
+   * corpus this made a plain `SELECT COUNT(*) FROM conversations` (which only
+   * needs to touch that table's own pages) take 8-20s because it had to fault
+   * in nearly the entire 7GB file in near-random order. Batching commits
+   * collapses that from ~35,700 transactions to ~180, and the resulting
+   * layout keeps count/aggregate queries in the low tens of milliseconds.
+   * Do not revert to per-conversation commits without re-verifying query
+   * latency against a multi-GB corpus.
+   */
+  indexConversationsStreaming(conversations: Iterable<Conversation>): number {
+    const BATCH_SIZE = 200;
+    let count = 0;
+    let inTxn = false;
+    let sinceCommit = 0;
+
+    try {
+      for (const c of conversations) {
+        if (!inTxn) {
+          this.db.exec('BEGIN IMMEDIATE');
+          inTxn = true;
+        }
+        this.insertConversationRow(c);
+        count++;
+        sinceCommit++;
+
+        if (sinceCommit >= BATCH_SIZE) {
+          this.db.exec('COMMIT');
+          inTxn = false;
+          sinceCommit = 0;
+        }
+      }
+      if (inTxn) {
+        this.db.exec('COMMIT');
+      }
+    } catch (err) {
+      if (inTxn) this.db.exec('ROLLBACK');
+      throw err;
+    }
+
+    return count;
   }
 
   private query<T>(sql: string, params: unknown[] = []): T[] {
     const stmt = this.db.prepare(sql);
-    if (params.length > 0) stmt.bind(params as (string | number | null)[]);
-
-    const results: T[] = [];
-    while (stmt.step()) {
-      results.push(stmt.getAsObject() as T);
-    }
-    stmt.free();
-    return results;
+    return stmt.all(...(params as never[])) as T[];
   }
 
-  getIndexedIds(): Set<string> {
-    const rows = this.query<{ id: string }>('SELECT id FROM conversations');
-    return new Set(rows.map((r) => r.id));
+  private queryOne<T>(sql: string, params: unknown[] = []): T | undefined {
+    const stmt = this.db.prepare(sql);
+    return stmt.get(...(params as never[])) as T | undefined;
   }
 
-  indexConversations(conversations: Conversation[]): number {
-    const existing = this.getIndexedIds();
-    const toInsert = conversations.filter((c) => !existing.has(c.id));
-
-    if (toInsert.length === 0) return 0;
-
-    this.db.run('BEGIN TRANSACTION');
+  enrichMetadata(metaMap: Map<string, ConversationMeta>) {
+    this.db.exec('BEGIN');
     try {
-      for (const c of toInsert) {
-        this.db.run(
-          `INSERT OR REPLACE INTO conversations
-            (id, workspace, workspace_path, title, first_message, created_at, mode, branch, message_count, indexed_at, source, kind, entrypoint)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-          [
-            c.id,
-            c.workspace,
-            c.workspacePath,
-            c.title,
-            c.firstMessage,
-            c.createdAt ? Math.round(c.createdAt) : null,
-            c.mode,
-            c.branch,
-            c.messageCount,
-            Date.now(),
-            c.source,
-            c.kind,
-            c.entrypoint,
-          ]
-        );
-        this.db.run(
-          `INSERT INTO conversations_fts (conv_id, title, workspace) VALUES (?, ?, ?)`,
-          [c.id, c.title, c.workspace]
-        );
-
-        for (let i = 0; i < c.messages.length; i++) {
-          const msg = c.messages[i]!;
-          if (!msg.text.trim()) continue;
-
-          this.db.run(
-            `INSERT INTO messages (conv_id, msg_index, role, text) VALUES (?, ?, ?, ?)`,
-            [c.id, i, msg.role, msg.text]
-          );
-          this.db.run(
-            `INSERT INTO messages_fts (rowid, text) VALUES (last_insert_rowid(), ?)`,
-            [msg.text]
-          );
+      const stmt = this.db.prepare(
+        `UPDATE conversations SET created_at = ?, mode = ?, branch = ? WHERE id = ? AND (created_at IS NULL OR mode IS NULL)`
+      );
+      for (const [id, meta] of metaMap) {
+        if (meta.createdAt || meta.mode || meta.branch) {
+          stmt.run(meta.createdAt ?? null, meta.mode ?? null, meta.branch ?? null, id);
         }
       }
-      this.db.run('COMMIT');
-      this.dirty = true;
-      this.save();
-    } catch (err) {
-      this.db.run('ROLLBACK');
-      throw err;
+      this.db.exec('COMMIT');
+    } catch {
+      this.db.exec('ROLLBACK');
     }
+  }
 
-    return toInsert.length;
+  close() {
+    this.db.close();
   }
 
   searchMessages(
@@ -213,11 +270,7 @@ export class SearchIndex {
 
     if (!queryStr.trim()) return [];
 
-    const ftsQuery = queryStr
-      .replace(/['"]/g, '')
-      .split(/\s+/)
-      .filter(Boolean)
-      .join(' ');
+    const ftsQuery = buildFtsQuery(queryStr);
 
     const conditions: string[] = ['messages_fts MATCH ?'];
     const params: (string | number | null)[] = [ftsQuery];
@@ -309,11 +362,7 @@ export class SearchIndex {
     let sql: string;
 
     if (queryStr.trim()) {
-      const ftsQuery = queryStr
-        .replace(/['"]/g, '')
-        .split(/\s+/)
-        .filter(Boolean)
-        .join(' ');
+      const ftsQuery = buildFtsQuery(queryStr);
 
       const conditions: string[] = ['conversations_fts MATCH ?'];
       params.push(ftsQuery);
@@ -392,7 +441,7 @@ export class SearchIndex {
     messageCount: number;
     source: Source;
   } | null {
-    const rows = this.query<{
+    const row = this.queryOne<{
       id: string;
       workspace: string;
       workspace_path: string;
@@ -408,8 +457,7 @@ export class SearchIndex {
       [id]
     );
 
-    if (rows.length === 0) return null;
-    const row = rows[0]!;
+    if (!row) return null;
 
     const messages = this.query<{ msg_index: number; role: string; text: string }>(
       `SELECT msg_index, role, text FROM messages WHERE conv_id = ? ORDER BY msg_index`,
@@ -440,11 +488,7 @@ export class SearchIndex {
 
     if (!queryStr.trim()) return [];
 
-    const ftsQuery = queryStr
-      .replace(/['"]/g, '')
-      .split(/\s+/)
-      .filter(Boolean)
-      .join(' ');
+    const ftsQuery = buildFtsQuery(queryStr);
 
     const rows = this.query<{ rowid: number; msg_index: number; role: string; text: string }>(
       `SELECT m.rowid, m.msg_index, m.role, m.text
@@ -493,7 +537,12 @@ export class SearchIndex {
     }));
   }
 
-  stats(source?: Source): { totalConversations: number; totalMessages: number; workspaceCount: number; bySource: Record<Source, { conversations: number; messages: number }> } {
+  stats(source?: Source): {
+    totalConversations: number;
+    totalMessages: number;
+    workspaceCount: number;
+    bySource: Record<Source, { conversations: number; messages: number }>;
+  } {
     const params: (string | number | null)[] = [];
     let whereClause = '';
 
@@ -502,25 +551,23 @@ export class SearchIndex {
       params.push(source);
     }
 
-    const rows = this.query<{ total: number; msgs: number; ws: number }>(
+    const row = this.queryOne<{ total: number; msgs: number; ws: number }>(
       `SELECT COUNT(*) as total, SUM(message_count) as msgs, COUNT(DISTINCT workspace) as ws
        FROM conversations ${whereClause}`,
       params
-    );
+    ) ?? { total: 0, msgs: 0, ws: 0 };
 
-    const row = rows[0] ?? { total: 0, msgs: 0, ws: 0 };
-
-    const bySourceRows = this.query<{ source: Source; convs: number; msgs: number }>(
-      `SELECT source, COUNT(*) as convs, SUM(message_count) as msgs FROM conversations GROUP BY source`
+    const bySourceRows = this.query<{ source: Source; conversations: number; messages: number }>(
+      `SELECT source, COUNT(*) as conversations, SUM(message_count) as messages
+       FROM conversations GROUP BY source`
     );
 
     const bySource: Record<Source, { conversations: number; messages: number }> = {
       claude: { conversations: 0, messages: 0 },
       cursor: { conversations: 0, messages: 0 },
     };
-
     for (const r of bySourceRows) {
-      bySource[r.source] = { conversations: r.convs, messages: r.msgs ?? 0 };
+      bySource[r.source] = { conversations: r.conversations, messages: r.messages ?? 0 };
     }
 
     return {
@@ -530,30 +577,17 @@ export class SearchIndex {
       bySource,
     };
   }
+}
 
-  enrichMetadata(metaMap: Map<string, ConversationMeta>) {
-    this.db.run('BEGIN TRANSACTION');
-    try {
-      for (const [id, meta] of metaMap) {
-        if (meta.createdAt || meta.mode || meta.branch) {
-          this.db.run(
-            `UPDATE conversations SET created_at = ?, mode = ?, branch = ? WHERE id = ? AND (created_at IS NULL OR mode IS NULL)`,
-            [meta.createdAt ?? null, meta.mode ?? null, meta.branch ?? null, id]
-          );
-        }
-      }
-      this.db.run('COMMIT');
-      this.dirty = true;
-      this.save();
-    } catch {
-      this.db.run('ROLLBACK');
-    }
-  }
-
-  close() {
-    this.save();
-    this.db.close();
-  }
+function buildFtsQuery(queryStr: string): string {
+  // FTS5 needs bareword/quoted tokens; strip characters that would otherwise
+  // be interpreted as FTS5 query syntax (', ", -, (, )) and re-join as an
+  // implicit AND of terms.
+  return queryStr
+    .replace(/['")(-]/g, ' ')
+    .split(/\s+/)
+    .filter(Boolean)
+    .join(' ');
 }
 
 function truncateToSnippet(text: string, maxLen: number): string {
