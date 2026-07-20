@@ -67,7 +67,7 @@ When new skills are created, evaluates whether they should be published to the m
 │  SessionStart → notifies of pending analysis     │
 ├─ MCP Server (ai-chat-browser) ──────────────────┤
 │  Indexes Claude Code + Cursor sessions           │
-│  SQLite FTS4 search across all conversations     │
+│  SQLite FTS5 search across all conversations     │
 │  Tools: search_messages, search_conversations,   │
 │         get_conversation, list_projects, stats    │
 └─────────────────────────────────────────────────┘
